@@ -238,6 +238,17 @@
     function renderCarCategory(carList, elementId) {
       const container = document.getElementById(elementId);
       container.innerHTML = '';
+      // Temporarily replace your cars array with just 1 car:
+const cars = [
+  {
+    name: 'Test Car',
+    image: 'https://source.unsplash.com/random/300x200/?car',
+    price12hrs: 1000,
+    price24hrs: 1800,
+    description: 'Test description',
+    category: 'economy'
+  }
+];
 
       carList.forEach((car, index) => {
         const card = document.createElement('div');
