@@ -77,47 +77,47 @@
     <div class="row g-4" id="luxuryCars"></div>
   </div>
 
-  <!-- Footer -->
-  <footer class="bg-dark text-white py-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <h5>GoPandaCars</h5>
-          <p>Premium car rental service with the best vehicles and customer service.</p>
+  <!-- Booking Modal -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Book <span id="modalCarName"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="col-md-2 mb-4">
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="#" class="text-white">Home</a></li>
-            <li><a href="#economy" class="text-white">Economy Cars</a></li>
-            <li><a href="#premium" class="text-white">Premium Cars</a></li>
-            <li><a href="#luxury" class="text-white">Luxury Cars</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3 mb-4">
-          <h5>Contact Us</h5>
-          <ul class="list-unstyled">
-            <li><i class="fas fa-phone me-2"></i> +91 9876543210</li>
-            <li><i class="fas fa-envelope me-2"></i> info@gopandacars.com</li>
-            <li><i class="fas fa-map-marker-alt me-2"></i> Bangalore, India</li>
-          </ul>
-        </div>
-        <div class="col-md-3 mb-4">
-          <h5>Follow Us</h5>
-          <div class="social-links">
-            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+        <div class="modal-body">
+          <div id="loginRequired" class="text-center py-4">
+            <h6>Please login to book this car</h6>
+            <a href="login.html" class="btn btn-primary mt-3">Login</a>
           </div>
+          <form id="bookingForm" style="display:none;">
+            <div class="mb-3">
+              <label class="form-label">Rental Option</label>
+              <select class="form-select" id="rentalOption">
+                <option value="12hrs">12 Hours (₹<span id="price12hrs"></span>)</option>
+                <option value="24hrs">24 Hours (₹<span id="price24hrs"></span>)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="startDate" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">End Date</label>
+              <input type="date" class="form-control" id="endDate" required>
+            </div>
+            <div class="alert alert-info">
+              Estimated Total: ₹<span id="estimatedTotal">0</span>
+            </div>
+          </form>
         </div>
-      </div>
-      <hr class="my-4 bg-light">
-      <div class="text-center">
-        <p class="mb-0">&copy; 2023 GoPandaCars. All rights reserved.</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="confirmBookingBtn" class="btn btn-primary" style="display:none;">Confirm Booking</button>
+        </div>
       </div>
     </div>
-  </footer>
+  </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -140,10 +140,12 @@
       {name:'Fortuner',image:'https://source.unsplash.com/random/600x400/?toyota+fortuner',price12hrs:8000,price24hrs:12000,description:'Premium full-size SUV with powerful engine and luxury features.',withDriver:true,category:'luxury'}
     ];
 
+    // Initialize Bootstrap modal
+    const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+    let selectedCar = null;
+
     // Function to render cars by category
     function renderCars() {
-      console.log("Rendering cars..."); // Debug log
-      
       const economyCars = cars.filter(car => car.category === 'economy');
       const premiumCars = cars.filter(car => car.category === 'premium');
       const luxuryCars = cars.filter(car => car.category === 'luxury');
@@ -157,18 +159,13 @@
       const container = document.getElementById(elementId);
       container.innerHTML = '';
 
-      if (!container) {
-        console.error("Container not found:", elementId); // Debug log
-        return;
-      }
-
       carList.forEach((car, index) => {
         const card = document.createElement('div');
         card.className = 'col-md-4';
         card.innerHTML = `
           <div class="card car-card h-100">
             <img src="${car.image}" class="card-img-top" alt="${car.name}" 
-                 onerror="this.src='https://via.placeholder.com/300x200?text=Car+Image'">
+                 onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Car+Image'">
             <div class="card-body">
               <h5 class="card-title">${car.name}</h5>
               <p class="card-text text-muted">${car.description}</p>
@@ -184,11 +181,19 @@
               ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
             </div>
             <div class="card-footer bg-transparent">
-              <button class="btn btn-primary w-100">Book Now</button>
+              <button class="btn btn-primary w-100 book-btn" data-car-index="${index}">Book Now</button>
             </div>
           </div>
         `;
         container.appendChild(card);
+      });
+
+      // Add event listeners to book buttons
+      document.querySelectorAll('.book-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const carIndex = this.getAttribute('data-car-index');
+          showBookingModal(cars[carIndex]);
+        });
       });
     }
 
@@ -201,14 +206,79 @@
       }
     }
 
-    // Initialize the page when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log("DOM fully loaded"); // Debug log
-      renderCars();
+    function showBookingModal(car) {
+      selectedCar = car;
+      document.getElementById('modalCarName').textContent = car.name;
+      document.getElementById('price12hrs').textContent = car.price12hrs;
+      document.getElementById('price24hrs').textContent = car.price24hrs;
+      
+      // For demo purposes, we'll show the booking form directly
+      // In a real app, you would check if user is logged in first
+      document.getElementById('loginRequired').style.display = 'none';
+      document.getElementById('bookingForm').style.display = 'block';
+      document.getElementById('confirmBookingBtn').style.display = 'block';
+      
+      // Set minimum date to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('startDate').min = today;
+      document.getElementById('endDate').min = today;
+      
+      updateEstimatedTotal();
+      bookingModal.show();
+    }
+
+    function updateEstimatedTotal() {
+      if (!selectedCar) return;
+      
+      const option = document.getElementById('rentalOption').value;
+      const startDate = new Date(document.getElementById('startDate').value);
+      const endDate = new Date(document.getElementById('endDate').value);
+      
+      if (isNaN(startDate.getTime())) return;
+      
+      if (isNaN(endDate.getTime())) {
+        // Single day booking
+        const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+        document.getElementById('estimatedTotal').textContent = price;
+      } else {
+        // Multi-day booking
+        const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+        const pricePerDay = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+        document.getElementById('estimatedTotal').textContent = days * pricePerDay;
+      }
+    }
+
+    // Event listeners for booking form
+    document.getElementById('rentalOption').addEventListener('change', updateEstimatedTotal);
+    document.getElementById('startDate').addEventListener('change', function() {
+      document.getElementById('endDate').min = this.value;
+      updateEstimatedTotal();
+    });
+    document.getElementById('endDate').addEventListener('change', updateEstimatedTotal);
+
+    // Confirm booking
+    document.getElementById('confirmBookingBtn').addEventListener('click', () => {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      
+      if (!startDate || !endDate) {
+        alert('Please select both start and end dates');
+        return;
+      }
+      
+      const option = document.getElementById('rentalOption').value;
+      const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+      
+      // In a real app, you would save this to a database
+      alert(`Booking confirmed!\n\nCar: ${selectedCar.name}\nDuration: ${startDate} to ${endDate}\nPrice: ₹${document.getElementById('estimatedTotal').textContent}`);
+      
+      bookingModal.hide();
     });
 
-    // Debug: Check if car data is loaded
-    console.log("Car data:", cars);
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCars();
+    });
   </script>
 </body>
 </html>
