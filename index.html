@@ -191,10 +191,12 @@
     const db = firebase.firestore();
 
     // Car data
-    const cars = [
-      {name:'Swift',image:'img/swift.jpg',price12hrs:1200,price24hrs:2000,description:'Compact hatchback with great fuel efficiency and comfortable seating for 5.',category:'economy'},
-      // ... (same car data as before)
-    ];
+   // In your cars array, replace image paths like this:
+const cars = [
+  {name:'Swift',image:'https://source.unsplash.com/random/300x200/?swift+car',price12hrs:1200,price24hrs:2000,description:'Compact hatchback...',category:'economy'},
+  {name:'Etios',image:'https://source.unsplash.com/random/300x200/?toyota+etios',price12hrs:1200,price24hrs:2000,description:'Reliable sedan...',category:'economy'},
+  // ... do this for all cars
+];
 
     // DOM elements
     const authButtons = document.getElementById('authButtons');
