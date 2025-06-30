@@ -182,20 +182,84 @@
 
     // Car data with placeholder images
     const cars = [
-      {name:'Swift',image:'https://source.unsplash.com/random/600x400/?maruti+swift',price12hrs:1200,price24hrs:2000,description:'Compact hatchback with great fuel efficiency and comfortable seating for 5.',category:'economy'},
-      {name:'Etios',image:'https://source.unsplash.com/random/600x400/?toyota+etios',price12hrs:1200,price24hrs:2000,description:'Reliable sedan with spacious interior and good mileage.',category:'economy'},
-      {name:'I10 Nios',image:'https://source.unsplash.com/random/600x400/?hyundai+i10',price12hrs:1500,price24hrs:2300,description:'Premium hatchback with modern features and stylish design.',category:'economy'},
-      {name:'Swift Dzire',image:'https://source.unsplash.com/random/600x400/?swift+dzire',price12hrs:1500,price24hrs:2300,description:'Popular compact sedan with excellent ride quality.',category:'economy'},
-      {name:'Hyundai Aura',image:'https://source.unsplash.com/random/600x400/?hyundai+aura',price12hrs:1500,price24hrs:2500,description:'Stylish compact sedan with premium features.',category:'premium'},
-      {name:'Tata Punch',image:'https://source.unsplash.com/random/600x400/?tata+punch',price12hrs:1500,price24hrs:2500,description:'Compact SUV with rugged design and modern features.',category:'premium'},
-      {name:'Hyundai i20',image:'https://source.unsplash.com/random/600x400/?hyundai+i20',price12hrs:1500,price24hrs:2500,description:'Premium hatchback with sporty looks and advanced features.',sunroof:true,category:'premium'},
-      {name:'Renault Kiger',image:'https://source.unsplash.com/random/600x400/?renault+kiger',price12hrs:1500,price24hrs:2500,description:'Compact SUV with bold styling and spacious interior.',category:'premium'},
-      {name:'Brezza',image:'https://source.unsplash.com/random/600x400/?maruti+brezza',price12hrs:1500,price24hrs:2500,description:'Popular compact SUV with excellent build quality.',category:'premium'},
-      {name:'Hyundai Creta',image:'https://source.unsplash.com/random/600x400/?hyundai+creta',price12hrs:2000,price24hrs:3000,description:'Premium SUV with luxurious features and spacious cabin.',category:'premium'},
-      {name:'Mahindra Thar',image:'https://source.unsplash.com/random/600x400/?mahindra+thar',price12hrs:3500,price24hrs:5000,description:'Iconic off-roader with convertible top and powerful engine.',category:'luxury'},
-      {name:'Innova Crysta',image:'https://source.unsplash.com/random/600x400/?innova+crysta',price12hrs:3500,price24hrs:5000,description:'Premium 7-seater MPV with luxurious comfort.',category:'luxury'},
-      {name:'Fortuner',image:'https://source.unsplash.com/random/600x400/?toyota+fortuner',price12hrs:8000,price24hrs:12000,description:'Premium full-size SUV with powerful engine and luxury features.',withDriver:true,category:'luxury'}
-    ];
+    {name: 'Swift', image: 'img/swift.jpg', price12hrs: 1200, price24hrs: 2000, 
+     description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.', category: 'economy'},
+     
+    {name: 'Etios', image: 'img/etios.jpg', price12hrs: 1200, price24hrs: 2000, 
+     description: 'Reliable sedan with spacious interior and good mileage.', category: 'economy'},
+     
+    {name: 'I10 Nios', image: 'img/i10nios.jpg', price12hrs: 1500, price24hrs: 2300, 
+     description: 'Premium hatchback with modern features and stylish design.', category: 'economy'},
+     
+    {name: 'Swift Dzire', image: 'img/swiftdzire.jpg', price12hrs: 1500, price24hrs: 2300, 
+     description: 'Popular compact sedan with excellent ride quality.', category: 'economy'},
+     
+    {name: 'Hyundai Aura', image: 'img/aura.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Stylish compact sedan with premium features.', category: 'premium'},
+     
+    {name: 'Tata Punch', image: 'img/punch.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Compact SUV with rugged design and modern features.', category: 'premium'},
+     
+    {name: 'Hyundai i20', image: 'img/i20.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Premium hatchback with sporty looks and advanced features.', sunroof: true, category: 'premium'},
+     
+    {name: 'Renault Kiger', image: 'img/kiger.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Compact SUV with bold styling and spacious interior.', category: 'premium'},
+     
+    {name: 'Urban Cruiser', image: 'img/urban-cruiser.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Compact SUV with Toyota reliability and comfort.', category: 'premium'},
+     
+    {name: 'Brezza', image: 'img/brezza.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Popular compact SUV with excellent build quality.', category: 'premium'},
+     
+    {name: 'Nexa Fronx', image: 'img/fronx.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Stylish crossover with premium features.', sunroof: true, category: 'premium'},
+     
+    {name: 'Hyundai Creta', image: 'img/creta.jpg', price12hrs: 2000, price24hrs: 3000, 
+     description: 'Premium SUV with luxurious features and spacious cabin.', category: 'premium'},
+     
+    {name: 'Grand Vitara', image: 'img/grandvitara.jpg', price12hrs: 2000, price24hrs: 3000, 
+     description: 'Premium SUV with hybrid technology and elegant design.', category: 'premium'},
+     
+    {name: 'Ertiga', image: 'img/ertiga.jpg', price12hrs: 2000, price24hrs: 3500, 
+     description: '7-seater MPV with comfortable seating and good mileage.', category: 'premium'},
+     
+    {name: 'Bolero Neo', image: 'img/bolero-neo.jpg', price12hrs: 2000, price24hrs: 3500, 
+     description: 'Rugged SUV with excellent off-road capabilities.', category: 'premium'},
+     
+    {name: 'Mahindra Thar', image: 'img/thar.jpg', price12hrs: 3500, price24hrs: 5000, 
+     description: 'Iconic off-roader with convertible top and powerful engine.', category: 'luxury'},
+     
+    {name: 'Innova Crysta', image: 'img/innova.jpg', price12hrs: 3500, price24hrs: 5000, 
+     description: 'Premium 7-seater MPV with luxurious comfort.',  category: 'luxury'},
+     
+    {name: 'Brezza Sunroof', image: 'img/brezza-sunroof.jpg', price12hrs: 1500, price24hrs: 2500, 
+     description: 'Compact SUV with panoramic sunroof for open-air experience.', sunroof: true, category: 'premium'},
+     
+    {name: 'Mahindra XUV700', image: 'img/xuv700.jpg', price24hrs: 6500, price12hrs: 4500, 
+     description: 'Premium SUV with advanced features and powerful performance.', withDriver: true, category: 'luxury'},
+     
+    {name: 'Hyundai Venue', image: 'img/venue.jpg', price24hrs: 2500, price12hrs: 1500, 
+     description: 'Compact SUV with bold styling and connected car tech.', category: 'premium'},
+      {name: 'Baleno',image: 'img/baleno.jpg',price12hrs: 1500,price24hrs: 2500,
+    description: 'Mid variant hatchback with comfort, style, and great fuel efficiency.',
+    category: 'premium'  },
+     
+    {name: 'Tata Nexon Sunroof', image: 'img/nexon-sunroof.jpg', price24hrs: 2800, price12hrs: 1800, 
+     description: 'Safe and stylish compact SUV with panoramic sunroof.', sunroof: true, category: 'premium'},
+     
+    {name: 'Tata Altroz Sunroof', image: 'img/altroz-sunroof.jpg', price24hrs: 2500, price12hrs: 1600, 
+     description: 'Premium hatchback with sunroof and premium interiors.', sunroof: true, category: 'premium'},
+     
+    {name: 'XUV 300 Sunroof', image: 'img/xuv300-sunroof.jpg', price24hrs: 2800, price12hrs: 1800, 
+     description: 'Feature-packed compact SUV with sunroof option.', sunroof: true, category: 'premium'},
+     
+    {name: 'Fortuner', image: 'img/fortuner.jpg', price24hrs: 12000, price12hrs: 8000, 
+     description: 'Premium full-size SUV with powerful engine and luxury features.', withDriver: true, category: 'luxury'},
+     
+    {name: 'Kia Seltos', image: 'img/kia-selto.jpg', price24hrs: 2800, price12hrs: 1800, 
+     description: 'Stylish SUV with premium features and spacious cabin.', category: 'premium'}
+];
 
     // Initialize Bootstrap modal
     const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
