@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment | GoPandaCars</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container py-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h4>Complete Your Payment</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Booking Summary</h5>
+            <div id="bookingDetails"></div>
+            <div class="mt-3">
+              <h6>Apply Offer Code</h6>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="offerCode" placeholder="Enter offer code">
+                <button class="btn btn-outline-primary" id="applyOffer">Apply</button>
+              </div>
+              <div id="offerMessage" class="alert" style="display:none;"></div>
+            </div>
+          </div>
+          <div class="col-md-6 text-center">
+            <h5>Scan to Pay</h5>
+            <div id="qrcode" class="mb-3"></div>
+            <p>Or pay manually to:</p>
+            <div class="alert alert-info">
+              <p><strong>UPI ID:</strong> gopandacars@upi</p>
+              <p><strong>Account No:</strong> 1234567890</p>
+              <p><strong>IFSC:</strong> GPCB000123</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-between">
+          <h5>Total: ₹<span id="totalAmount">0</span></h5>
+          <button id="confirmPayment" class="btn btn-success">Confirm Payment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+      authDomain: "gopandacars-7085f.firebaseapp.com",
+      projectId: "gopandacars-7085f",
+      storageBucket: "gopandacars-7085f.appspot.com",
+      messagingSenderId: "486383420605"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Get booking ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingId = urlParams.get('bookingId');
+    let currentBooking = null;
+
+    // Load booking details
+    db.collection('bookings').doc(bookingId).get().then(doc => {
+      if (doc.exists) {
+        currentBooking = doc.data();
+        displayBookingDetails();
+        generateQRCode();
+      } else {
+        alert('Booking not found');
+        window.location.href = 'index.html';
+      }
+    });
+
+    function displayBookingDetails() {
+      document.getElementById('bookingDetails').innerHTML = `
+        <p><strong>Car:</strong> ${currentBooking.carId}</p>
+        <p><strong>Dates:</strong> ${currentBooking.startDate} to ${currentBooking.endDate}</p>
+        <p><strong>Original Price:</strong> ₹${currentBooking.originalPrice}</p>
+        <p><strong>Final Price:</strong> ₹<span id="finalPrice">${currentBooking.finalPrice}</span></p>
+      `;
+      document.getElementById('totalAmount').textContent = currentBooking.finalPrice;
+    }
+
+    function generateQRCode() {
+      new QRCode(document.getElementById("qrcode"), {
+        text: `upi://pay?pa=gopandacars@upi&pn=GoPandaCars&am=${currentBooking.finalPrice}&tn=Booking-${bookingId}`,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    // Apply offer code
+    document.getElementById('applyOffer').addEventListener('click', () => {
+      const offerCode = document.getElementById('offerCode').value;
+      const offerMessage = document.getElementById('offerMessage');
+      
+      db.collection('offers').where('code', '==', offerCode)
+        .where('isActive', '==', true)
+        .get().then(snap => {
+          if (snap.empty) {
+            offerMessage.textContent = 'Invalid or expired offer code';
+            offerMessage.className = 'alert alert-danger';
+            offerMessage.style.display = 'block';
+            return;
+          }
+          
+          const offer = snap.docs[0].data();
+          applyOffer(offer);
+        });
+    });
+
+    function applyOffer(offer) {
+      const offerMessage = document.getElementById('offerMessage');
+      let finalPrice = currentBooking.originalPrice;
+      
+      if (offer.discountType === 'percentage') {
+        finalPrice = currentBooking.originalPrice * (1 - (offer.discountValue / 100));
+      } else if (offer.discountType === 'fixed') {
+        finalPrice = currentBooking.originalPrice - offer.discountValue;
+      }
+      
+      // Update display
+      document.getElementById('finalPrice').textContent = finalPrice.toFixed(2);
+      document.getElementById('totalAmount').textContent = finalPrice.toFixed(2);
+      
+      // Show success message
+      offerMessage.innerHTML = `
+        Offer applied successfully!<br>
+        <strong>${offer.name}</strong>: ${offer.description}
+      `;
+      offerMessage.className = 'alert alert-success';
+      offerMessage.style.display = 'block';
+      
+      // Update booking in database
+      db.collection('bookings').doc(bookingId).update({
+        finalPrice: finalPrice,
+        appliedOffer: offer.code
+      });
+    }
+
+    // Confirm payment
+    document.getElementById('confirmPayment').addEventListener('click', () => {
+      db.collection('bookings').doc(bookingId).update({
+        status: 'confirmed',
+        paymentDate: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert('Payment confirmed! Your booking is now active.');
+        window.location.href = 'profile.html';
+      });
+    });
+  </script>
+</body>
+</html>
