@@ -168,17 +168,37 @@
                 <h5 class="mb-0">Total Amount: <span class="text-primary">₹<span id="finalAmount">0</span></span></h5>
                 <small class="text-muted">Inclusive of all taxes</small>
               </div>
-              <button id="confirmPayment" class="btn btn-success btn-lg px-4">
-                <i class="fas fa-check-circle me-2"></i> Confirm Payment
-              </button>
+              <!-- Change this in the card-footer section -->
+<button id="verifyPayment" class="btn btn-primary btn-lg px-4">
+  <i class="fas fa-check-circle me-2"></i> Verify Payment
+</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- Change the modal header -->
+<div class="modal-header bg-primary text-white">
+  <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i> Payment Verified</h5>
+  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
 
-  <!-- Payment Success Modal -->
+<!-- Change the modal body text -->
+<div class="modal-body text-center">
+  <div class="mb-4">
+    <i class="fas fa-check-circle text-primary" style="font-size: 4rem;"></i>
+  </div>
+  <h4 class="mb-3">Payment Verified!</h4>
+  <p>Your payment of ₹<span id="modalAmount">0</span> has been verified successfully.</p>
+  <div class="alert alert-light mt-3 text-start">
+    <p class="mb-1"><strong>Booking ID:</strong> <span id="modalBookingId">BOOK123</span></p>
+    <p class="mb-1"><strong>Transaction ID:</strong> <span id="transactionId">TXN123456789</span></p>
+    <p class="mb-0"><strong>Status:</strong> <span class="badge bg-primary">Verified</span></p>
+  </div>
+</div>
+
+  <!-- Payment Success Modal --
   <div class="modal fade" id="paymentSuccessModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -346,6 +366,36 @@
         console.error("Error updating booking:", error);
       });
     }
+    // Replace the confirmPayment function with this verifyPayment function
+document.getElementById('verifyPayment').addEventListener('click', verifyPayment);
+
+function verifyPayment() {
+  const paymentModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
+  
+  // Generate random transaction ID (this would actually come from your payment verification)
+  const transactionId = 'TXN' + Math.floor(100000000 + Math.random() * 900000000);
+  document.getElementById('transactionId').textContent = transactionId;
+  
+  // Here you would typically:
+  // 1. Check with your payment provider to verify the payment
+  // 2. Only update the booking if payment is verified
+  
+  // For demo purposes, we'll just update the status
+  db.collection('bookings').doc(bookingId).update({
+    status: 'verified',
+    paymentVerifiedDate: firebase.firestore.FieldValue.serverTimestamp(),
+    transactionId: transactionId
+  }).then(() => {
+    paymentModal.show();
+    // Update modal text to reflect verification
+    document.querySelector('.modal-title').innerHTML = '<i class="fas fa-check-circle me-2"></i> Payment Verified';
+    document.querySelector('.modal-body h4').textContent = 'Payment Verified!';
+    document.querySelector('.modal-body p').textContent = `Your payment of ₹${currentBooking.finalPrice.toFixed(2)} has been verified successfully.`;
+  }).catch(error => {
+    console.error("Error verifying payment:", error);
+    alert('Error verifying payment. Please try again.');
+  });
+}
 
     function showOfferMessage(message, type) {
       const offerMessage = document.getElementById('offerMessage');
@@ -360,6 +410,7 @@
 
     // Confirm payment
     document.getElementById('confirmPayment').addEventListener('click', confirmPayment);
+    
 
     function confirmPayment() {
       const paymentModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
