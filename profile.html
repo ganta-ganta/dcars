@@ -100,12 +100,28 @@
         <h5 class="mb-0">My Bookings</h5>
       </div>
       <div class="card-body">
-        <div class="row" id="bookingsList">
-          <div class="col-12 text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Car</th>
+                <th>Dates</th>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookingsList">
+              <tr>
+                <td colspan="6" class="text-center py-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -144,9 +160,18 @@
     // Check auth state
     auth.onAuthStateChanged(user => {
       if (user) {
-        // User is signed in
-        loadUserProfile(user);
-        loadUserBookings(user.uid);
+        // Check if user is blocked
+        db.collection('users').doc(user.uid).get().then(doc => {
+          if (doc.exists && doc.data().isBlocked) {
+            auth.signOut();
+            alert('Your account has been blocked by admin');
+            return;
+          }
+          
+          // User is signed in
+          loadUserProfile(user);
+          loadUserBookings(user.uid);
+        });
       } else {
         // No user is signed in
         window.location.href = 'login.html';
@@ -186,64 +211,66 @@
         .then(querySnapshot => {
           if (querySnapshot.empty) {
             bookingsList.innerHTML = `
-              <div class="col-12 text-center py-5">
-                <h6 class="text-muted">You don't have any bookings yet</h6>
-                <a href="index.html" class="btn btn-primary mt-3">Book a Car</a>
-              </div>
+              <tr>
+                <td colspan="6" class="text-center py-5">
+                  <h6 class="text-muted">You don't have any bookings yet</h6>
+                  <a href="index.html" class="btn btn-primary mt-3">Book a Car</a>
+                </td>
+              </tr>
             `;
             return;
           }
           
           querySnapshot.forEach(doc => {
             const booking = doc.data();
-            addBookingCard(booking, doc.id);
+            addBookingRow(booking, doc.id);
           });
         })
         .catch(error => {
           console.error("Error getting bookings: ", error);
           bookingsList.innerHTML = `
-            <div class="col-12 text-center py-5">
-              <h6 class="text-danger">Error loading bookings</h6>
-              <button class="btn btn-primary mt-3" onclick="window.location.reload()">Try Again</button>
-            </div>
+            <tr>
+              <td colspan="6" class="text-center py-5">
+                <h6 class="text-danger">Error loading bookings</h6>
+                <button class="btn btn-primary mt-3" onclick="window.location.reload()">Try Again</button>
+              </td>
+            </tr>
           `;
         });
     }
 
-    function addBookingCard(booking, bookingId) {
-      const card = document.createElement('div');
-      card.className = 'col-md-6 mb-4';
+    function addBookingRow(booking, bookingId) {
+      const row = document.createElement('tr');
+      row.className = 'booking-card';
       
       const statusClass = booking.status === 'confirmed' ? 'bg-success' : 
                          booking.status === 'cancelled' ? 'bg-danger' : 'bg-warning';
       
-      card.innerHTML = `
-        <div class="card booking-card h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="card-title mb-0">${booking.carId}</h5>
-              <span class="badge ${statusClass} status-badge">${booking.status}</span>
-            </div>
-            <div class="d-flex mb-3">
-              <img src="${booking.carImage || 'img/default-car.jpg'}" class="rounded me-3" style="width: 100px; height: 60px; object-fit: cover;">
-              <div>
-                <p class="mb-1"><strong>Dates:</strong> ${booking.startDate} to ${booking.endDate}</p>
-                <p class="mb-1"><strong>Price:</strong> ₹${booking.price}</p>
-                <p class="mb-0"><small class="text-muted">Booked on: ${new Date(booking.createdAt?.toDate()).toLocaleString()}</small></p>
-              </div>
-            </div>
+      row.innerHTML = `
+        <td>${bookingId.substring(0, 8)}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <img src="${booking.carImage || 'https://placehold.co/100x60?text=Car'}" 
+                 class="rounded me-3" style="width: 80px; height: 50px; object-fit: cover;">
+            <div>${booking.carName}</div>
           </div>
-          <div class="card-footer bg-transparent">
-            ${booking.status === 'pending' ? `
-              <button class="btn btn-sm btn-outline-danger cancel-booking" data-booking-id="${bookingId}">
-                <i class="fas fa-times me-1"></i> Cancel
-              </button>
-            ` : ''}
-          </div>
-        </div>
+        </td>
+        <td>${booking.startDate} to ${booking.endDate}</td>
+        <td><span class="badge ${statusClass} status-badge">${booking.status}</span></td>
+        <td>₹${booking.finalPrice || booking.originalPrice}</td>
+        <td>
+          ${booking.status === 'pending_payment' ? `
+            <a href="pay.html?bookingId=${bookingId}" class="btn btn-sm btn-primary">Complete Payment</a>
+          ` : ''}
+          ${booking.status === 'pending_payment' || booking.status === 'confirmed' ? `
+            <button class="btn btn-sm btn-outline-danger ms-2 cancel-booking" data-booking-id="${bookingId}">
+              Cancel
+            </button>
+          ` : ''}
+        </td>
       `;
       
-      bookingsList.appendChild(card);
+      bookingsList.appendChild(row);
     }
 
     // Logout handler
