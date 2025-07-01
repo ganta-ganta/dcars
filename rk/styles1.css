@@ -1,0 +1,115 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Banner Styles */
+.banner {
+  background-color: #f9d342;
+  color: #333;
+  padding: 15px;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  animation: slideIn 0.5s ease-out, pulse 2s infinite;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banner p {
+  margin: 0;
+  font-size: 1.2rem; /* Slightly larger for desktop readability */
+}
+
+.dismiss-btn {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    background-color: #cfa900;
+  }
+  50% {
+    background-color: #ffd700;
+  }
+}
+
+/* Diwali Banner Modal */
+#diwaliBanner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Ensure it's on top */
+  width: 100%; /* Full width for desktop */
+  height: 100vh; /* Full-screen modal */
+}
+
+.clr-modal-content {
+  max-width: 700px; /* Wider for desktop */
+  background-color: #cfa900;
+  border-radius: 18px;
+  box-shadow: 0 20px 10px rgba(152, 159, 7, 0.253);
+  padding: 20px;
+  overflow: hidden;
+  width: 80%; /* Centers the content while not occupying the entire screen */
+  height: auto;
+}
+
+.clr-modal-body {
+  text-align: center;
+  padding: 20px;
+}
+
+.clr-modal-footer {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Desktop Optimizations */
+@media (min-width: 1024px) {
+  .banner {
+    padding: 20px;
+  }
+  .banner p {
+    font-size: 1.4rem;
+  }
+  .dismiss-btn {
+    font-size: 1.2rem;
+  }
+  #diwaliBanner {
+    padding: 20px;
+  }
+  .clr-modal-content {
+    padding: 30px;
+    max-width: 500px;
+  }
+  .clr-modal-body {
+    font-size: 1.2rem; /* Increase font size for readability */
+  }
+}
