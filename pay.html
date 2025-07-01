@@ -4,100 +4,220 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment | GoPandaCars</title>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- QR Code Library -->
   <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
   <style>
-    .payment-status {
-      font-size: 1.1rem;
-      padding: 10px;
-      border-radius: 5px;
+    body {
+      background-color: #f8f9fa;
     }
-    .status-pending {
-      background-color: #fff3cd;
-      color: #856404;
+    .payment-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .status-verified {
-      background-color: #d4edda;
-      color: #155724;
+    .payment-header {
+      border-radius: 10px 10px 0 0 !important;
+    }
+    .qr-container {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      display: inline-block;
+      border: 1px solid #dee2e6;
+    }
+    .payment-method {
+      transition: all 0.3s ease;
+    }
+    .payment-method:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+    .copy-btn {
+      cursor: pointer;
+    }
+    .bank-details {
+      background-color: #f8f9fa;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
   <div class="container py-5">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        <h4>Complete Your Payment</h4>
-      </div>
-      <div class="card-body">
-        <div id="paymentStatus" class="payment-status status-pending mb-4">
-          <i class="fas fa-info-circle me-2"></i> Payment received! Waiting for admin verification.
-        </div>
-        
-        <div class="row">
-          <div class="col-md-6">
-            <h5>Booking Summary</h5>
-            <div id="bookingDetails"></div>
-            <div class="mt-3">
-              <h6>Apply Offer Code</h6>
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" id="offerCode" placeholder="Enter offer code">
-                <button class="btn btn-outline-primary" id="applyOffer">Apply</button>
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card payment-card">
+          <!-- Header -->
+          <div class="card-header payment-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="mb-0"><i class="fas fa-credit-card me-2"></i> Complete Your Payment</h4>
+              <span class="badge bg-light text-dark">Booking ID: <span id="displayBookingId">BOOK123</span></span>
+            </div>
+          </div>
+          
+          <!-- Body -->
+          <div class="card-body">
+            <div class="row">
+              <!-- Booking Summary -->
+              <div class="col-md-6 border-end">
+                <h5 class="mb-4"><i class="fas fa-receipt me-2"></i> Booking Summary</h5>
+                <div id="bookingDetails" class="mb-4"></div>
+                
+                <!-- Offer Code Section -->
+                <div class="offer-section mt-4">
+                  <h6 class="mb-3"><i class="fas fa-tag me-2"></i> Apply Offer Code</h6>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="offerCode" placeholder="Enter offer code">
+                    <button class="btn btn-primary" id="applyOffer">
+                      <i class="fas fa-check me-1"></i> Apply
+                    </button>
+                  </div>
+                  <div id="offerMessage" class="alert" style="display:none;"></div>
+                </div>
+                
+                <!-- Price Breakdown -->
+                <div class="price-breakdown mt-4">
+                  <h6 class="mb-3"><i class="fas fa-file-invoice-dollar me-2"></i> Price Breakdown</h6>
+                  <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>Base Price</span>
+                      <span>₹<span id="basePrice">0</span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>Discount</span>
+                      <span class="text-success">-₹<span id="discountAmount">0</span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between fw-bold">
+                      <span>Total Amount</span>
+                      <span>₹<span id="totalAmount">0</span></span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div id="offerMessage" class="alert" style="display:none;"></div>
+              
+              <!-- Payment Methods -->
+              <div class="col-md-6">
+                <h5 class="mb-4"><i class="fas fa-money-bill-wave me-2"></i> Payment Methods</h5>
+                
+                <!-- UPI QR Code -->
+                <div class="payment-method card mb-4">
+                  <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="fas fa-qrcode me-2"></i> Scan UPI QR Code</h6>
+                  </div>
+                  <div class="card-body text-center">
+                    <div id="qrcode" class="qr-container mb-3"></div>
+                    <p class="text-muted mb-2">Scan this QR code with any UPI app</p>
+                    <small class="text-muted">Supports all UPI apps (GPay, PhonePe, Paytm, etc.)</small>
+                  </div>
+                </div>
+                
+                <!-- Manual Payment -->
+                <div class="payment-method card mb-4">
+                  <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="fas fa-university me-2"></i> Bank Transfer</h6>
+                  </div>
+                  <div class="card-body bank-details">
+                    <div class="mb-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">UPI ID</span>
+                        <div>
+                          <span class="fw-bold">gopandacars@upi</span>
+                          <button class="btn btn-sm btn-outline-primary ms-2 copy-btn" onclick="copyToClipboard('upiId')">
+                            <i class="fas fa-copy"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Account Number</span>
+                        <div>
+                          <span class="fw-bold">1234567890</span>
+                          <button class="btn btn-sm btn-outline-primary ms-2 copy-btn" onclick="copyToClipboard('accountNo')">
+                            <i class="fas fa-copy"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">IFSC Code</span>
+                        <div>
+                          <span class="fw-bold">GPCB000123</span>
+                          <button class="btn btn-sm btn-outline-primary ms-2 copy-btn" onclick="copyToClipboard('ifscCode')">
+                            <i class="fas fa-copy"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-3">
+                      <small class="text-muted">After payment, please share screenshot on WhatsApp: +91 9966688266</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-md-6 text-center">
-            <h5>Scan to Pay</h5>
-            <div id="qrcode" class="mb-3"></div>
-            <p>Or pay manually to:</p>
-            <div class="alert alert-info">
-              <p><strong>UPI ID:</strong> gopandacars@upi</p>
-              <p><strong>Account No:</strong> 1234567890</p>
-              <p><strong>IFSC:</strong> GPCB000123</p>
+          
+          <!-- Footer -->
+          <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="mb-0">Total Amount: <span class="text-primary">₹<span id="finalAmount">0</span></span></h5>
+                <small class="text-muted">Inclusive of all taxes</small>
+              </div>
+              <button id="confirmPayment" class="btn btn-success btn-lg px-4">
+                <i class="fas fa-check-circle me-2"></i> Confirm Payment
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="card-footer">
-        <div class="d-flex justify-content-between">
-          <h5>Total: ₹<span id="totalAmount">0</span></h5>
-          <button id="confirmPayment" class="btn btn-success">I've Made Payment</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Verification Modal -->
-  <div class="modal fade" id="verificationModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog">
+  <!-- Payment Success Modal -->
+  <div class="modal fade" id="paymentSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Payment Verification</h5>
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i> Payment Successful</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <p>Your payment is being verified by our team. This usually takes 15-30 minutes.</p>
-          <p>You'll receive a confirmation email once verified.</p>
-          <div class="text-center my-3">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
+        <div class="modal-body text-center">
+          <div class="mb-4">
+            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+          </div>
+          <h4 class="mb-3">Thank You!</h4>
+          <p>Your payment of ₹<span id="modalAmount">0</span> has been received successfully.</p>
+          <div class="alert alert-light mt-3 text-start">
+            <p class="mb-1"><strong>Booking ID:</strong> <span id="modalBookingId">BOOK123</span></p>
+            <p class="mb-1"><strong>Transaction ID:</strong> <span id="transactionId">TXN123456789</span></p>
+            <p class="mb-0"><strong>Status:</strong> <span class="badge bg-success">Confirmed</span></p>
           </div>
         </div>
-        <div class="modal-footer">
-          <button id="viewBookingsBtn" class="btn btn-primary" style="display:none;">View My Bookings</button>
+        <div class="modal-footer justify-content-center">
+          <a href="https://wa.me/919966688266" class="btn btn-success me-2">
+            <i class="fab fa-whatsapp me-1"></i> Share on WhatsApp
+          </a>
+          <a href="profile.html" class="btn btn-primary">
+            <i class="fas fa-user-circle me-1"></i> View Booking
+          </a>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   
   <script>
-    // Firebase configuration
+    // Initialize Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
       authDomain: "gopandacars-7085f.firebaseapp.com",
@@ -107,67 +227,57 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const auth = firebase.auth();
 
     // Get booking ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const bookingId = urlParams.get('bookingId');
     let currentBooking = null;
-    let verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
-    let unsubscribeBooking = null;
 
     // Load booking details
-    db.collection('bookings').doc(bookingId).get().then(doc => {
-      if (doc.exists) {
-        currentBooking = doc.data();
-        displayBookingDetails();
-        generateQRCode();
-        
-        // Set up real-time listener for booking status changes
-        unsubscribeBooking = db.collection('bookings').doc(bookingId)
-          .onSnapshot(snap => {
-            const updatedBooking = snap.data();
-            
-            if (updatedBooking.status === 'confirmed') {
-              // Admin has verified the payment
-              document.getElementById('paymentStatus').className = 'payment-status status-verified mb-4';
-              document.getElementById('paymentStatus').innerHTML = `
-                <i class="fas fa-check-circle me-2"></i> Payment verified! Your booking is now confirmed.
-              `;
-              
-              // Show the view bookings button in modal
-              document.getElementById('viewBookingsBtn').style.display = 'block';
-            }
-          });
-      } else {
-        alert('Booking not found');
-        window.location.href = 'index.html';
-      }
-    });
+    function loadBookingDetails() {
+      db.collection('bookings').doc(bookingId).get().then(doc => {
+        if (doc.exists) {
+          currentBooking = doc.data();
+          displayBookingDetails();
+          generateQRCode();
+          document.getElementById('displayBookingId').textContent = bookingId;
+          document.getElementById('modalBookingId').textContent = bookingId;
+        } else {
+          alert('Booking not found');
+          window.location.href = 'index.html';
+        }
+      }).catch(error => {
+        console.error("Error getting booking:", error);
+        alert('Error loading booking details');
+      });
+    }
 
+    // Display booking details
     function displayBookingDetails() {
+      const discount = currentBooking.originalPrice - currentBooking.finalPrice;
+      
       document.getElementById('bookingDetails').innerHTML = `
-        <p><strong>Booking ID:</strong> ${bookingId.substring(0, 8)}</p>
-        <p><strong>Car:</strong> ${currentBooking.carName}</p>
-        <p><strong>Dates:</strong> ${formatDate(currentBooking.startDate)} to ${formatDate(currentBooking.endDate)}</p>
-        <p><strong>Original Price:</strong> ₹${currentBooking.originalPrice}</p>
-        <p><strong>Final Price:</strong> ₹<span id="finalPrice">${currentBooking.finalPrice || currentBooking.originalPrice}</span></p>
+        <div class="mb-3">
+          <p class="mb-1"><strong>Car:</strong> ${currentBooking.carId}</p>
+          <p class="mb-1"><strong>Dates:</strong> ${formatDate(currentBooking.startDate)} to ${formatDate(currentBooking.endDate)}</p>
+          <p class="mb-0"><strong>Duration:</strong> ${calculateDays(currentBooking.startDate, currentBooking.endDate)} days</p>
+        </div>
       `;
-      document.getElementById('totalAmount').textContent = currentBooking.finalPrice || currentBooking.originalPrice;
+      
+      document.getElementById('basePrice').textContent = currentBooking.originalPrice.toFixed(2);
+      document.getElementById('discountAmount').textContent = discount.toFixed(2);
+      document.getElementById('totalAmount').textContent = currentBooking.finalPrice.toFixed(2);
+      document.getElementById('finalAmount').textContent = currentBooking.finalPrice.toFixed(2);
+      document.getElementById('modalAmount').textContent = currentBooking.finalPrice.toFixed(2);
     }
 
-    function formatDate(timestamp) {
-      if (!timestamp) return 'N/A';
-      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-      return date.toLocaleDateString();
-    }
-
+    // Generate UPI QR Code
     function generateQRCode() {
-      const finalPrice = currentBooking.finalPrice || currentBooking.originalPrice;
+      document.getElementById("qrcode").innerHTML = "";
       new QRCode(document.getElementById("qrcode"), {
-        text: `upi://pay?pa=gopandacars@upi&pn=GoPandaCars&am=${finalPrice}&tn=Booking-${bookingId}`,
-        width: 200,
-        height: 200,
+        text: `upi://pay?pa=gopandacars@upi&pn=GoPandaCars&am=${currentBooking.finalPrice}&tn=Booking-${bookingId}`,
+        width: 180,
+        height: 180,
         colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
@@ -175,135 +285,124 @@
     }
 
     // Apply offer code
-    document.getElementById('applyOffer').addEventListener('click', () => {
-      const offerCode = document.getElementById('offerCode').value;
+    document.getElementById('applyOffer').addEventListener('click', applyOfferCode);
+
+    function applyOfferCode() {
+      const offerCode = document.getElementById('offerCode').value.trim();
       const offerMessage = document.getElementById('offerMessage');
       
       if (!offerCode) {
-        offerMessage.textContent = 'Please enter an offer code';
-        offerMessage.className = 'alert alert-warning';
-        offerMessage.style.display = 'block';
+        showOfferMessage('Please enter an offer code', 'danger');
         return;
       }
       
       db.collection('offers').where('code', '==', offerCode)
         .where('isActive', '==', true)
-        .where('validUntil', '>=', new Date())
         .get().then(snap => {
           if (snap.empty) {
-            offerMessage.textContent = 'Invalid, expired or inactive offer code';
-            offerMessage.className = 'alert alert-danger';
-            offerMessage.style.display = 'block';
+            showOfferMessage('Invalid or expired offer code', 'danger');
             return;
           }
           
           const offer = snap.docs[0].data();
-          applyOffer(offer);
+          applyDiscount(offer);
+        }).catch(error => {
+          console.error("Error applying offer:", error);
+          showOfferMessage('Error applying offer code', 'danger');
         });
-    });
+    }
 
-    function applyOffer(offer) {
-      const offerMessage = document.getElementById('offerMessage');
+    function applyDiscount(offer) {
       let finalPrice = currentBooking.originalPrice;
+      let discount = 0;
       
       if (offer.discountType === 'percentage') {
-        finalPrice = currentBooking.originalPrice * (1 - (offer.discountValue / 100));
+        discount = currentBooking.originalPrice * (offer.discountValue / 100);
+        finalPrice = currentBooking.originalPrice - discount;
       } else if (offer.discountType === 'fixed') {
-        finalPrice = currentBooking.originalPrice - offer.discountValue;
+        discount = offer.discountValue;
+        finalPrice = currentBooking.originalPrice - discount;
       }
       
-      // Ensure price doesn't go negative
-      finalPrice = Math.max(finalPrice, 0);
-      
       // Update display
-      document.getElementById('finalPrice').textContent = finalPrice.toFixed(2);
+      document.getElementById('discountAmount').textContent = discount.toFixed(2);
       document.getElementById('totalAmount').textContent = finalPrice.toFixed(2);
+      document.getElementById('finalAmount').textContent = finalPrice.toFixed(2);
       
       // Show success message
-      offerMessage.innerHTML = `
-        Offer applied successfully!<br>
-        <strong>${offer.name}</strong>: ${offer.discountValue}${offer.discountType === 'percentage' ? '%' : '₹'} off
-      `;
-      offerMessage.className = 'alert alert-success';
-      offerMessage.style.display = 'block';
+      showOfferMessage(`
+        <strong>${offer.name}</strong> applied successfully!<br>
+        ${offer.description}
+      `, 'success');
       
       // Update booking in database
       db.collection('bookings').doc(bookingId).update({
         finalPrice: finalPrice,
-        discountApplied: true,
-        discountCode: offer.code,
-        discountAmount: offer.discountType === 'percentage' 
-          ? (currentBooking.originalPrice * (offer.discountValue / 100)).toFixed(2)
-          : offer.discountValue
+        appliedOffer: offer.code
+      }).then(() => {
+        currentBooking.finalPrice = finalPrice;
+        generateQRCode(); // Regenerate QR with new amount
+      }).catch(error => {
+        console.error("Error updating booking:", error);
       });
+    }
+
+    function showOfferMessage(message, type) {
+      const offerMessage = document.getElementById('offerMessage');
+      offerMessage.innerHTML = message;
+      offerMessage.className = `alert alert-${type}`;
+      offerMessage.style.display = 'block';
+      
+      setTimeout(() => {
+        offerMessage.style.display = 'none';
+      }, 5000);
     }
 
     // Confirm payment
-    document.getElementById('confirmPayment').addEventListener('click', () => {
-      // First verify user is authenticated
-      auth.onAuthStateChanged(user => {
-        if (!user) {
-          alert('Please login to complete payment');
-          window.location.href = 'login.html?redirect=pay.html?bookingId=' + bookingId;
-          return;
-        }
-        
-        // Update booking status to "payment_received" (awaiting admin verification)
-        db.collection('bookings').doc(bookingId).update({
-          status: 'payment_received',
-          paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-          paymentMethod: 'UPI',
-          paymentStatus: 'pending_verification',
-          userId: user.uid,
-          userEmail: user.email
-        }).then(() => {
-          // Show verification modal
-          verificationModal.show();
-          
-          // Disable the payment button
-          document.getElementById('confirmPayment').disabled = true;
-          document.getElementById('confirmPayment').innerHTML = `
-            <i class="fas fa-check me-2"></i> Payment Submitted
-          `;
-          
-          // Set up view bookings button
-          document.getElementById('viewBookingsBtn').addEventListener('click', () => {
-            window.location.href = 'profile.html';
-          });
-          
-          // Notify admin (this would be handled through your admin notification system)
-          notifyAdmin(bookingId);
-        }).catch(error => {
-          console.error("Error updating booking:", error);
-          alert('Failed to confirm payment. Please try again.');
-        });
-      });
-    });
+    document.getElementById('confirmPayment').addEventListener('click', confirmPayment);
 
-    function notifyAdmin(bookingId) {
-      // In a real app, you might:
-      // 1. Send an email to admin
-      // 2. Create a notification in Firestore
-      // 3. Use Firebase Cloud Messaging
+    function confirmPayment() {
+      const paymentModal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
       
-      // Example: Create an admin notification
-      db.collection('adminNotifications').add({
-        type: 'payment_verification',
-        bookingId: bookingId,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        status: 'pending',
-        read: false
+      // Generate random transaction ID
+      const transactionId = 'TXN' + Math.floor(100000000 + Math.random() * 900000000);
+      document.getElementById('transactionId').textContent = transactionId;
+      
+      // Update booking status
+      db.collection('bookings').doc(bookingId).update({
+        status: 'confirmed',
+        paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+        transactionId: transactionId
       }).then(() => {
-        console.log("Admin notified");
+        paymentModal.show();
+      }).catch(error => {
+        console.error("Error confirming payment:", error);
+        alert('Error confirming payment. Please try again.');
       });
     }
 
-    // Clean up Firestore listener when page unloads
-    window.addEventListener('beforeunload', () => {
-      if (unsubscribeBooking) {
-        unsubscribeBooking();
-      }
-    });
+    // Helper functions
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('en-IN', options);
+    }
+
+    function calculateDays(startDate, endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      return Math.round((end - start) / (1000 * 60 * 60 * 24));
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        // You could show a small toast notification here
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', loadBookingDetails);
   </script>
 </body>
 </html>
