@@ -130,33 +130,7 @@
     let verificationId = null;
     let countdownInterval = null;
     let timeLeft = 120; // 2 minutes in seconds
-    // Modify your send OTP code to handle reCAPTCHA explicitly
-sendOtpBtn.addEventListener('click', async () => {
-  const phoneNumber = selectedCountry.dialCode + phoneNumberInput.value.trim();
-  
-  if (!phoneNumberInput.value || phoneNumberInput.value.length !== 10 || !/^\d+$/.test(phoneNumberInput.value)) {
-    showPhoneError('Please enter a valid 10-digit phone number');
-    return;
-  }
-  
-  sendOtpBtn.disabled = true;
-  sendOtpBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending OTP...';
-  
-  try {
-    // Initialize reCAPTCHA
-    const appVerifier = new firebase.auth.RecaptchaVerifier('sendOtpBtn', {
-      size: 'invisible',
-      callback: (response) => {
-        // reCAPTCHA solved, proceed with sending OTP
-        console.log('reCAPTCHA solved:', response);
-      },
-      'expired-callback': () => {
-        console.log('reCAPTCHA expired');
-        showPhoneError('Verification expired. Please try again.');
-        sendOtpBtn.disabled = false;
-        sendOtpBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i> Send OTP';
-      }
-    });
+    
     
     // Send OTP
     const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, appVerifier);
