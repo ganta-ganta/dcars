@@ -202,8 +202,8 @@
           .then(doc => {
             if (doc.exists) {
               const userData = doc.data();
-              if (userData.role === 'admin') {
-                window.location.href = 'admin/dashboard.html';
+              if (userData.role === 'admin@gopandacars.in') {
+                window.location.href = 'admin.html';
               } else {
                 window.location.href = 'index.html';
               }
