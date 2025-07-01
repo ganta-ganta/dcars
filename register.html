@@ -47,27 +47,31 @@
         <form id="registrationForm">
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="firstName" class="form-label">First Name</label>
+              <label for="firstName" class="form-label">First Name*</label>
               <input type="text" class="form-control" id="firstName" placeholder="Enter first name" required>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="lastName" class="form-label">Last Name</label>
+              <label for="lastName" class="form-label">Last Name*</label>
               <input type="text" class="form-control" id="lastName" placeholder="Enter last name" required>
             </div>
           </div>
           
           <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
+            <label for="email" class="form-label">Email address*</label>
             <input type="email" class="form-control" id="email" placeholder="Enter email" required>
           </div>
           
           <div class="mb-3">
-            <label for="phone" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" required>
+            <label for="phone" class="form-label">Phone Number*</label>
+            <div class="input-group">
+              <span class="input-group-text">+91</span>
+              <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" pattern="[0-9]{10}" required>
+            </div>
+            <small class="text-muted">10 digit Indian phone number</small>
           </div>
           
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Password*</label>
             <div class="input-group">
               <input type="password" class="form-control" id="password" placeholder="Enter password" required>
               <button class="btn btn-outline-secondary" type="button" id="togglePasswordVisibility">
@@ -81,13 +85,13 @@
           </div>
           
           <div class="mb-3">
-            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <label for="confirmPassword" class="form-label">Confirm Password*</label>
             <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
             <div class="invalid-feedback" id="passwordMatchError">Passwords do not match</div>
           </div>
           
           <div class="mb-3">
-            <label for="license" class="form-label">Driver's License Number</label>
+            <label for="license" class="form-label">Driver's License Number*</label>
             <input type="text" class="form-control" id="license" placeholder="Enter driver's license number" required>
           </div>
           
@@ -117,8 +121,8 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <!-- Your terms and conditions content here -->
           <p>By creating an account, you agree to our terms of service...</p>
+          <!-- Add your full terms here -->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
@@ -139,7 +143,8 @@
       authDomain: "gopandacars-7085f.firebaseapp.com",
       projectId: "gopandacars-7085f",
       storageBucket: "gopandacars-7085f.appspot.com",
-      messagingSenderId: "486383420605"
+      messagingSenderId: "486383420605",
+      appId: "YOUR_APP_ID"
     };
     
     // Initialize Firebase
@@ -167,29 +172,15 @@
       const password = passwordInput.value;
       let strength = 0;
       
-      // Length check
       if (password.length >= 8) strength += 25;
-      
-      // Contains uppercase
       if (/[A-Z]/.test(password)) strength += 25;
-      
-      // Contains lowercase
       if (/[a-z]/.test(password)) strength += 25;
-      
-      // Contains number
       if (/[0-9]/.test(password)) strength += 25;
       
-      // Update strength bar
       passwordStrengthBar.style.width = strength + '%';
-      
-      // Change color based on strength
-      if (strength < 50) {
-        passwordStrengthBar.style.backgroundColor = '#dc3545'; // Red
-      } else if (strength < 75) {
-        passwordStrengthBar.style.backgroundColor = '#fd7e14'; // Orange
-      } else {
-        passwordStrengthBar.style.backgroundColor = '#28a745'; // Green
-      }
+      passwordStrengthBar.style.backgroundColor = 
+        strength < 50 ? '#dc3545' : 
+        strength < 75 ? '#fd7e14' : '#28a745';
     });
 
     // Password match validation
@@ -211,18 +202,17 @@
       const firstName = document.getElementById('firstName').value.trim();
       const lastName = document.getElementById('lastName').value.trim();
       const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
+      const phone = '+91' + document.getElementById('phone').value.trim();
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       const license = document.getElementById('license').value.trim();
       
-      // Validate passwords match
+      // Validate passwords
       if (password !== confirmPassword) {
         alert('Passwords do not match');
         return;
       }
       
-      // Validate password strength
       if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
         alert('Password must be at least 8 characters with uppercase, lowercase, and number');
         return;
@@ -248,31 +238,29 @@
           phone: phone,
           driverLicense: license,
           role: 'user', // Default role
+          status: 'active',
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          emailVerified: false
         });
         
         // Send email verification
         await user.sendEmailVerification();
         
-        // Redirect to home page after successful registration
+        alert('Registration successful! Please verify your email.');
         window.location.href = 'index.html';
         
       } catch (error) {
         console.error('Registration Error:', error);
-        
-        // Show error message
-        const errorMessage = getErrorMessage(error.code);
-        alert(errorMessage);
+        alert(getErrorMessage(error.code));
         
         // Reset button state
         const submitBtn = e.target.querySelector('button[type="submit"]');
         submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus me-2"></i> Register';
       }
     });
     
-    // Error message mapping
     function getErrorMessage(errorCode) {
       const errorMessages = {
         'auth/email-already-in-use': 'Email already in use',
@@ -281,14 +269,12 @@
         'auth/weak-password': 'Password is too weak',
         'auth/network-request-failed': 'Network error. Please check your connection'
       };
-      
       return errorMessages[errorCode] || 'Registration failed. Please try again.';
     }
 
     // Check if user is already logged in
     auth.onAuthStateChanged((user) => {
       if (user) {
-        // User is logged in, redirect to home page
         window.location.href = 'index.html';
       }
     });
