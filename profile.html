@@ -285,7 +285,7 @@
       }
     }
 
-    // Load user bookings with error handling
+    // Load user bookings with proper data handling
     async function loadUserBookings(userId) {
       try {
         // Show loading state
@@ -298,14 +298,35 @@
           </div>
         `;
 
-        // Query bookings for this user
-        const querySnapshot = await db.collection('bookings')
-          .where('userId', '==', userId)
-          .orderBy('createdAt', 'desc')
-          .get();
+        // First try the indexed query
+        let querySnapshot;
+        try {
+          querySnapshot = await db.collection('bookings')
+            .where('userId', '==', userId)
+            .orderBy('createdAt', 'desc')
+            .get();
+        } catch (error) {
+          if (error.code === 'failed-precondition') {
+            // Fallback to client-side sorting if index isn't ready
+            console.warn("Index not ready, falling back to client-side sorting");
+            const allBookings = await db.collection('bookings')
+              .where('userId', '==', userId)
+              .get();
+            
+            querySnapshot = {
+              docs: allBookings.docs.sort((a, b) => {
+                const aDate = a.data().createdAt?.toMillis?.() || 0;
+                const bDate = b.data().createdAt?.toMillis?.() || 0;
+                return bDate - aDate;
+              })
+            };
+          } else {
+            throw error;
+          }
+        }
 
         // Check if there are any bookings
-        if (querySnapshot.empty) {
+        if (!querySnapshot.docs || querySnapshot.docs.length === 0) {
           bookingsContainer.innerHTML = `
             <div class="col-12">
               <div class="alert alert-info">
@@ -318,9 +339,17 @@
 
         // Process and display bookings
         let bookingsHTML = '';
-        querySnapshot.forEach(doc => {
+        querySnapshot.docs.forEach(doc => {
           const booking = doc.data();
-          bookingsHTML += createBookingCard(booking, doc.id);
+          // Clean up data
+          const cleanedBooking = {
+            ...booking,
+            carId: booking.carId?.trim() || '',
+            status: booking.status?.trim() || 'pending',
+            startDate: booking.startDate?.trim() || '',
+            endDate: booking.endDate?.trim() || ''
+          };
+          bookingsHTML += createBookingCard(cleanedBooking, doc.id);
         });
 
         bookingsContainer.innerHTML = bookingsHTML;
@@ -329,28 +358,22 @@
       } catch (error) {
         console.error("Error loading bookings:", error);
         
-        let errorMessage = "Failed to load bookings. Please try again later.";
-        if (error.code === 'failed-precondition') {
-          errorMessage = `
-            <div class="alert alert-warning">
-              <strong>Database index required:</strong> 
-              <p>This query needs a special index to work. Please try again in a few minutes.</p>
+        bookingsContainer.innerHTML = `
+          <div class="col-12">
+            <div class="alert alert-danger">
+              Failed to load bookings: ${error.message}
+              ${error.code === 'failed-precondition' ? 
+                '<p class="mt-2">The database is still creating the required index. This may take a few minutes.</p>' : ''}
               <button class="btn btn-sm btn-primary mt-2" onclick="window.location.reload()">
                 <i class="fas fa-sync-alt me-1"></i> Try Again
               </button>
             </div>
-          `;
-        }
-
-        bookingsContainer.innerHTML = `
-          <div class="col-12">
-            ${errorMessage}
           </div>
         `;
       }
     }
 
-    // Create booking card HTML
+    // Create booking card HTML with proper data handling
     function createBookingCard(booking, bookingId) {
       const statusClass = getStatusClass(booking.status);
       const startDate = formatDate(booking.startDate);
@@ -417,7 +440,11 @@
       if (date.toDate) {
         return date.toDate().toLocaleDateString();
       }
-      return new Date(date).toLocaleDateString();
+      try {
+        return new Date(date).toLocaleDateString();
+      } catch {
+        return date; // Return raw string if date parsing fails
+      }
     }
 
     // Format datetime for display
@@ -426,7 +453,11 @@
       if (date.toDate) {
         return date.toDate().toLocaleString();
       }
-      return new Date(date).toLocaleString();
+      try {
+        return new Date(date).toLocaleString();
+      } catch {
+        return date; // Return raw string if date parsing fails
+      }
     }
 
     // Setup event listeners
@@ -451,13 +482,16 @@
             Updating...
           `;
           
-          await db.collection('users').doc(userId).update({
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            address: document.getElementById('address').value,
-            driverLicense: document.getElementById('license').value,
+          // Trim all string inputs
+          const profileData = {
+            name: document.getElementById('name').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            address: document.getElementById('address').value.trim(),
+            driverLicense: document.getElementById('license').value.trim(),
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
+          };
+          
+          await db.collection('users').doc(userId).update(profileData);
           
           showSuccess('Profile updated successfully!');
           loadUserProfile(userId); // Refresh profile data
@@ -524,7 +558,7 @@
       });
     }
 
-    // View booking details
+    // View booking details with proper data handling
     async function viewBookingDetails(bookingId) {
       try {
         document.getElementById('bookingModalBody').innerHTML = `
@@ -544,28 +578,42 @@
         }
 
         const booking = doc.data();
+        // Clean up booking data
+        const cleanedBooking = {
+          ...booking,
+          carId: booking.carId?.trim() || '',
+          status: booking.status?.trim() || 'pending',
+          startDate: booking.startDate?.trim() || '',
+          endDate: booking.endDate?.trim() || '',
+          carName: booking.carName?.trim() || 'N/A',
+          carCategory: booking.carCategory?.trim() || 'N/A',
+          userName: booking.userName?.trim() || 'N/A',
+          userEmail: booking.userEmail?.trim() || 'N/A',
+          userPhone: booking.userPhone?.trim() || 'Not provided'
+        };
+
         document.getElementById('bookingModalBody').innerHTML = `
           <div class="row">
             <div class="col-md-6">
-              <h5>${booking.carName || 'N/A'}</h5>
-              <p class="text-muted">${booking.carCategory || 'N/A'}</p>
+              <h5>${cleanedBooking.carName}</h5>
+              <p class="text-muted">${cleanedBooking.carCategory}</p>
               <hr>
-              <p><strong>Status:</strong> <span class="badge ${getStatusClass(booking.status)}">${booking.status}</span></p>
+              <p><strong>Status:</strong> <span class="badge ${getStatusClass(cleanedBooking.status)}">${cleanedBooking.status}</span></p>
               <p><strong>Booking ID:</strong> ${bookingId}</p>
-              <p><strong>Dates:</strong> ${formatDate(booking.startDate)} - ${formatDate(booking.endDate)}</p>
-              <p><strong>Booked On:</strong> ${formatDateTime(booking.createdAt)}</p>
+              <p><strong>Dates:</strong> ${formatDate(cleanedBooking.startDate)} - ${formatDate(cleanedBooking.endDate)}</p>
+              <p><strong>Booked On:</strong> ${formatDateTime(cleanedBooking.createdAt)}</p>
             </div>
             <div class="col-md-6">
               <h5>Payment Details</h5>
               <hr>
-              <p><strong>Original Price:</strong> ₹${booking.originalPrice || '0'}</p>
-              ${booking.discountApplied ? `
-                <p><strong>Discount:</strong> ${booking.discountCode || ''} (₹${booking.discountAmount || '0'})</p>
+              <p><strong>Original Price:</strong> ₹${cleanedBooking.originalPrice || '0'}</p>
+              ${cleanedBooking.discountApplied ? `
+                <p><strong>Discount:</strong> ${cleanedBooking.discountCode || ''} (₹${cleanedBooking.discountAmount || '0'})</p>
               ` : ''}
-              <p><strong>Final Price:</strong> ₹${booking.finalPrice || booking.originalPrice || '0'}</p>
-              <p><strong>Payment Status:</strong> ${booking.paymentStatus || 'Pending'}</p>
-              ${booking.paymentMethod ? `
-                <p><strong>Payment Method:</strong> ${booking.paymentMethod}</p>
+              <p><strong>Final Price:</strong> ₹${cleanedBooking.finalPrice || cleanedBooking.originalPrice || '0'}</p>
+              <p><strong>Payment Status:</strong> ${cleanedBooking.paymentStatus || 'Pending'}</p>
+              ${cleanedBooking.paymentMethod ? `
+                <p><strong>Payment Method:</strong> ${cleanedBooking.paymentMethod}</p>
               ` : ''}
             </div>
           </div>
@@ -573,9 +621,9 @@
             <div class="col-12">
               <h5>Customer Information</h5>
               <hr>
-              <p><strong>Name:</strong> ${booking.userName || 'N/A'}</p>
-              <p><strong>Email:</strong> ${booking.userEmail || 'N/A'}</p>
-              <p><strong>Phone:</strong> ${booking.userPhone || 'Not provided'}</p>
+              <p><strong>Name:</strong> ${cleanedBooking.userName}</p>
+              <p><strong>Email:</strong> ${cleanedBooking.userEmail}</p>
+              <p><strong>Phone:</strong> ${cleanedBooking.userPhone}</p>
             </div>
           </div>
         `;
@@ -589,7 +637,7 @@
       }
     }
 
-    // Cancel booking
+    // Cancel booking with confirmation
     async function cancelBooking(bookingId) {
       if (!confirm('Are you sure you want to cancel this booking?')) return;
       
