@@ -3,37 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | GoPandaCars</title>
+  <title>Payment Verification | GoPandaCars Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .sidebar { min-height: 100vh; background-color: #f8f9fa; }
-    .nav-link { color: #333; }
-    .nav-link.active { color: #0d6efd; font-weight: 500; }
-    .badge-status { font-size: 0.8rem; }
-    .booking-card { transition: all 0.3s; }
-    .booking-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    .card-img-top { height: 200px; object-fit: cover; }
-    .loading-spinner {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-    }
-    .notification-item {
-      padding: 12px 15px;
-      border-bottom: 1px solid #eee;
-      transition: background-color 0.2s;
-    }
-    .notification-item:hover {
+    body {
       background-color: #f8f9fa;
     }
-    .notification-item.unread {
-      background-color: #f0f7ff;
+    .sidebar {
+      min-height: 100vh;
+      background-color: #f8f9fa;
     }
-    .notification-time {
-      font-size: 0.75rem;
-      color: #6c757d;
+    .nav-link {
+      color: #333;
+    }
+    .nav-link.active {
+      color: #0d6efd;
+      font-weight: 500;
+    }
+    .status-badge {
+      font-size: 0.8rem;
+    }
+    .payment-card {
+      transition: all 0.3s;
+    }
+    .payment-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .screenshot-container {
+      max-width: 100%;
+      max-height: 200px;
+      overflow: hidden;
+    }
+    .screenshot-container img {
+      width: 100%;
+      height: auto;
+      cursor: zoom-in;
+    }
+    .payment-details {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+    .search-container {
+      position: relative;
+    }
+    .search-results {
+      position: absolute;
+      z-index: 1000;
+      width: 100%;
+      max-height: 300px;
+      overflow-y: auto;
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 0 0 5px 5px;
+      display: none;
+    }
+    .search-item {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .search-item:hover {
+      background-color: #f8f9fa;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: white !important;
+      }
+      .card {
+        border: none !important;
+        box-shadow: none !important;
+      }
     }
   </style>
 </head>
@@ -41,7 +84,7 @@
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-      <div class="col-md-3 col-lg-2 d-md-block sidebar">
+      <div class="col-md-3 col-lg-2 d-md-block sidebar no-print">
         <div class="position-sticky pt-3">
           <div class="text-center mb-4">
             <h4>GoPandaCars</h4>
@@ -49,27 +92,27 @@
           </div>
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" href="#" data-target="dashboard">
+              <a class="nav-link" href="admin-dashboard.html">
                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-target="bookings">
+              <a class="nav-link" href="admin-bookings.html">
                 <i class="fas fa-calendar-check me-2"></i>Bookings
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-target="users">
+              <a class="nav-link active" href="#">
+                <i class="fas fa-money-check-alt me-2"></i>Payments
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin-users.html">
                 <i class="fas fa-users me-2"></i>Users
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-target="offers">
-                <i class="fas fa-tag me-2"></i>Offers
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-target="cars">
+              <a class="nav-link" href="admin-cars.html">
                 <i class="fas fa-car me-2"></i>Cars
               </a>
             </li>
@@ -84,389 +127,138 @@
 
       <!-- Main Content -->
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <div class="d-flex align-items-center">
-            <h1 class="h2 me-3">Admin Dashboard</h1>
-            <div class="position-relative">
-              <button class="btn btn-outline-secondary" id="notificationsBtn">
-                <i class="fas fa-bell"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationBadge" style="display: none;">
-                  0
-                </span>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom no-print">
+          <h1 class="h2"><i class="fas fa-money-check-alt me-2"></i> Payment Verification</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+              <button class="btn btn-sm btn-outline-secondary" onclick="window.print()">
+                <i class="fas fa-print me-1"></i> Print
               </button>
-              <div class="dropdown-menu dropdown-menu-end p-0" id="notificationsDropdown" style="width: 350px; max-height: 400px; overflow-y: auto; display: none;">
-                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                  <h6 class="mb-0">Notifications</h6>
-                  <button class="btn btn-sm btn-outline-secondary" id="clearNotificationsBtn">Clear All</button>
-                </div>
-                <div id="notificationsList"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Dashboard Section -->
-        <div id="dashboardSection">
-          <div class="row mb-4">
-            <div class="col-md-3">
-              <div class="card text-white bg-primary mb-3">
-                <div class="card-body">
-                  <h5 class="card-title">Total Bookings</h5>
-                  <h2 class="card-text" id="totalBookings">0</h2>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card text-white bg-success mb-3">
-                <div class="card-body">
-                  <h5 class="card-title">Confirmed</h5>
-                  <h2 class="card-text" id="confirmedBookings">0</h2>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card text-white bg-warning mb-3">
-                <div class="card-body">
-                  <h5 class="card-title">Pending</h5>
-                  <h2 class="card-text" id="pendingBookings">0</h2>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card text-white bg-danger mb-3">
-                <div class="card-body">
-                  <h5 class="card-title">Cancelled</h5>
-                  <h2 class="card-text" id="cancelledBookings">0</h2>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <h4>Recent Bookings</h4>
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Car</th>
-                  <th>Customer</th>
-                  <th>Dates</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody id="recentBookingsTable">
-                <tr>
-                  <td colspan="6" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Bookings Section -->
-        <div id="bookingsSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Bookings</h4>
-            <div class="btn-group">
-              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Filter
+              <button class="btn btn-sm btn-outline-secondary" id="exportBtn">
+                <i class="fas fa-file-export me-1"></i> Export
               </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item filter-booking" data-status="all" href="#">All</a></li>
-                <li><a class="dropdown-item filter-booking" data-status="pending_payment" href="#">Pending Payment</a></li>
-                <li><a class="dropdown-item filter-booking" data-status="confirmed" href="#">Confirmed</a></li>
-                <li><a class="dropdown-item filter-booking" data-status="cancelled" href="#">Cancelled</a></li>
-              </ul>
             </div>
           </div>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Booking ID</th>
-                  <th>Car</th>
-                  <th>Customer</th>
-                  <th>Dates</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="bookingsList">
-                <tr>
-                  <td colspan="7" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
 
-        <!-- Users Section -->
-        <div id="usersSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Users</h4>
-            <div class="btn-group">
-              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Filter
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item filter-user" data-status="all" href="#">All</a></li>
-                <li><a class="dropdown-item filter-user" data-status="active" href="#">Active</a></li>
-                <li><a class="dropdown-item filter-user" data-status="blocked" href="#">Blocked</a></li>
-              </ul>
+        <!-- Search and Filters -->
+        <div class="row mb-4 no-print">
+          <div class="col-md-6">
+            <div class="search-container">
+              <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search by Booking ID, UPI Ref, or Phone">
+                <button class="btn btn-primary" id="searchBtn">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <div class="search-results" id="searchResults"></div>
             </div>
           </div>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>User ID</th>
-                  <th>Email</th>
-                  <th>Joined</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="usersList">
-                <tr>
-                  <td colspan="5" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Offers Section -->
-        <div id="offersSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Offers</h4>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOfferModal">
-              <i class="fas fa-plus me-1"></i> Add New Offer
-            </button>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Name</th>
-                  <th>Discount</th>
-                  <th>Valid Until</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="offersList">
-                <tr>
-                  <td colspan="6" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Cars Section -->
-        <div id="carsSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Cars</h4>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCarModal">
-              <i class="fas fa-plus me-1"></i> Add New Car
-            </button>
-          </div>
-          <div class="row" id="carsGrid">
-            <div class="col-12 text-center loading-spinner">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+          <div class="col-md-6">
+            <div class="d-flex justify-content-end">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Filter by Status
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item filter-payment" data-status="all" href="#">All Payments</a></li>
+                  <li><a class="dropdown-item filter-payment" data-status="pending" href="#">Pending Verification</a></li>
+                  <li><a class="dropdown-item filter-payment" data-status="verified" href="#">Verified</a></li>
+                  <li><a class="dropdown-item filter-payment" data-status="rejected" href="#">Rejected</a></li>
+                </ul>
+              </div>
+              <div class="btn-group ms-2">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Filter by Date
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item filter-date" data-range="today" href="#">Today</a></li>
+                  <li><a class="dropdown-item filter-date" data-range="week" href="#">This Week</a></li>
+                  <li><a class="dropdown-item filter-date" data-range="month" href="#">This Month</a></li>
+                  <li><a class="dropdown-item filter-date" data-range="all" href="#">All Time</a></li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Payment List -->
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Reference</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th class="no-print">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsList">
+              <tr>
+                <td colspan="8" class="text-center py-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="no-print">
+          <ul class="pagination justify-content-center" id="pagination">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
       </main>
     </div>
   </div>
 
-  <!-- Add Offer Modal -->
-  <div class="modal fade" id="addOfferModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Create New Offer</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="offerForm">
-            <div class="mb-3">
-              <label class="form-label">Offer Code</label>
-              <input type="text" class="form-control" id="offerCode" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Offer Name</label>
-              <input type="text" class="form-control" id="offerName" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Description</label>
-              <textarea class="form-control" id="offerDescription" rows="3"></textarea>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Discount Type</label>
-                <select class="form-select" id="discountType" required>
-                  <option value="percentage">Percentage</option>
-                  <option value="fixed">Fixed Amount</option>
-                </select>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Discount Value</label>
-                <input type="number" class="form-control" id="discountValue" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Valid Until</label>
-              <input type="date" class="form-control" id="validUntil" required>
-            </div>
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" id="isActive" checked>
-              <label class="form-check-label" for="isActive">Active</label>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" id="saveOfferBtn" class="btn btn-primary">Save Offer</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add Car Modal -->
-  <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Add New Car</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="carForm">
-            <div class="mb-3">
-              <label class="form-label">Car Name</label>
-              <input type="text" class="form-control" id="carName" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Image URL</label>
-              <input type="url" class="form-control" id="carImage" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Description</label>
-              <textarea class="form-control" id="carDescription" rows="3" required></textarea>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Category</label>
-                <select class="form-select" id="carCategory" required>
-                  <option value="economy">Economy</option>
-                  <option value="premium">Premium</option>
-                  <option value="luxury">Luxury</option>
-                </select>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">12 Hours Price (₹)</label>
-                <input type="number" class="form-control" id="carPrice12hrs" required>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">24 Hours Price (₹)</label>
-                <input type="number" class="form-control" id="carPrice24hrs" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Features</label>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="carSunroof">
-                  <label class="form-check-label" for="carSunroof">Sunroof</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="carWithDriver">
-                  <label class="form-check-label" for="carWithDriver">With Driver</label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" id="saveCarBtn" class="btn btn-primary">Save Car</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Booking Details Modal -->
-  <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+  <!-- Payment Verification Modal -->
+  <div class="modal fade" id="verifyModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Booking Details</h5>
+          <h5 class="modal-title">Verify Payment</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="bookingModalBody">
-          Loading booking details...
+        <div class="modal-body" id="verifyModalBody">
+          Loading payment details...
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer no-print">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" id="cancelBookingBtn" style="display:none;">Cancel Booking</button>
-          <button type="button" class="btn btn-success" id="confirmBookingBtn" style="display:none;">Confirm Booking</button>
+          <button type="button" class="btn btn-danger" id="rejectPaymentBtn">
+            <i class="fas fa-times me-1"></i> Reject
+          </button>
+          <button type="button" class="btn btn-success" id="verifyPaymentBtn">
+            <i class="fas fa-check me-1"></i> Verify
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- User Details Modal -->
-  <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">User Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="userModalBody">
-          Loading user details...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" id="blockUserBtn" style="display:none;">Block User</button>
-          <button type="button" class="btn btn-success" id="unblockUserBtn" style="display:none;">Unblock User</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Notification Sound -->
-  <audio id="notificationSound" preload="auto">
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
-  </audio>
-
+  <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
   
   <script>
     // Firebase configuration
@@ -487,36 +279,29 @@
 
     // DOM elements
     const logoutBtn = document.getElementById('logoutBtn');
-    const dashboardSection = document.getElementById('dashboardSection');
-    const bookingsSection = document.getElementById('bookingsSection');
-    const usersSection = document.getElementById('usersSection');
-    const offersSection = document.getElementById('offersSection');
-    const carsSection = document.getElementById('carsSection');
-    const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-    const userModal = new bootstrap.Modal(document.getElementById('userModal'));
-    const addOfferModal = new bootstrap.Modal(document.getElementById('addOfferModal'));
-    const addCarModal = new bootstrap.Modal(document.getElementById('addCarModal'));
-    const notificationSound = document.getElementById('notificationSound');
-    const notificationBadge = document.getElementById('notificationBadge');
-    const notificationsList = document.getElementById('notificationsList');
-    const notificationsDropdown = document.getElementById('notificationsDropdown');
-    const notificationsBtn = document.getElementById('notificationsBtn');
-    const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
+    const paymentsList = document.getElementById('paymentsList');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchResults = document.getElementById('searchResults');
+    const verifyModal = new bootstrap.Modal(document.getElementById('verifyModal'));
+    const verifyModalBody = document.getElementById('verifyModalBody');
+    const verifyPaymentBtn = document.getElementById('verifyPaymentBtn');
+    const rejectPaymentBtn = document.getElementById('rejectPaymentBtn');
+    const exportBtn = document.getElementById('exportBtn');
     
-    let currentBookingId = null;
-    let currentUserId = null;
-    let lastBookingTimestamp = null;
-    let unreadNotifications = 0;
+    let currentPaymentId = null;
+    let currentFilter = 'pending';
+    let currentDateRange = 'month';
+    let currentSearchQuery = '';
 
     // Check auth state
     auth.onAuthStateChanged(user => {
       if (user) {
         // Check if user is admin (you might want to implement proper admin check)
         if (user.email === 'admin@gopandacars.com') {
-          // Admin user
-          loadDashboard();
+          // Admin user - load payments
+          loadPayments();
           setupEventListeners();
-          setupNotifications();
         } else {
           // Not admin
           window.location.href = 'profile.html';
@@ -527,443 +312,356 @@
       }
     });
 
-    // Setup notifications system
-    function setupNotifications() {
-      // Load last booking timestamp from localStorage
-      const lastTimestamp = localStorage.getItem('lastBookingTimestamp');
-      if (lastTimestamp) {
-        lastBookingTimestamp = new Date(parseInt(lastTimestamp));
+    // Load payments with filters
+    function loadPayments() {
+      let query = db.collection('payments').orderBy('paymentDate', 'desc');
+      
+      // Apply status filter
+      if (currentFilter !== 'all') {
+        query = query.where('status', '==', currentFilter);
       }
       
-      // Set up real-time listener for new bookings
-      db.collection('bookings').orderBy('createdAt', 'desc').limit(1)
-        .onSnapshot(snapshot => {
-          snapshot.docChanges().forEach(change => {
-            if (change.type === 'added') {
-              const booking = change.doc.data();
-              const bookingTime = booking.createdAt.toDate();
-              
-              // Check if this is a new booking since last check
-              if (!lastBookingTimestamp || bookingTime > lastBookingTimestamp) {
-                lastBookingTimestamp = bookingTime;
-                localStorage.setItem('lastBookingTimestamp', bookingTime.getTime().toString());
-                
-                // Only show notification if not initial load
-                if (lastBookingTimestamp) {
-                  addNewBookingNotification(change.doc.id, booking);
-                  playNotificationSound();
-                }
-              }
-            }
-          });
-        });
+      // Apply date range filter
+      if (currentDateRange !== 'all') {
+        const now = new Date();
+        let startDate = new Date();
         
-      // Load existing notifications
-      loadNotifications();
-      
-      // Notification button click handler
-      notificationsBtn.addEventListener('click', () => {
-        notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block';
-        markNotificationsAsRead();
-      });
-      
-      // Clear notifications button
-      clearNotificationsBtn.addEventListener('click', clearNotifications);
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!notificationsBtn.contains(e.target) && !notificationsDropdown.contains(e.target)) {
-          notificationsDropdown.style.display = 'none';
+        switch(currentDateRange) {
+          case 'today':
+            startDate.setHours(0, 0, 0, 0);
+            break;
+          case 'week':
+            startDate.setDate(startDate.getDate() - 7);
+            break;
+          case 'month':
+            startDate.setMonth(startDate.getMonth() - 1);
+            break;
         }
-      });
-    }
-
-    function playNotificationSound() {
-      notificationSound.currentTime = 0; // Rewind to start
-      notificationSound.play().catch(e => console.log("Audio play failed:", e));
-    }
-
-    function addNewBookingNotification(bookingId, booking) {
-      unreadNotifications++;
-      updateNotificationBadge();
-      
-      const notificationItem = document.createElement('div');
-      notificationItem.className = 'notification-item unread';
-      notificationItem.innerHTML = `
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <strong>New Booking</strong>
-            <p class="mb-1">${booking.carName || 'Unknown car'} booked by ${booking.userEmail || 'unknown user'}</p>
-            <p class="mb-0 notification-time">${new Date().toLocaleTimeString()}</p>
-          </div>
-          <a href="#" class="btn btn-sm btn-outline-primary view-notification" data-booking-id="${bookingId}">View</a>
-        </div>
-      `;
-      
-      // Add to top of list
-      if (notificationsList.firstChild) {
-        notificationsList.insertBefore(notificationItem, notificationsList.firstChild);
-      } else {
-        notificationsList.appendChild(notificationItem);
+        
+        query = query.where('paymentDate', '>=', startDate);
       }
       
-      // Add click handler for view button
-      notificationItem.querySelector('.view-notification').addEventListener('click', (e) => {
-        e.preventDefault();
-        viewBookingDetails(bookingId);
-        notificationsDropdown.style.display = 'none';
-      });
-    }
-
-    function updateNotificationBadge() {
-      if (unreadNotifications > 0) {
-        notificationBadge.style.display = 'block';
-        notificationBadge.textContent = unreadNotifications;
-      } else {
-        notificationBadge.style.display = 'none';
-      }
-    }
-
-    function markNotificationsAsRead() {
-      unreadNotifications = 0;
-      updateNotificationBadge();
-      
-      // Remove unread styling
-      document.querySelectorAll('.notification-item.unread').forEach(item => {
-        item.classList.remove('unread');
-      });
-    }
-
-    function clearNotifications() {
-      notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
-      markNotificationsAsRead();
-    }
-
-    function loadNotifications() {
-      // In a real app, you might load persisted notifications from a database
-      notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
-    }
-
-    // Load dashboard data
-    function loadDashboard() {
-      // Load booking counts
-      db.collection('bookings').get().then(snap => {
-        document.getElementById('totalBookings').textContent = snap.size;
-        
-        const confirmed = snap.docs.filter(doc => doc.data().status === 'confirmed').length;
-        const pending = snap.docs.filter(doc => doc.data().status === 'pending_payment').length;
-        const cancelled = snap.docs.filter(doc => doc.data().status === 'cancelled').length;
-        
-        document.getElementById('confirmedBookings').textContent = confirmed;
-        document.getElementById('pendingBookings').textContent = pending;
-        document.getElementById('cancelledBookings').textContent = cancelled;
-      }).catch(error => {
-        console.error("Error loading booking counts:", error);
-      });
-      
-      // Load recent bookings
-      db.collection('bookings').orderBy('createdAt', 'desc').limit(5).get()
-        .then(snap => {
-          const tableBody = document.getElementById('recentBookingsTable');
-          tableBody.innerHTML = '';
-          
-          if (snap.empty) {
-            tableBody.innerHTML = `
-              <tr>
-                <td colspan="6" class="text-center py-5"><h6 class="text-muted">No recent bookings found</h6></td>
-              </tr>
-            `;
-            return;
-          }
-          
-          snap.forEach(doc => {
-            const booking = doc.data();
-            const row = document.createElement('tr');
-            row.className = 'booking-card';
-            row.innerHTML = `
-              <td>${doc.id.substring(0, 6)}...</td>
-              <td>${booking.carName || 'N/A'}</td>
-              <td>${booking.userEmail || 'N/A'}</td>
-              <td>${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}</td>
-              <td><span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></td>
-              <td>₹${booking.finalPrice || booking.originalPrice || '0'}</td>
-            `;
-            tableBody.appendChild(row);
-          });
-        }).catch(error => {
-          console.error("Error loading recent bookings:", error);
-          document.getElementById('recentBookingsTable').innerHTML = `
-            <tr>
-              <td colspan="6" class="text-center py-5 text-danger">Error loading bookings</td>
-            </tr>
-          `;
-        });
-    }
-
-    // Load all bookings
-    function loadAllBookings(filter = 'all') {
-      let query = db.collection('bookings').orderBy('createdAt', 'desc');
-      
-      if (filter !== 'all') {
-        query = query.where('status', '==', filter);
+      // Apply search query if exists
+      if (currentSearchQuery) {
+        // This is a simplified search - in production you'd use a more robust search solution
+        query = query.where('bookingId', '==', currentSearchQuery);
       }
       
       query.get().then(snap => {
-        const bookingsList = document.getElementById('bookingsList');
-        bookingsList.innerHTML = '';
+        paymentsList.innerHTML = '';
         
         if (snap.empty) {
-          bookingsList.innerHTML = `
+          paymentsList.innerHTML = `
             <tr>
-              <td colspan="7" class="text-center py-5"><h6 class="text-muted">No bookings found</h6></td>
+              <td colspan="8" class="text-center py-5"><h6 class="text-muted">No payments found</h6></td>
             </tr>
           `;
           return;
         }
         
         snap.forEach(doc => {
-          const booking = doc.data();
-          addBookingRow(booking, doc.id);
+          const payment = doc.data();
+          addPaymentRow(payment, doc.id);
         });
       }).catch(error => {
-        console.error("Error loading bookings:", error);
-        document.getElementById('bookingsList').innerHTML = `
+        console.error("Error loading payments:", error);
+        paymentsList.innerHTML = `
           <tr>
-            <td colspan="7" class="text-center py-5 text-danger">Error loading bookings</td>
+            <td colspan="8" class="text-center py-5 text-danger">Error loading payments</td>
           </tr>
         `;
       });
     }
 
-    function addBookingRow(booking, bookingId) {
+    function addPaymentRow(payment, paymentId) {
       const row = document.createElement('tr');
-      row.className = 'booking-card';
+      row.className = 'payment-card';
       
       row.innerHTML = `
-        <td>${bookingId.substring(0, 8)}</td>
-        <td>${booking.carName || 'N/A'}</td>
-        <td>${booking.userEmail || 'N/A'}</td>
-        <td>${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}</td>
-        <td><span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></td>
-        <td>₹${booking.finalPrice || booking.originalPrice || '0'}</td>
+        <td>${payment.bookingId || 'N/A'}</td>
         <td>
-          <button class="btn btn-sm btn-outline-primary view-booking" data-booking-id="${bookingId}">
+          ${payment.customerName || 'N/A'}<br>
+          <small class="text-muted">${payment.customerPhone || ''}</small>
+        </td>
+        <td>₹${payment.amount || '0'}</td>
+        <td>${payment.method || 'N/A'}</td>
+        <td>
+          <small>${payment.reference || 'N/A'}</small>
+          ${payment.screenshotUrl ? `
+            <br><small><a href="#" class="view-screenshot" data-url="${payment.screenshotUrl}">View Screenshot</a></small>
+          ` : ''}
+        </td>
+        <td>
+          <span class="badge ${getStatusBadgeClass(payment.status)} status-badge">
+            ${payment.status || 'N/A'}
+          </span>
+        </td>
+        <td>${payment.paymentDate ? formatDate(payment.paymentDate.toDate()) : 'N/A'}</td>
+        <td class="no-print">
+          <button class="btn btn-sm btn-outline-primary view-payment" data-payment-id="${paymentId}">
             <i class="fas fa-eye me-1"></i> View
           </button>
-          ${booking.status === 'pending_payment' ? `
-            <button class="btn btn-sm btn-success confirm-booking ms-1" data-booking-id="${bookingId}">
-              <i class="fas fa-check me-1"></i> Confirm
+          ${payment.status === 'pending' ? `
+            <button class="btn btn-sm btn-success verify-payment ms-1" data-payment-id="${paymentId}">
+              <i class="fas fa-check me-1"></i> Verify
             </button>
           ` : ''}
         </td>
       `;
       
-      document.getElementById('bookingsList').appendChild(row);
+      paymentsList.appendChild(row);
     }
 
-    // Load all users
-    function loadUsers(filter = 'all') {
-      let query = db.collection('users').orderBy('createdAt', 'desc');
+    // View payment details
+    async function viewPaymentDetails(paymentId) {
+      currentPaymentId = paymentId;
       
-      if (filter === 'active') {
-        query = query.where('isBlocked', '==', false);
-      } else if (filter === 'blocked') {
-        query = query.where('isBlocked', '==', true);
+      try {
+        const doc = await db.collection('payments').doc(paymentId).get();
+        if (!doc.exists) {
+          alert('Payment not found');
+          return;
+        }
+        
+        const payment = doc.data();
+        verifyModalBody.innerHTML = `
+          <div class="row">
+            <div class="col-md-6">
+              <h6 class="text-muted">Payment Information</h6>
+              <p><strong>Booking ID:</strong> ${payment.bookingId || 'N/A'}</p>
+              <p><strong>Status:</strong> <span class="badge ${getStatusBadgeClass(payment.status)}">${payment.status}</span></p>
+              <p><strong>Date:</strong> ${formatDateTime(payment.paymentDate?.toDate()) || 'N/A'}</p>
+              <p><strong>Method:</strong> ${payment.method || 'N/A'}</p>
+              <p><strong>Reference:</strong> ${payment.reference || 'N/A'}</p>
+              <p><strong>Amount:</strong> ₹${payment.amount || '0'}</p>
+            </div>
+            <div class="col-md-6">
+              <h6 class="text-muted">Customer Information</h6>
+              <p><strong>Name:</strong> ${payment.customerName || 'N/A'}</p>
+              <p><strong>Phone:</strong> ${payment.customerPhone || 'N/A'}</p>
+              <p><strong>Email:</strong> ${payment.customerEmail || 'N/A'}</p>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <h6 class="text-muted">Payment Proof</h6>
+              ${payment.screenshotUrl ? `
+                <div class="screenshot-container">
+                  <img src="${payment.screenshotUrl}" class="img-fluid" alt="Payment screenshot">
+                </div>
+                <p class="mt-2"><a href="${payment.screenshotUrl}" target="_blank">View full image</a></p>
+              ` : '<p>No screenshot provided</p>'}
+            </div>
+          </div>
+          ${payment.notes ? `
+            <div class="row mt-3">
+              <div class="col-12">
+                <h6 class="text-muted">Admin Notes</h6>
+                <div class="payment-details p-3">
+                  ${payment.notes}
+                </div>
+              </div>
+            </div>
+          ` : ''}
+        `;
+        
+        // Show appropriate buttons
+        verifyPaymentBtn.style.display = payment.status === 'pending' ? 'inline-block' : 'none';
+        rejectPaymentBtn.style.display = payment.status === 'pending' ? 'inline-block' : 'none';
+        
+        verifyModal.show();
+      } catch (error) {
+        console.error("Error loading payment details:", error);
+        verifyModalBody.innerHTML = `
+          <div class="alert alert-danger">
+            Error loading payment details
+          </div>
+        `;
+      }
+    }
+
+    // Verify payment
+    function verifyPayment() {
+      if (!currentPaymentId) return;
+      
+      const notes = prompt('Enter any verification notes (optional):');
+      
+      db.collection('payments').doc(currentPaymentId).update({
+        status: 'verified',
+        verifiedBy: auth.currentUser.email,
+        verifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        notes: notes || ''
+      })
+      .then(() => {
+        alert('Payment verified successfully');
+        verifyModal.hide();
+        loadPayments();
+        
+        // Also update the corresponding booking status
+        updateBookingStatusAfterVerification(currentPaymentId, 'confirmed');
+      })
+      .catch(error => {
+        console.error("Error verifying payment:", error);
+        alert('Failed to verify payment');
+      });
+    }
+
+    // Reject payment
+    function rejectPayment() {
+      if (!currentPaymentId) return;
+      
+      const reason = prompt('Enter rejection reason (required):');
+      if (!reason) {
+        alert('Rejection reason is required');
+        return;
       }
       
-      query.get().then(snap => {
-        const usersList = document.getElementById('usersList');
-        usersList.innerHTML = '';
+      db.collection('payments').doc(currentPaymentId).update({
+        status: 'rejected',
+        rejectedBy: auth.currentUser.email,
+        rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        notes: reason
+      })
+      .then(() => {
+        alert('Payment rejected successfully');
+        verifyModal.hide();
+        loadPayments();
         
-        if (snap.empty) {
-          usersList.innerHTML = `
-            <tr>
-              <td colspan="5" class="text-center py-5"><h6 class="text-muted">No users found</h6></td>
-            </tr>
-          `;
-          return;
-        }
-        
-        snap.forEach(doc => {
-          const user = doc.data();
-          addUserRow(user, doc.id);
-        });
-      }).catch(error => {
-        console.error("Error loading users:", error);
-        document.getElementById('usersList').innerHTML = `
-          <tr>
-            <td colspan="5" class="text-center py-5 text-danger">Error loading users</td>
-          </tr>
-        `;
+        // Also update the corresponding booking status
+        updateBookingStatusAfterVerification(currentPaymentId, 'cancelled');
+      })
+      .catch(error => {
+        console.error("Error rejecting payment:", error);
+        alert('Failed to reject payment');
       });
     }
 
-    function addUserRow(user, userId) {
-      const row = document.createElement('tr');
-      
-      row.innerHTML = `
-        <td>${userId.substring(0, 8)}</td>
-        <td>${user.email || 'N/A'}</td>
-        <td>${user.createdAt?.toDate().toLocaleDateString() || 'N/A'}</td>
-        <td>
-          <span class="badge ${user.isBlocked ? 'bg-danger' : 'bg-success'}">
-            ${user.isBlocked ? 'Blocked' : 'Active'}
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-outline-primary view-user" data-user-id="${userId}">
-            <i class="fas fa-eye me-1"></i> View
-          </button>
-          ${!user.isBlocked ? `
-            <button class="btn btn-sm btn-outline-danger block-user ms-1" data-user-id="${userId}">
-              <i class="fas fa-ban me-1"></i> Block
-            </button>
-          ` : `
-            <button class="btn btn-sm btn-outline-success unblock-user ms-1" data-user-id="${userId}">
-              <i class="fas fa-check-circle me-1"></i> Unblock
-            </button>
-          `}
-        </td>
-      `;
-      
-      document.getElementById('usersList').appendChild(row);
+    // Update booking status after payment verification/rejection
+    function updateBookingStatusAfterVerification(paymentId, newStatus) {
+      // First get the payment to find the booking ID
+      db.collection('payments').doc(paymentId).get()
+        .then(paymentDoc => {
+          if (paymentDoc.exists) {
+            const payment = paymentDoc.data();
+            if (payment.bookingId) {
+              // Update the booking status
+              return db.collection('bookings').doc(payment.bookingId).update({
+                status: newStatus,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+            }
+          }
+          return Promise.resolve();
+        })
+        .catch(error => {
+          console.error("Error updating booking status:", error);
+        });
     }
 
-    // Load offers
-    function loadOffers() {
-      db.collection('offers').orderBy('createdAt', 'desc').get().then(snap => {
-        const offersList = document.getElementById('offersList');
-        offersList.innerHTML = '';
-        
-        if (snap.empty) {
-          offersList.innerHTML = `
-            <tr>
-              <td colspan="6" class="text-center py-5"><h6 class="text-muted">No offers found</h6></td>
-            </tr>
-          `;
+    // Search payments
+    function searchPayments(query) {
+      currentSearchQuery = query.trim();
+      loadPayments();
+    }
+
+    // Setup typeahead search
+    function setupSearch() {
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        if (query.length < 3) {
+          searchResults.style.display = 'none';
           return;
         }
         
-        snap.forEach(doc => {
-          const offer = doc.data();
-          addOfferRow(offer, doc.id);
-        });
-      }).catch(error => {
-        console.error("Error loading offers:", error);
-        document.getElementById('offersList').innerHTML = `
-          <tr>
-            <td colspan="6" class="text-center py-5 text-danger">Error loading offers</td>
-          </tr>
-        `;
-      });
-    }
-
-    function addOfferRow(offer, offerId) {
-      const row = document.createElement('tr');
-      
-      row.innerHTML = `
-        <td>${offer.code || 'N/A'}</td>
-        <td>${offer.name || 'N/A'}</td>
-        <td>
-          ${offer.discountType === 'percentage' ? 
-            `${offer.discountValue || 0}%` : 
-            `₹${offer.discountValue || 0}`}
-        </td>
-        <td>${offer.validUntil ? new Date(offer.validUntil).toLocaleDateString() : 'N/A'}</td>
-        <td>
-          <span class="badge ${offer.isActive ? 'bg-success' : 'bg-secondary'}">
-            ${offer.isActive ? 'Active' : 'Inactive'}
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-outline-primary toggle-offer" 
-                  data-offer-id="${offerId}" 
-                  data-current-status="${offer.isActive}">
-            ${offer.isActive ? 'Deactivate' : 'Activate'}
-          </button>
-          <button class="btn btn-sm btn-outline-danger delete-offer ms-1" 
-                  data-offer-id="${offerId}">
-            <i class="fas fa-trash"></i>
-          </button>
-        </td>
-      `;
-
-      document.getElementById('offersList').appendChild(row);
-    }
-
-    // Load cars
-    function loadCars() {
-      db.collection('cars').orderBy('createdAt', 'desc').get().then(snap => {
-        const carsGrid = document.getElementById('carsGrid');
-        carsGrid.innerHTML = '';
+        // In a real app, you would query your database for matching results
+        // This is a simplified version that just shows some sample results
+        const sampleResults = [
+          { id: 'BOOK12345', text: 'BOOK12345 - John Doe (9876543210)' },
+          { id: 'BOOK67890', text: 'BOOK67890 - Jane Smith (9876543211)' },
+          { id: 'UPI123456789', text: 'UPI Ref: UPI123456789' }
+        ].filter(item => item.text.toLowerCase().includes(query.toLowerCase()));
         
-        if (snap.empty) {
-          carsGrid.innerHTML = `
-            <div class="col-12 text-center py-5">
-              <h6 class="text-muted">No cars found</h6>
-            </div>
-          `;
-          return;
+        if (sampleResults.length > 0) {
+          searchResults.innerHTML = '';
+          sampleResults.forEach(result => {
+            const item = document.createElement('div');
+            item.className = 'search-item';
+            item.textContent = result.text;
+            item.addEventListener('click', () => {
+              searchInput.value = result.id;
+              searchResults.style.display = 'none';
+              searchPayments(result.id);
+            });
+            searchResults.appendChild(item);
+          });
+          searchResults.style.display = 'block';
+        } else {
+          searchResults.style.display = 'none';
         }
-        
-        snap.forEach(doc => {
-          const car = doc.data();
-          addCarCard(car, doc.id);
-        });
-      }).catch(error => {
-        console.error("Error loading cars:", error);
-        document.getElementById('carsGrid').innerHTML = `
-          <div class="col-12 text-center py-5 text-danger">
-            Error loading cars
-          </div>
-        `;
+      });
+      
+      // Hide results when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) {
+          searchResults.style.display = 'none';
+        }
+      });
+      
+      // Search button click
+      searchBtn.addEventListener('click', function() {
+        searchPayments(searchInput.value);
+      });
+      
+      // Enter key in search input
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          searchPayments(this.value);
+        }
       });
     }
 
-    function addCarCard(car, carId) {
-      const col = document.createElement('div');
-      col.className = 'col-md-4 mb-4';
+    // Export to Excel
+    function exportToExcel() {
+      // Get all visible payments data
+      const payments = [];
+      document.querySelectorAll('#paymentsList tr').forEach(row => {
+        if (row.cells.length === 8) { // Ensure it's a data row
+          payments.push({
+            bookingId: row.cells[0].textContent,
+            customer: row.cells[1].textContent.replace(/\n/g, ' ').trim(),
+            amount: row.cells[2].textContent,
+            method: row.cells[3].textContent,
+            reference: row.cells[4].textContent.replace(/\n/g, ' ').trim(),
+            status: row.cells[5].textContent,
+            date: row.cells[6].textContent
+          });
+        }
+      });
       
-      col.innerHTML = `
-        <div class="card h-100">
-          <img src="${car.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${car.name}">
-          <div class="card-body">
-            <h5 class="card-title">${car.name || 'Unnamed Car'}</h5>
-            <p class="card-text text-muted">${car.category ? car.category.toUpperCase() : 'N/A'}</p>
-            <p class="card-text">${car.description ? car.description.substring(0, 100) + '...' : 'No description'}</p>
-            <div class="d-flex justify-content-between">
-              <div>
-                <span class="badge bg-light text-dark me-2">12h: ₹${car.price12hrs || '0'}</span>
-                <span class="badge bg-light text-dark">24h: ₹${car.price24hrs || '0'}</span>
-              </div>
-              <div>
-                ${car.sunroof ? '<span class="badge bg-info me-1">Sunroof</span>' : ''}
-                ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
-              </div>
-            </div>
-          </div>
-          <div class="card-footer bg-white">
-            <button class="btn btn-sm btn-outline-primary edit-car" data-car-id="${carId}">
-              <i class="fas fa-edit me-1"></i> Edit
-            </button>
-            <button class="btn btn-sm btn-outline-danger delete-car ms-1" data-car-id="${carId}">
-              <i class="fas fa-trash me-1"></i> Delete
-            </button>
-          </div>
-        </div>
-      `;
+      if (payments.length === 0) {
+        alert('No payments to export');
+        return;
+      }
       
-      document.getElementById('carsGrid').appendChild(col);
+      // Create worksheet
+      const ws = XLSX.utils.json_to_sheet(payments);
+      
+      // Create workbook
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Payments");
+      
+      // Export to file
+      XLSX.writeFile(wb, `GoPandaCars_Payments_${new Date().toISOString().split('T')[0]}.xlsx`);
     }
 
     // Helper function to get status badge class
     function getStatusBadgeClass(status) {
       switch(status) {
-        case 'confirmed':
+        case 'verified':
           return 'bg-success';
-        case 'pending_payment':
+        case 'pending':
           return 'bg-warning text-dark';
-        case 'cancelled':
+        case 'rejected':
           return 'bg-danger';
         default:
           return 'bg-secondary';
@@ -973,519 +671,78 @@
     // Helper function to format date
     function formatDate(date) {
       if (!date) return 'N/A';
-      if (date.toDate) {
-        return date.toDate().toLocaleDateString();
-      }
-      return new Date(date).toLocaleDateString();
+      return date.toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+
+    // Helper function to format date with time
+    function formatDateTime(date) {
+      if (!date) return 'N/A';
+      return date.toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
 
     // Setup event listeners
     function setupEventListeners() {
-      // Navigation
-      document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          
-          // Update active nav link
-          document.querySelectorAll('.nav-link').forEach(navLink => {
-            navLink.classList.remove('active');
-          });
-          this.classList.add('active');
-          
-          // Show corresponding section
-          const target = this.getAttribute('data-target');
-          dashboardSection.style.display = 'none';
-          bookingsSection.style.display = 'none';
-          usersSection.style.display = 'none';
-          offersSection.style.display = 'none';
-          carsSection.style.display = 'none';
-          
-          switch(target) {
-            case 'dashboard':
-              dashboardSection.style.display = 'block';
-              loadDashboard();
-              break;
-            case 'bookings':
-              bookingsSection.style.display = 'block';
-              loadAllBookings();
-              break;
-            case 'users':
-              usersSection.style.display = 'block';
-              loadUsers();
-              break;
-            case 'offers':
-              offersSection.style.display = 'block';
-              loadOffers();
-              break;
-            case 'cars':
-              carsSection.style.display = 'block';
-              loadCars();
-              break;
-          }
-        });
-      });
-
       // Logout
       logoutBtn.addEventListener('click', () => {
         auth.signOut().then(() => {
           window.location.href = 'login.html';
         });
       });
-
-      // Booking filters
-      document.querySelectorAll('.filter-booking').forEach(filter => {
+      
+      // Payment filters
+      document.querySelectorAll('.filter-payment').forEach(filter => {
         filter.addEventListener('click', (e) => {
           e.preventDefault();
-          const status = filter.getAttribute('data-status');
-          loadAllBookings(status);
+          currentFilter = filter.getAttribute('data-status');
+          loadPayments();
         });
       });
-
-      // User filters
-      document.querySelectorAll('.filter-user').forEach(filter => {
+      
+      // Date filters
+      document.querySelectorAll('.filter-date').forEach(filter => {
         filter.addEventListener('click', (e) => {
           e.preventDefault();
-          const status = filter.getAttribute('data-status');
-          loadUsers(status);
+          currentDateRange = filter.getAttribute('data-range');
+          loadPayments();
         });
       });
-
-      // View booking details
+      
+      // View payment details
       document.addEventListener('click', (e) => {
-        if (e.target.closest('.view-booking')) {
-          const bookingId = e.target.closest('.view-booking').getAttribute('data-booking-id');
-          viewBookingDetails(bookingId);
+        if (e.target.closest('.view-payment') || e.target.closest('.verify-payment')) {
+          const paymentId = e.target.closest('[data-payment-id]').getAttribute('data-payment-id');
+          viewPaymentDetails(paymentId);
         }
         
-        // Confirm booking
-        if (e.target.closest('.confirm-booking')) {
-          const bookingId = e.target.closest('.confirm-booking').getAttribute('data-booking-id');
-          confirmBooking(bookingId);
-        }
-        
-        // View user details
-        if (e.target.closest('.view-user')) {
-          const userId = e.target.closest('.view-user').getAttribute('data-user-id');
-          viewUserDetails(userId);
-        }
-        
-        // Block user
-        if (e.target.closest('.block-user')) {
-          const userId = e.target.closest('.block-user').getAttribute('data-user-id');
-          blockUser(userId);
-        }
-        
-        // Unblock user
-        if (e.target.closest('.unblock-user')) {
-          const userId = e.target.closest('.unblock-user').getAttribute('data-user-id');
-          unblockUser(userId);
-        }
-        
-        // Toggle offer status
-        if (e.target.closest('.toggle-offer')) {
-          const offerId = e.target.closest('.toggle-offer').getAttribute('data-offer-id');
-          const currentStatus = e.target.closest('.toggle-offer').getAttribute('data-current-status') === 'true';
-          toggleOfferStatus(offerId, !currentStatus);
-        }
-        
-        // Delete offer
-        if (e.target.closest('.delete-offer')) {
-          const offerId = e.target.closest('.delete-offer').getAttribute('data-offer-id');
-          deleteOffer(offerId);
-        }
-        
-        // Edit car
-        if (e.target.closest('.edit-car')) {
-          const carId = e.target.closest('.edit-car').getAttribute('data-car-id');
-          editCar(carId);
-        }
-        
-        // Delete car
-        if (e.target.closest('.delete-car')) {
-          const carId = e.target.closest('.delete-car').getAttribute('data-car-id');
-          deleteCar(carId);
+        // View screenshot
+        if (e.target.closest('.view-screenshot')) {
+          e.preventDefault();
+          const url = e.target.closest('.view-screenshot').getAttribute('data-url');
+          window.open(url, '_blank');
         }
       });
-
-      // Save new offer
-      document.getElementById('saveOfferBtn').addEventListener('click', () => {
-        saveNewOffer();
-      });
-
-      // Save new car
-      document.getElementById('saveCarBtn').addEventListener('click', () => {
-        saveNewCar();
-      });
-
-      // Confirm booking from modal
-      document.getElementById('confirmBookingBtn').addEventListener('click', () => {
-        if (currentBookingId) {
-          confirmBooking(currentBookingId);
-          bookingModal.hide();
-        }
-      });
-
-      // Cancel booking from modal
-      document.getElementById('cancelBookingBtn').addEventListener('click', () => {
-        if (currentBookingId) {
-          cancelBooking(currentBookingId);
-          bookingModal.hide();
-        }
-      });
-
-      // Block user from modal
-      document.getElementById('blockUserBtn').addEventListener('click', () => {
-        if (currentUserId) {
-          blockUser(currentUserId);
-          userModal.hide();
-        }
-      });
-
-      // Unblock user from modal
-      document.getElementById('unblockUserBtn').addEventListener('click', () => {
-        if (currentUserId) {
-          unblockUser(currentUserId);
-          userModal.hide();
-        }
-      });
-    }
-
-    // View booking details
-    async function viewBookingDetails(bookingId) {
-      currentBookingId = bookingId;
       
-      try {
-        const doc = await db.collection('bookings').doc(bookingId).get();
-        if (!doc.exists) {
-          alert('Booking not found');
-          return;
-        }
-        
-        const booking = doc.data();
-        const modalBody = document.getElementById('bookingModalBody');
-        
-        modalBody.innerHTML = `
-          <div class="row">
-            <div class="col-md-6">
-              <h6 class="text-muted">Booking Information</h6>
-              <p><strong>Booking ID:</strong> ${bookingId}</p>
-              <p><strong>Status:</strong> <span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></p>
-              <p><strong>Created At:</strong> ${booking.createdAt?.toDate().toLocaleString() || 'N/A'}</p>
-              <p><strong>Dates:</strong> ${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}</p>
-              <p><strong>Pickup Location:</strong> ${booking.pickupLocation || 'Not specified'}</p>
-            </div>
-            <div class="col-md-6">
-              <h6 class="text-muted">Car Information</h6>
-              <p><strong>Car:</strong> ${booking.carName || 'N/A'}</p>
-              <p><strong>Category:</strong> ${booking.carCategory || 'N/A'}</p>
-              <p><strong>Original Price:</strong> ₹${booking.originalPrice || '0'}</p>
-              ${booking.discountApplied ? `
-                <p><strong>Discount Applied:</strong> ${booking.discountCode || ''} (₹${booking.discountAmount || '0'})</p>
-              ` : ''}
-              <p><strong>Final Price:</strong> ₹${booking.finalPrice || booking.originalPrice || '0'}</p>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <h6 class="text-muted">Customer Information</h6>
-              <p><strong>Name:</strong> ${booking.userName || 'Not specified'}</p>
-              <p><strong>Email:</strong> ${booking.userEmail || 'N/A'}</p>
-              <p><strong>Phone:</strong> ${booking.userPhone || 'Not specified'}</p>
-            </div>
-            <div class="col-md-6">
-              <h6 class="text-muted">Payment Information</h6>
-              <p><strong>Payment Method:</strong> ${booking.paymentMethod || 'Not specified'}</p>
-              <p><strong>Payment Status:</strong> ${booking.paymentStatus || 'Pending'}</p>
-              ${booking.transactionId ? `
-                <p><strong>Transaction ID:</strong> ${booking.transactionId}</p>
-              ` : ''}
-            </div>
-          </div>
-        `;
-        
-        // Show appropriate action buttons
-        document.getElementById('cancelBookingBtn').style.display = 'none';
-        document.getElementById('confirmBookingBtn').style.display = 'none';
-        
-        if (booking.status === 'pending_payment') {
-          document.getElementById('confirmBookingBtn').style.display = 'inline-block';
-          document.getElementById('cancelBookingBtn').style.display = 'inline-block';
-        }
-        
-        bookingModal.show();
-      } catch (error) {
-        console.error("Error loading booking details:", error);
-        document.getElementById('bookingModalBody').innerHTML = `
-          <div class="alert alert-danger">
-            Error loading booking details
-          </div>
-        `;
-      }
-    }
-
-    // View user details
-    async function viewUserDetails(userId) {
-      currentUserId = userId;
+      // Verify payment button
+      verifyPaymentBtn.addEventListener('click', verifyPayment);
       
-      try {
-        const doc = await db.collection('users').doc(userId).get();
-        if (!doc.exists) {
-          alert('User not found');
-          return;
-        }
-        
-        const user = doc.data();
-        const modalBody = document.getElementById('userModalBody');
-        
-        modalBody.innerHTML = `
-          <div class="row">
-            <div class="col-md-6">
-              <h6 class="text-muted">Basic Information</h6>
-              <p><strong>User ID:</strong> ${userId}</p>
-              <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
-              <p><strong>Phone:</strong> ${user.phone || 'Not provided'}</p>
-              <p><strong>Status:</strong> <span class="badge ${user.isBlocked ? 'bg-danger' : 'bg-success'}">${user.isBlocked ? 'Blocked' : 'Active'}</span></p>
-              <p><strong>Joined:</strong> ${user.createdAt?.toDate().toLocaleDateString() || 'N/A'}</p>
-            </div>
-            <div class="col-md-6">
-              <h6 class="text-muted">Additional Information</h6>
-              <p><strong>Name:</strong> ${user.name || 'Not provided'}</p>
-              <p><strong>Address:</strong> ${user.address || 'Not provided'}</p>
-              <p><strong>License Number:</strong> ${user.driverLicense || 'Not provided'}</p>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-12">
-              <h6 class="text-muted">Booking History</h6>
-              <p>Total bookings: ${user.totalBookings || 0}</p>
-            </div>
-          </div>
-        `;
-        
-        // Show appropriate action buttons
-        document.getElementById('blockUserBtn').style.display = 'none';
-        document.getElementById('unblockUserBtn').style.display = 'none';
-        
-        if (user.isBlocked) {
-          document.getElementById('unblockUserBtn').style.display = 'inline-block';
-        } else {
-          document.getElementById('blockUserBtn').style.display = 'inline-block';
-        }
-        
-        userModal.show();
-      } catch (error) {
-        console.error("Error loading user details:", error);
-        document.getElementById('userModalBody').innerHTML = `
-          <div class="alert alert-danger">
-            Error loading user details
-          </div>
-        `;
-      }
-    }
-
-    // Confirm booking
-    function confirmBooking(bookingId) {
-      if (!confirm('Are you sure you want to confirm this booking?')) return;
+      // Reject payment button
+      rejectPaymentBtn.addEventListener('click', rejectPayment);
       
-      db.collection('bookings').doc(bookingId).update({
-        status: 'confirmed',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        alert('Booking confirmed successfully');
-        loadDashboard();
-        loadAllBookings();
-      })
-      .catch(error => {
-        console.error("Error confirming booking:", error);
-        alert('Failed to confirm booking');
-      });
-    }
-
-    // Cancel booking
-    function cancelBooking(bookingId) {
-      if (!confirm('Are you sure you want to cancel this booking?')) return;
+      // Export button
+      exportBtn.addEventListener('click', exportToExcel);
       
-      db.collection('bookings').doc(bookingId).update({
-        status: 'cancelled',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        alert('Booking cancelled successfully');
-        loadDashboard();
-        loadAllBookings();
-      })
-      .catch(error => {
-        console.error("Error cancelling booking:", error);
-        alert('Failed to cancel booking');
-      });
-    }
-
-    // Block user
-    function blockUser(userId) {
-      if (!confirm('Are you sure you want to block this user?')) return;
-      
-      db.collection('users').doc(userId).update({
-        isBlocked: true,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        alert('User blocked successfully');
-        loadUsers();
-      })
-      .catch(error => {
-        console.error("Error blocking user:", error);
-        alert('Failed to block user');
-      });
-    }
-
-    // Unblock user
-    function unblockUser(userId) {
-      if (!confirm('Are you sure you want to unblock this user?')) return;
-      
-      db.collection('users').doc(userId).update({
-        isBlocked: false,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        alert('User unblocked successfully');
-        loadUsers();
-      })
-      .catch(error => {
-        console.error("Error unblocking user:", error);
-        alert('Failed to unblock user');
-      });
-    }
-
-    // Toggle offer status
-    function toggleOfferStatus(offerId, newStatus) {
-      db.collection('offers').doc(offerId).update({
-        isActive: newStatus,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        loadOffers();
-      })
-      .catch(error => {
-        console.error("Error toggling offer status:", error);
-        alert('Failed to update offer status');
-      });
-    }
-
-    // Delete offer
-    function deleteOffer(offerId) {
-      if (!confirm('Are you sure you want to delete this offer?')) return;
-      
-      db.collection('offers').doc(offerId).delete()
-      .then(() => {
-        loadOffers();
-      })
-      .catch(error => {
-        console.error("Error deleting offer:", error);
-        alert('Failed to delete offer');
-      });
-    }
-
-    // Save new offer
-    function saveNewOffer() {
-      const offerCode = document.getElementById('offerCode').value;
-      const offerName = document.getElementById('offerName').value;
-      const offerDescription = document.getElementById('offerDescription').value;
-      const discountType = document.getElementById('discountType').value;
-      const discountValue = parseFloat(document.getElementById('discountValue').value);
-      const validUntil = document.getElementById('validUntil').value;
-      const isActive = document.getElementById('isActive').checked;
-      
-      if (!offerCode || !offerName || !discountValue || !validUntil) {
-        alert('Please fill all required fields');
-        return;
-      }
-      
-      const newOffer = {
-        code: offerCode,
-        name: offerName,
-        description: offerDescription,
-        discountType,
-        discountValue,
-        validUntil: new Date(validUntil),
-        isActive,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      
-      db.collection('offers').add(newOffer)
-        .then(() => {
-          alert('Offer created successfully');
-          addOfferModal.hide();
-          document.getElementById('offerForm').reset();
-          loadOffers();
-        })
-        .catch(error => {
-          console.error("Error adding offer:", error);
-          alert('Failed to create offer');
-        });
-    }
-
-    // Save new car
-    function saveNewCar() {
-      const carName = document.getElementById('carName').value;
-      const carImage = document.getElementById('carImage').value;
-      const carDescription = document.getElementById('carDescription').value;
-      const carCategory = document.getElementById('carCategory').value;
-      const carPrice12hrs = parseFloat(document.getElementById('carPrice12hrs').value);
-      const carPrice24hrs = parseFloat(document.getElementById('carPrice24hrs').value);
-      const carSunroof = document.getElementById('carSunroof').checked;
-      const carWithDriver = document.getElementById('carWithDriver').checked;
-      
-      if (!carName || !carImage || !carDescription || !carPrice12hrs || !carPrice24hrs) {
-        alert('Please fill all required fields');
-        return;
-      }
-      
-      const newCar = {
-        name: carName,
-        imageUrl: carImage,
-        description: carDescription,
-        category: carCategory,
-        price12hrs: carPrice12hrs,
-        price24hrs: carPrice24hrs,
-        sunroof: carSunroof,
-        withDriver: carWithDriver,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      
-      db.collection('cars').add(newCar)
-        .then(() => {
-          alert('Car added successfully');
-          addCarModal.hide();
-          document.getElementById('carForm').reset();
-          loadCars();
-        })
-        .catch(error => {
-          console.error("Error adding car:", error);
-          alert('Failed to add car');
-        });
-    }
-
-    // Edit car (placeholder)
-    function editCar(carId) {
-      alert('Edit car functionality would be implemented here');
-      // Would need to fetch car details and populate an edit modal
-    }
-
-    // Delete car
-    function deleteCar(carId) {
-      if (!confirm('Are you sure you want to delete this car? This cannot be undone.')) return;
-      
-      db.collection('cars').doc(carId).delete()
-        .then(() => {
-          loadCars();
-        })
-        .catch(error => {
-          console.error("Error deleting car:", error);
-          alert('Failed to delete car');
-        });
+      // Setup search
+      setupSearch();
     }
   </script>
 </body>
