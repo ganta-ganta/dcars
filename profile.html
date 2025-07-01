@@ -28,6 +28,10 @@
       font-size: 0.8rem;
       padding: 5px 10px;
     }
+    .error-message {
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
@@ -106,7 +110,6 @@
           <div class="tab-pane fade show active" id="bookings" role="tabpanel">
             <h4 class="mb-4">My Bookings</h4>
             <div class="row" id="bookingsContainer">
-              <!-- Bookings will be loaded here -->
               <div class="col-12 text-center py-5">
                 <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden">Loading...</span>
@@ -210,10 +213,6 @@
       // Setup event listeners
       setupEventListeners();
     });
-    const querySnapshot = await db.collection('bookings')
-  .where('userId', '==', userId)
-  .orderBy('createdAt', 'desc')
-  .get();
 
     // Load user profile data
     async function loadUserProfile(userId) {
@@ -238,10 +237,11 @@
         }
       } catch (error) {
         console.error("Error loading profile:", error);
+        showError("Failed to load profile data. Please try again later.");
       }
     }
 
-    // Load user bookings
+    // Load user bookings with error handling for missing index
     async function loadUserBookings(userId) {
       try {
         // Show loading state
@@ -258,7 +258,15 @@
         const querySnapshot = await db.collection('bookings')
           .where('userId', '==', userId)
           .orderBy('createdAt', 'desc')
-          .get();
+          .get()
+          .catch(error => {
+            if (error.code === 'failed-precondition') {
+              // Handle missing index error specifically
+              const indexUrl = `https://console.firebase.google.com/v1/r/project/${firebaseConfig.projectId}/firestore/indexes?create_composite=ClJwcm9qZWN0cy9nb3BhbmRhY2Fycy03MDg1Zi9kYXRhYmFzZXMvKGRlZmF1bHQpL2NvbGxlY3Rpb25Hcm91cHMvYm9va2luZ3MvaW5kZXhlcy9fEAEaCgoGdXNlcklkEAEaDQoJY3JlYXRlZEF0EAIaDAoIX19uYW1lX18QAg`;
+              throw new Error(`Index required for this query. Please create the index: ${indexUrl}`);
+            }
+            throw error;
+          });
 
         // Check if there are any bookings
         if (querySnapshot.empty) {
@@ -284,10 +292,24 @@
 
       } catch (error) {
         console.error("Error loading bookings:", error);
+        
+        let errorMessage = error.message;
+        if (error.message.includes('Index required')) {
+          errorMessage = `
+            <strong>Database index required:</strong> 
+            <p>This query needs a special index to work. The index is being created automatically, 
+            but it may take a few minutes to be ready.</p>
+            <p>If you're the administrator, you can <a href="${error.message.split(' ').pop()}" target="_blank">create the index manually</a>.</p>
+            <button class="btn btn-sm btn-primary mt-2" onclick="window.location.reload()">
+              <i class="fas fa-sync-alt me-1"></i> Try Again
+            </button>
+          `;
+        }
+
         bookingsContainer.innerHTML = `
           <div class="col-12">
             <div class="alert alert-danger">
-              Error loading bookings: ${error.message}
+              ${errorMessage}
             </div>
           </div>
         `;
@@ -365,8 +387,16 @@
       profileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const userId = auth.currentUser.uid;
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
         
         try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Updating...
+          `;
+          
           await db.collection('users').doc(userId).update({
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
@@ -375,11 +405,14 @@
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           
-          alert('Profile updated successfully!');
+          showSuccess('Profile updated successfully!');
           loadUserProfile(userId); // Refresh profile data
         } catch (error) {
           console.error("Error updating profile:", error);
-          alert('Failed to update profile: ' + error.message);
+          showError('Failed to update profile: ' + error.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
         }
       });
 
@@ -409,7 +442,7 @@
       try {
         const doc = await db.collection('bookings').doc(bookingId).get();
         if (!doc.exists) {
-          alert('Booking not found');
+          showError('Booking not found');
           return;
         }
 
@@ -422,7 +455,7 @@
               <hr>
               <p><strong>Status:</strong> <span class="badge ${getStatusClass(booking.status)}">${booking.status}</span></p>
               <p><strong>Booking ID:</strong> ${bookingId}</p>
-              <p><strong>Dates:</strong> ${booking.startDate.toDate().toLocaleDateString()} - ${booking.endDate.toDate().toLocaleDateString()}</p>
+              <p><strong>Dates:</strong> ${booking.startDate?.toDate().toLocaleDateString() || 'N/A'} - ${booking.endDate?.toDate().toLocaleDateString() || 'N/A'}</p>
             </div>
             <div class="col-md-6">
               <h5>Payment Details</h5>
@@ -439,7 +472,7 @@
 
         bookingModal.show();
       } catch (error) {
-        alert('Error loading booking details: ' + error.message);
+        showError('Error loading booking details: ' + error.message);
       }
     }
 
@@ -455,11 +488,53 @@
         
         // Refresh bookings
         loadUserBookings(auth.currentUser.uid);
-        alert('Booking cancelled successfully');
+        showSuccess('Booking cancelled successfully');
       } catch (error) {
         console.error("Error cancelling booking:", error);
-        alert('Failed to cancel booking: ' + error.message);
+        showError('Failed to cancel booking: ' + error.message);
       }
+    }
+
+    // Helper function to show success messages
+    function showSuccess(message) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-success alert-dismissible fade show';
+      alertDiv.role = 'alert';
+      alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      
+      // Add to the top of the container
+      const container = document.querySelector('.container.my-5');
+      container.prepend(alertDiv);
+      
+      // Auto dismiss after 5 seconds
+      setTimeout(() => {
+        alertDiv.classList.remove('show');
+        setTimeout(() => alertDiv.remove(), 150);
+      }, 5000);
+    }
+
+    // Helper function to show error messages
+    function showError(message) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+      alertDiv.role = 'alert';
+      alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      
+      // Add to the top of the container
+      const container = document.querySelector('.container.my-5');
+      container.prepend(alertDiv);
+      
+      // Auto dismiss after 8 seconds
+      setTimeout(() => {
+        alertDiv.classList.remove('show');
+        setTimeout(() => alertDiv.remove(), 150);
+      }, 8000);
     }
   </script>
 </body>
