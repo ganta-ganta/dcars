@@ -28,20 +28,34 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">GoPandaCars</a>
+      <a class="navbar-brand fw-bold" href="index.html">GoPandaCars</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#economy">Economy</a></li>
           <li class="nav-item"><a class="nav-link" href="#premium">Premium</a></li>
           <li class="nav-item"><a class="nav-link" href="#luxury">Luxury</a></li>
         </ul>
-        <div>
+        <div id="authButtons">
           <a href="login.html" class="btn btn-outline-light me-2">Login</a>
           <a href="login.html?action=signup" class="btn btn-primary">Sign Up</a>
+        </div>
+        <div id="userProfile" style="display:none;">
+          <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+              <i class="fas fa-user-circle me-1"></i>
+              <span id="userName">Profile</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="profile.html">My Profile</a></li>
+              <li><a class="dropdown-item" href="profile.html#bookings">My Bookings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -130,7 +144,7 @@
         <div class="col-md-2 mb-4">
           <h5>Quick Links</h5>
           <ul class="list-unstyled">
-            <li><a href="#" class="text-white">Home</a></li>
+            <li><a href="index.html" class="text-white">Home</a></li>
             <li><a href="#economy" class="text-white">Economy Cars</a></li>
             <li><a href="#premium" class="text-white">Premium Cars</a></li>
             <li><a href="#luxury" class="text-white">Luxury Cars</a></li>
@@ -180,90 +194,58 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // Car data with placeholder images
+    // Car data with consistent naming
     const cars = [
-    {name: 'Swift', image: 'img/swift.jpg', price12hrs: 1200, price24hrs: 2000, 
-     description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.', category: 'economy'},
-     
-    {name: 'Etios', image: 'img/etios.jpg', price12hrs: 1200, price24hrs: 2000, 
-     description: 'Reliable sedan with spacious interior and good mileage.', category: 'economy'},
-     
-    {name: 'I10 Nios', image: 'img/i10nios.jpg', price12hrs: 1500, price24hrs: 2300, 
-     description: 'Premium hatchback with modern features and stylish design.', category: 'economy'},
-     
-    {name: 'Swift Dzire', image: 'img/swiftdzire.jpg', price12hrs: 1500, price24hrs: 2300, 
-     description: 'Popular compact sedan with excellent ride quality.', category: 'economy'},
-     
-    {name: 'Hyundai Aura', image: 'img/aura.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Stylish compact sedan with premium features.', category: 'premium'},
-     
-    {name: 'Tata Punch', image: 'img/punch.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Compact SUV with rugged design and modern features.', category: 'premium'},
-     
-    {name: 'Hyundai i20', image: 'img/i20.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Premium hatchback with sporty looks and advanced features.', sunroof: true, category: 'premium'},
-     
-    {name: 'Renault Kiger', image: 'img/kiger.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Compact SUV with bold styling and spacious interior.', category: 'premium'},
-     
-    {name: 'Urban Cruiser', image: 'img/urban-cruiser.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Compact SUV with Toyota reliability and comfort.', category: 'premium'},
-     
-    {name: 'Brezza', image: 'img/brezza.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Popular compact SUV with excellent build quality.', category: 'premium'},
-     
-    {name: 'Nexa Fronx', image: 'img/fronx.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Stylish crossover with premium features.', sunroof: true, category: 'premium'},
-     
-    {name: 'Hyundai Creta', image: 'img/creta.jpg', price12hrs: 2000, price24hrs: 3000, 
-     description: 'Premium SUV with luxurious features and spacious cabin.', category: 'premium'},
-     
-    {name: 'Grand Vitara', image: 'img/grandvitara.jpg', price12hrs: 2000, price24hrs: 3000, 
-     description: 'Premium SUV with hybrid technology and elegant design.', category: 'premium'},
-     
-    {name: 'Ertiga', image: 'img/ertiga.jpg', price12hrs: 2000, price24hrs: 3500, 
-     description: '7-seater MPV with comfortable seating and good mileage.', category: 'premium'},
-     
-    {name: 'Bolero Neo', image: 'img/bolero-neo.jpg', price12hrs: 2000, price24hrs: 3500, 
-     description: 'Rugged SUV with excellent off-road capabilities.', category: 'premium'},
-     
-    {name: 'Mahindra Thar', image: 'img/thar.jpg', price12hrs: 3500, price24hrs: 5000, 
-     description: 'Iconic off-roader with convertible top and powerful engine.', category: 'luxury'},
-     
-    {name: 'Innova Crysta', image: 'img/innova.jpg', price12hrs: 3500, price24hrs: 5000, 
-     description: 'Premium 7-seater MPV with luxurious comfort.',  category: 'luxury'},
-     
-    {name: 'Brezza Sunroof', image: 'img/brezza-sunroof.jpg', price12hrs: 1500, price24hrs: 2500, 
-     description: 'Compact SUV with panoramic sunroof for open-air experience.', sunroof: true, category: 'premium'},
-     
-    {name: 'Mahindra XUV700', image: 'img/xuv700.jpg', price24hrs: 6500, price12hrs: 4500, 
-     description: 'Premium SUV with advanced features and powerful performance.', withDriver: true, category: 'luxury'},
-     
-    {name: 'Hyundai Venue', image: 'img/venue.jpg', price24hrs: 2500, price12hrs: 1500, 
-     description: 'Compact SUV with bold styling and connected car tech.', category: 'premium'},
-      {name: 'Baleno',image: 'img/baleno.jpg',price12hrs: 1500,price24hrs: 2500,
-    description: 'Mid variant hatchback with comfort, style, and great fuel efficiency.',
-    category: 'premium'  },
-     
-    {name: 'Tata Nexon Sunroof', image: 'img/nexon-sunroof.jpg', price24hrs: 2800, price12hrs: 1800, 
-     description: 'Safe and stylish compact SUV with panoramic sunroof.', sunroof: true, category: 'premium'},
-     
-    {name: 'Tata Altroz Sunroof', image: 'img/altroz-sunroof.jpg', price24hrs: 2500, price12hrs: 1600, 
-     description: 'Premium hatchback with sunroof and premium interiors.', sunroof: true, category: 'premium'},
-     
-    {name: 'XUV 300 Sunroof', image: 'img/xuv300-sunroof.jpg', price24hrs: 2800, price12hrs: 1800, 
-     description: 'Feature-packed compact SUV with sunroof option.', sunroof: true, category: 'premium'},
-     
-    {name: 'Fortuner', image: 'img/fortuner.jpg', price24hrs: 12000, price12hrs: 8000, 
-     description: 'Premium full-size SUV with powerful engine and luxury features.', withDriver: true, category: 'luxury'},
-     
-    {name: 'Kia Seltos', image: 'img/kia-selto.jpg', price24hrs: 2800, price12hrs: 1800, 
-     description: 'Stylish SUV with premium features and spacious cabin.', category: 'premium'}
-];
+      {id: 'car1', name:'Maruti Swift', image:'https://source.unsplash.com/random/600x400/?maruti+swift', price12hrs:1200, price24hrs:2000, description:'Compact hatchback with great fuel efficiency and comfortable seating for 5.', category:'economy'},
+      {id: 'car2', name:'Toyota Etios', image:'https://source.unsplash.com/random/600x400/?toyota+etios', price12hrs:1200, price24hrs:2000, description:'Reliable sedan with spacious interior and good mileage.', category:'economy'},
+      {id: 'car3', name:'Hyundai i10 Nios', image:'https://source.unsplash.com/random/600x400/?hyundai+i10', price12hrs:1500, price24hrs:2300, description:'Premium hatchback with modern features and stylish design.', category:'economy'},
+      {id: 'car4', name:'Maruti Swift Dzire', image:'https://source.unsplash.com/random/600x400/?swift+dzire', price12hrs:1500, price24hrs:2300, description:'Popular compact sedan with excellent ride quality.', category:'economy'},
+      {id: 'car5', name:'Hyundai Aura', image:'https://source.unsplash.com/random/600x400/?hyundai+aura', price12hrs:1500, price24hrs:2500, description:'Stylish compact sedan with premium features.', category:'premium'},
+      {id: 'car6', name:'Tata Punch', image:'https://source.unsplash.com/random/600x400/?tata+punch', price12hrs:1500, price24hrs:2500, description:'Compact SUV with rugged design and modern features.', category:'premium'},
+      {id: 'car7', name:'Hyundai i20', image:'https://source.unsplash.com/random/600x400/?hyundai+i20', price12hrs:1500, price24hrs:2500, description:'Premium hatchback with sporty looks and advanced features.', sunroof:true, category:'premium'},
+      {id: 'car8', name:'Renault Kiger', image:'https://source.unsplash.com/random/600x400/?renault+kiger', price12hrs:1500, price24hrs:2500, description:'Compact SUV with bold styling and spacious interior.', category:'premium'},
+      {id: 'car9', name:'Maruti Brezza', image:'https://source.unsplash.com/random/600x400/?maruti+brezza', price12hrs:1500, price24hrs:2500, description:'Popular compact SUV with excellent build quality.', category:'premium'},
+      {id: 'car10', name:'Hyundai Creta', image:'https://source.unsplash.com/random/600x400/?hyundai+creta', price12hrs:2000, price24hrs:3000, description:'Premium SUV with luxurious features and spacious cabin.', category:'premium'},
+      {id: 'car11', name:'Mahindra Thar', image:'https://source.unsplash.com/random/600x400/?mahindra+thar', price12hrs:3500, price24hrs:5000, description:'Iconic off-roader with convertible top and powerful engine.', category:'luxury'},
+      {id: 'car12', name:'Toyota Innova Crysta', image:'https://source.unsplash.com/random/600x400/?innova+crysta', price12hrs:3500, price24hrs:5000, description:'Premium 7-seater MPV with luxurious comfort.', category:'luxury'},
+      {id: 'car13', name:'Toyota Fortuner', image:'https://source.unsplash.com/random/600x400/?toyota+fortuner', price12hrs:8000, price24hrs:12000, description:'Premium full-size SUV with powerful engine and luxury features.', withDriver:true, category:'luxury'}
+    ];
 
     // Initialize Bootstrap modal
     const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
     let selectedCar = null;
+
+    // DOM elements
+    const authButtons = document.getElementById('authButtons');
+    const userProfile = document.getElementById('userProfile');
+    const userName = document.getElementById('userName');
+
+    // Check auth state
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // Check if user is blocked
+        db.collection('users').doc(user.uid).get().then(doc => {
+          if (doc.exists && doc.data().isBlocked) {
+            auth.signOut();
+            alert('Your account has been blocked by admin');
+            return;
+          }
+          
+          authButtons.style.display = 'none';
+          userProfile.style.display = 'block';
+          userName.textContent = user.email.split('@')[0];
+          
+          if (user.email === 'admin@gopandacars.com') {
+            // Add admin link if user is admin
+            const dropdown = document.querySelector('.dropdown-menu');
+            dropdown.innerHTML += `<li><a class="dropdown-item" href="admin.html"><i class="fas fa-cog me-1"></i>Admin Panel</a></li>`;
+          }
+        });
+      } else {
+        authButtons.style.display = 'block';
+        userProfile.style.display = 'none';
+      }
+    });
 
     // Function to render cars by category
     function renderCars() {
@@ -280,7 +262,7 @@
       const container = document.getElementById(elementId);
       container.innerHTML = '';
 
-      carList.forEach((car, index) => {
+      carList.forEach((car) => {
         const card = document.createElement('div');
         card.className = 'col-md-4';
         card.innerHTML = `
@@ -302,7 +284,7 @@
               ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
             </div>
             <div class="card-footer bg-transparent">
-              <button class="btn btn-primary w-100 book-btn" data-car-index="${index}">Book Now</button>
+              <button class="btn btn-primary w-100 book-btn" data-car-id="${car.id}">Book Now</button>
             </div>
           </div>
         `;
@@ -312,8 +294,9 @@
       // Add event listeners to book buttons
       document.querySelectorAll('.book-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-          const carIndex = this.getAttribute('data-car-index');
-          showBookingModal(cars[carIndex]);
+          const carId = this.getAttribute('data-car-id');
+          const car = cars.find(c => c.id === carId);
+          showBookingModal(car);
         });
       });
     }
@@ -333,7 +316,6 @@
       document.getElementById('price12hrs').textContent = car.price12hrs;
       document.getElementById('price24hrs').textContent = car.price24hrs;
       
-      // Check if user is logged in
       const user = auth.currentUser;
       if (user) {
         document.getElementById('loginRequired').style.display = 'none';
@@ -400,7 +382,8 @@
       db.collection('bookings').doc(bookingId).set({
         userId: user.uid,
         userEmail: user.email,
-        carId: selectedCar.name,
+        carId: selectedCar.id,
+        carName: selectedCar.name,
         carImage: selectedCar.image,
         startDate: startDate,
         endDate: endDate,
@@ -418,13 +401,11 @@
       });
     });
 
-    // Check auth state to show/hide login prompt
-    auth.onAuthStateChanged(user => {
-      if (user && document.getElementById('loginRequired').style.display === 'block') {
-        document.getElementById('loginRequired').style.display = 'none';
-        document.getElementById('bookingForm').style.display = 'block';
-        document.getElementById('confirmBookingBtn').style.display = 'block';
-      }
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      auth.signOut().then(() => {
+        window.location.href = 'index.html';
+      });
     });
 
     // Initialize the page
