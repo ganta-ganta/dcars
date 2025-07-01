@@ -20,6 +20,21 @@
       align-items: center;
       height: 200px;
     }
+    .notification-item {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s;
+    }
+    .notification-item:hover {
+      background-color: #f8f9fa;
+    }
+    .notification-item.unread {
+      background-color: #f0f7ff;
+    }
+    .notification-time {
+      font-size: 0.75rem;
+      color: #6c757d;
+    }
   </style>
 </head>
 <body>
@@ -70,7 +85,24 @@
       <!-- Main Content -->
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Admin Dashboard</h1>
+          <div class="d-flex align-items-center">
+            <h1 class="h2 me-3">Admin Dashboard</h1>
+            <div class="position-relative">
+              <button class="btn btn-outline-secondary" id="notificationsBtn">
+                <i class="fas fa-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationBadge" style="display: none;">
+                  0
+                </span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end p-0" id="notificationsDropdown" style="width: 350px; max-height: 400px; overflow-y: auto; display: none;">
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                  <h6 class="mb-0">Notifications</h6>
+                  <button class="btn btn-sm btn-outline-secondary" id="clearNotificationsBtn">Clear All</button>
+                </div>
+                <div id="notificationsList"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Dashboard Section -->
@@ -426,6 +458,11 @@
     </div>
   </div>
 
+  <!-- Notification Sound -->
+  <audio id="notificationSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
+  </audio>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -459,8 +496,17 @@
     const userModal = new bootstrap.Modal(document.getElementById('userModal'));
     const addOfferModal = new bootstrap.Modal(document.getElementById('addOfferModal'));
     const addCarModal = new bootstrap.Modal(document.getElementById('addCarModal'));
+    const notificationSound = document.getElementById('notificationSound');
+    const notificationBadge = document.getElementById('notificationBadge');
+    const notificationsList = document.getElementById('notificationsList');
+    const notificationsDropdown = document.getElementById('notificationsDropdown');
+    const notificationsBtn = document.getElementById('notificationsBtn');
+    const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
+    
     let currentBookingId = null;
     let currentUserId = null;
+    let lastBookingTimestamp = null;
+    let unreadNotifications = 0;
 
     // Check auth state
     auth.onAuthStateChanged(user => {
@@ -470,6 +516,7 @@
           // Admin user
           loadDashboard();
           setupEventListeners();
+          setupNotifications();
         } else {
           // Not admin
           window.location.href = 'profile.html';
@@ -479,6 +526,123 @@
         window.location.href = 'login.html';
       }
     });
+
+    // Setup notifications system
+    function setupNotifications() {
+      // Load last booking timestamp from localStorage
+      const lastTimestamp = localStorage.getItem('lastBookingTimestamp');
+      if (lastTimestamp) {
+        lastBookingTimestamp = new Date(parseInt(lastTimestamp));
+      }
+      
+      // Set up real-time listener for new bookings
+      db.collection('bookings').orderBy('createdAt', 'desc').limit(1)
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'added') {
+              const booking = change.doc.data();
+              const bookingTime = booking.createdAt.toDate();
+              
+              // Check if this is a new booking since last check
+              if (!lastBookingTimestamp || bookingTime > lastBookingTimestamp) {
+                lastBookingTimestamp = bookingTime;
+                localStorage.setItem('lastBookingTimestamp', bookingTime.getTime().toString());
+                
+                // Only show notification if not initial load
+                if (lastBookingTimestamp) {
+                  addNewBookingNotification(change.doc.id, booking);
+                  playNotificationSound();
+                }
+              }
+            }
+          });
+        });
+        
+      // Load existing notifications
+      loadNotifications();
+      
+      // Notification button click handler
+      notificationsBtn.addEventListener('click', () => {
+        notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block';
+        markNotificationsAsRead();
+      });
+      
+      // Clear notifications button
+      clearNotificationsBtn.addEventListener('click', clearNotifications);
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!notificationsBtn.contains(e.target) && !notificationsDropdown.contains(e.target)) {
+          notificationsDropdown.style.display = 'none';
+        }
+      });
+    }
+
+    function playNotificationSound() {
+      notificationSound.currentTime = 0; // Rewind to start
+      notificationSound.play().catch(e => console.log("Audio play failed:", e));
+    }
+
+    function addNewBookingNotification(bookingId, booking) {
+      unreadNotifications++;
+      updateNotificationBadge();
+      
+      const notificationItem = document.createElement('div');
+      notificationItem.className = 'notification-item unread';
+      notificationItem.innerHTML = `
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <strong>New Booking</strong>
+            <p class="mb-1">${booking.carName || 'Unknown car'} booked by ${booking.userEmail || 'unknown user'}</p>
+            <p class="mb-0 notification-time">${new Date().toLocaleTimeString()}</p>
+          </div>
+          <a href="#" class="btn btn-sm btn-outline-primary view-notification" data-booking-id="${bookingId}">View</a>
+        </div>
+      `;
+      
+      // Add to top of list
+      if (notificationsList.firstChild) {
+        notificationsList.insertBefore(notificationItem, notificationsList.firstChild);
+      } else {
+        notificationsList.appendChild(notificationItem);
+      }
+      
+      // Add click handler for view button
+      notificationItem.querySelector('.view-notification').addEventListener('click', (e) => {
+        e.preventDefault();
+        viewBookingDetails(bookingId);
+        notificationsDropdown.style.display = 'none';
+      });
+    }
+
+    function updateNotificationBadge() {
+      if (unreadNotifications > 0) {
+        notificationBadge.style.display = 'block';
+        notificationBadge.textContent = unreadNotifications;
+      } else {
+        notificationBadge.style.display = 'none';
+      }
+    }
+
+    function markNotificationsAsRead() {
+      unreadNotifications = 0;
+      updateNotificationBadge();
+      
+      // Remove unread styling
+      document.querySelectorAll('.notification-item.unread').forEach(item => {
+        item.classList.remove('unread');
+      });
+    }
+
+    function clearNotifications() {
+      notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
+      markNotificationsAsRead();
+    }
+
+    function loadNotifications() {
+      // In a real app, you might load persisted notifications from a database
+      notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
+    }
 
     // Load dashboard data
     function loadDashboard() {
@@ -1129,6 +1293,8 @@
       })
       .then(() => {
         alert('Booking confirmed successfully');
+        loadDashboard();
+        loadAllBookings();
       })
       .catch(error => {
         console.error("Error confirming booking:", error);
@@ -1146,6 +1312,8 @@
       })
       .then(() => {
         alert('Booking cancelled successfully');
+        loadDashboard();
+        loadAllBookings();
       })
       .catch(error => {
         console.error("Error cancelling booking:", error);
@@ -1163,6 +1331,7 @@
       })
       .then(() => {
         alert('User blocked successfully');
+        loadUsers();
       })
       .catch(error => {
         console.error("Error blocking user:", error);
@@ -1180,6 +1349,7 @@
       })
       .then(() => {
         alert('User unblocked successfully');
+        loadUsers();
       })
       .catch(error => {
         console.error("Error unblocking user:", error);
@@ -1194,7 +1364,7 @@
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        // Status updated automatically via onSnapshot
+        loadOffers();
       })
       .catch(error => {
         console.error("Error toggling offer status:", error);
@@ -1208,7 +1378,7 @@
       
       db.collection('offers').doc(offerId).delete()
       .then(() => {
-        // Offer removed automatically via onSnapshot
+        loadOffers();
       })
       .catch(error => {
         console.error("Error deleting offer:", error);
@@ -1248,6 +1418,7 @@
           alert('Offer created successfully');
           addOfferModal.hide();
           document.getElementById('offerForm').reset();
+          loadOffers();
         })
         .catch(error => {
           console.error("Error adding offer:", error);
@@ -1289,6 +1460,7 @@
           alert('Car added successfully');
           addCarModal.hide();
           document.getElementById('carForm').reset();
+          loadCars();
         })
         .catch(error => {
           console.error("Error adding car:", error);
@@ -1308,7 +1480,7 @@
       
       db.collection('cars').doc(carId).delete()
         .then(() => {
-          // Car removed automatically via onSnapshot
+          loadCars();
         })
         .catch(error => {
           console.error("Error deleting car:", error);
