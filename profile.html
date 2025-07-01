@@ -210,6 +210,10 @@
       // Setup event listeners
       setupEventListeners();
     });
+    const querySnapshot = await db.collection('bookings')
+  .where('userId', '==', userId)
+  .orderBy('createdAt', 'desc')
+  .get();
 
     // Load user profile data
     async function loadUserProfile(userId) {
