@@ -1,215 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Profile | GoPandaCars</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .profile-header {
-      background: linear-gradient(135deg, #6e8efb, #a777e3);
-      color: white;
-      border-radius: 10px;
-    }
-    .booking-card {
-      transition: all 0.3s;
-      border: none;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .booking-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    .nav-pills .nav-link.active {
-      background-color: #6e8efb;
-    }
-    .badge-status {
-      font-size: 0.8rem;
-      padding: 5px 10px;
-    }
-    .loading-spinner {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-    }
-    .profile-pic-container {
-      position: relative;
-      width: fit-content;
-      margin: 0 auto;
-    }
-    .profile-pic-upload {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    .profile-pic-upload input {
-      display: none;
-    }
-  </style>
+  <!-- Previous head content remains the same -->
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">GoPandaCars</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="profile.html"><i class="fas fa-user me-1"></i> Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Profile Content -->
-  <div class="container my-5">
-    <div class="row">
-      <div class="col-md-4">
-        <!-- User Profile Card -->
-        <div class="card mb-4">
-          <div class="profile-header p-4 text-center">
-            <div class="profile-pic-container mb-3">
-              <img id="profilePic" src="https://ui-avatars.com/api/?name=User+Name&background=random" 
-                   class="rounded-circle" width="100" alt="Profile">
-              <div class="profile-pic-upload">
-                <i class="fas fa-camera"></i>
-                <input type="file" id="profilePicInput" accept="image/*">
-              </div>
-            </div>
-            <h4 id="userName">Loading...</h4>
-            <p class="text-white-50 mb-0" id="userEmail">user@example.com</p>
-          </div>
-          <div class="card-body">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span><i class="fas fa-phone me-2"></i> Phone</span>
-                <span id="userPhone">Not provided</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span><i class="fas fa-id-card me-2"></i> License</span>
-                <span id="userLicense">Not provided</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span><i class="fas fa-calendar-alt me-2"></i> Member Since</span>
-                <span id="joinDate">Loading...</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-8">
-        <!-- Profile Tabs -->
-        <ul class="nav nav-pills mb-4" id="profileTabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="bookings-tab" data-bs-toggle="pill" 
-                    data-bs-target="#bookings" type="button">My Bookings</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="edit-tab" data-bs-toggle="pill" 
-                    data-bs-target="#edit-profile" type="button">Edit Profile</button>
-          </li>
-        </ul>
-
-        <!-- Tab Content -->
-        <div class="tab-content" id="profileTabsContent">
-          <!-- Bookings Tab -->
-          <div class="tab-pane fade show active" id="bookings" role="tabpanel">
-            <h4 class="mb-4">My Bookings</h4>
-            <div class="row" id="bookingsContainer">
-              <div class="col-12 text-center py-5 loading-spinner">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="mt-2">Loading your bookings...</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Edit Profile Tab -->
-          <div class="tab-pane fade" id="edit-profile" role="tabpanel">
-            <h4 class="mb-4">Edit Profile</h4>
-            <form id="profileForm">
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label for="name" class="form-label">Full Name</label>
-                  <input type="text" class="form-control" id="name" required>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label for="phone" class="form-label">Phone Number</label>
-                  <div class="input-group">
-                    <span class="input-group-text">+91</span>
-                    <input type="tel" class="form-control" id="phone" pattern="[0-9]{10}" 
-                           title="Please enter a 10-digit phone number">
-                  </div>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <textarea class="form-control" id="address" rows="3"></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="license" class="form-label">Driver's License Number</label>
-                <input type="text" class="form-control" id="license">
-              </div>
-              <button type="submit" class="btn btn-primary" id="updateProfileBtn">
-                Update Profile
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Booking Details Modal -->
-  <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Booking Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="bookingModalBody">
-          Loading booking details...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Firebase and Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <!-- Previous HTML content remains the same until the script section -->
 
   <script>
-    // Firebase configuration
+    // Firebase configuration and initialization
     const firebaseConfig = {
       apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
       authDomain: "gopandacars-7085f.firebaseapp.com",
@@ -242,7 +40,7 @@
         if (user) {
           // User is signed in, load profile data
           loadUserProfile(user.uid);
-          loadUserBookings(user.uid);
+          loadUserBookings(user.uid); // This will now work
         } else {
           // No user is signed in, redirect to login
           window.location.href = 'login.html';
@@ -290,53 +88,397 @@
       }
     }
 
-    // Profile form submission
-    profileForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const userId = auth.currentUser.uid;
-      const originalBtnText = updateProfileBtn.innerHTML;
-      
+    // Load user bookings
+    async function loadUserBookings(userId) {
       try {
-        updateProfileBtn.disabled = true;
-        updateProfileBtn.innerHTML = `
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Updating...
+        // Show loading state
+        bookingsContainer.innerHTML = `
+          <div class="col-12 text-center py-5 loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading your bookings...</p>
+          </div>
+        `;
+
+        // First try the indexed query
+        let querySnapshot;
+        try {
+          querySnapshot = await db.collection('bookings')
+            .where('userId', '==', userId)
+            .orderBy('createdAt', 'desc')
+            .get();
+        } catch (error) {
+          if (error.code === 'failed-precondition') {
+            // Fallback to client-side sorting
+            const allBookings = await db.collection('bookings')
+              .where('userId', '==', userId)
+              .get();
+            
+            querySnapshot = {
+              docs: allBookings.docs.sort((a, b) => {
+                const aDate = a.data().createdAt?.toMillis?.() || 0;
+                const bDate = b.data().createdAt?.toMillis?.() || 0;
+                return bDate - aDate;
+              })
+            };
+          } else {
+            throw error;
+          }
+        }
+
+        // Check if there are any bookings
+        if (!querySnapshot.docs || querySnapshot.docs.length === 0) {
+          bookingsContainer.innerHTML = `
+            <div class="col-12">
+              <div class="alert alert-info">
+                You don't have any bookings yet. <a href="index.html" class="alert-link">Book a car now!</a>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        // Process and display bookings
+        let bookingsHTML = '';
+        querySnapshot.docs.forEach(doc => {
+          const booking = doc.data();
+          // Clean up data
+          const cleanedBooking = {
+            ...booking,
+            carId: booking.carId?.trim() || '',
+            status: booking.status?.trim() || 'pending',
+            startDate: booking.startDate?.trim() || '',
+            endDate: booking.endDate?.trim() || ''
+          };
+          bookingsHTML += createBookingCard(cleanedBooking, doc.id);
+        });
+
+        bookingsContainer.innerHTML = bookingsHTML;
+        setupBookingEventListeners();
+
+      } catch (error) {
+        console.error("Error loading bookings:", error);
+        
+        bookingsContainer.innerHTML = `
+          <div class="col-12">
+            <div class="alert alert-danger">
+              Failed to load bookings: ${error.message}
+              ${error.code === 'failed-precondition' ? 
+                '<p class="mt-2">The database is still creating the required index. This may take a few minutes.</p>' : ''}
+              <button class="btn btn-sm btn-primary mt-2" onclick="window.location.reload()">
+                <i class="fas fa-sync-alt me-1"></i> Try Again
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Create booking card HTML
+    function createBookingCard(booking, bookingId) {
+      const statusClass = getStatusClass(booking.status);
+      const startDate = formatDate(booking.startDate);
+      const endDate = formatDate(booking.endDate);
+      const createdAt = formatDateTime(booking.createdAt);
+      
+      return `
+        <div class="col-md-6 mb-4">
+          <div class="card booking-card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">${booking.carName || 'N/A'}</h5>
+              <span class="badge ${statusClass}">${booking.status}</span>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <p><strong>Booking ID:</strong></p>
+                  <p><strong>Dates:</strong></p>
+                  <p><strong>Price:</strong></p>
+                  <p><strong>Booked On:</strong></p>
+                </div>
+                <div class="col-6">
+                  <p>${bookingId.substring(0, 8)}</p>
+                  <p>${startDate} - ${endDate}</p>
+                  <p>₹${booking.finalPrice || booking.originalPrice || '0'}</p>
+                  <p>${createdAt}</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-white">
+              <button class="btn btn-sm btn-outline-primary view-booking" data-booking-id="${bookingId}">
+                <i class="fas fa-eye me-1"></i> View Details
+              </button>
+              ${booking.status === 'pending_payment' ? `
+                <button class="btn btn-sm btn-success pay-now ms-2" data-booking-id="${bookingId}">
+                  <i class="fas fa-credit-card me-1"></i> Pay Now
+                </button>
+              ` : ''}
+              ${booking.status === 'confirmed' ? `
+                <button class="btn btn-sm btn-outline-danger cancel-booking ms-2" data-booking-id="${bookingId}">
+                  <i class="fas fa-times me-1"></i> Cancel
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Setup booking event listeners
+    function setupBookingEventListeners() {
+      // View booking details
+      document.querySelectorAll('.view-booking').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const bookingId = e.currentTarget.getAttribute('data-booking-id');
+          viewBookingDetails(bookingId);
+        });
+      });
+
+      // Pay for booking
+      document.querySelectorAll('.pay-now').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const bookingId = e.currentTarget.getAttribute('data-booking-id');
+          window.location.href = `pay.html?bookingId=${bookingId}`;
+        });
+      });
+
+      // Cancel booking
+      document.querySelectorAll('.cancel-booking').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const bookingId = e.currentTarget.getAttribute('data-booking-id');
+          cancelBooking(bookingId);
+        });
+      });
+    }
+
+    // View booking details
+    async function viewBookingDetails(bookingId) {
+      try {
+        document.getElementById('bookingModalBody').innerHTML = `
+          <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading booking details...</p>
+          </div>
         `;
         
-        // Get phone and add country code before saving
-        const phoneValue = document.getElementById('phone').value.trim();
-        const phoneWithCode = phoneValue ? '+91' + phoneValue : '';
+        bookingModal.show();
         
-        const profileData = {
-          name: document.getElementById('name').value.trim(),
-          phone: phoneWithCode,
-          address: document.getElementById('address').value.trim(),
-          driverLicense: document.getElementById('license').value.trim(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        
-        await db.collection('users').doc(userId).update(profileData);
-        
-        showSuccess('Profile updated successfully!');
-        loadUserProfile(userId); // Refresh profile data
-        
+        const doc = await db.collection('bookings').doc(bookingId).get();
+        if (!doc.exists) {
+          throw new Error('Booking not found');
+        }
+
+        const booking = doc.data();
+        document.getElementById('bookingModalBody').innerHTML = `
+          <div class="row">
+            <div class="col-md-6">
+              <h5>${booking.carName || 'N/A'}</h5>
+              <p class="text-muted">${booking.carCategory || 'N/A'}</p>
+              <hr>
+              <p><strong>Status:</strong> <span class="badge ${getStatusClass(booking.status)}">${booking.status}</span></p>
+              <p><strong>Booking ID:</strong> ${bookingId}</p>
+              <p><strong>Dates:</strong> ${formatDate(booking.startDate)} - ${formatDate(booking.endDate)}</p>
+              <p><strong>Booked On:</strong> ${formatDateTime(booking.createdAt)}</p>
+            </div>
+            <div class="col-md-6">
+              <h5>Payment Details</h5>
+              <hr>
+              <p><strong>Original Price:</strong> ₹${booking.originalPrice || '0'}</p>
+              ${booking.discountApplied ? `
+                <p><strong>Discount:</strong> ${booking.discountCode || ''} (₹${booking.discountAmount || '0'})</p>
+              ` : ''}
+              <p><strong>Final Price:</strong> ₹${booking.finalPrice || booking.originalPrice || '0'}</p>
+              <p><strong>Payment Status:</strong> ${booking.paymentStatus || 'Pending'}</p>
+            </div>
+          </div>
+        `;
       } catch (error) {
-        console.error("Error updating profile:", error);
-        showError('Failed to update profile: ' + error.message);
-      } finally {
-        updateProfileBtn.disabled = false;
-        updateProfileBtn.innerHTML = originalBtnText;
+        console.error("Error loading booking details:", error);
+        document.getElementById('bookingModalBody').innerHTML = `
+          <div class="alert alert-danger">
+            Error loading booking details: ${error.message}
+          </div>
+        `;
       }
-    });
+    }
 
-    // [Rest of your existing profile.js code remains the same...]
-    // Include all your existing functions like:
-    // loadUserBookings, createBookingCard, setupBookingEventListeners,
-    // viewBookingDetails, cancelBooking, showSuccess, showError, etc.
-    
-    // These functions can remain exactly as they were in your original code
-    // since they don't need modifications for the name/phone number display issue
+    // Cancel booking
+    async function cancelBooking(bookingId) {
+      if (!confirm('Are you sure you want to cancel this booking?')) return;
+      
+      try {
+        await db.collection('bookings').doc(bookingId).update({
+          status: 'cancelled',
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        loadUserBookings(auth.currentUser.uid);
+        showSuccess('Booking cancelled successfully');
+      } catch (error) {
+        console.error("Error cancelling booking:", error);
+        showError('Failed to cancel booking: ' + error.message);
+      }
+    }
 
+    // Helper function for status styling
+    function getStatusClass(status) {
+      switch(status) {
+        case 'confirmed': return 'bg-success';
+        case 'pending_payment': return 'bg-warning text-dark';
+        case 'cancelled': return 'bg-secondary';
+        case 'completed': return 'bg-primary';
+        default: return 'bg-info';
+      }
+    }
+
+    // Format date for display
+    function formatDate(date) {
+      if (!date) return 'N/A';
+      if (date.toDate) {
+        return date.toDate().toLocaleDateString();
+      }
+      try {
+        return new Date(date).toLocaleDateString();
+      } catch {
+        return date;
+      }
+    }
+
+    // Format datetime for display
+    function formatDateTime(date) {
+      if (!date) return 'N/A';
+      if (date.toDate) {
+        return date.toDate().toLocaleString();
+      }
+      try {
+        return new Date(date).toLocaleString();
+      } catch {
+        return date;
+      }
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Logout button
+      logoutBtn.addEventListener('click', () => {
+        auth.signOut().then(() => {
+          window.location.href = 'login.html';
+        });
+      });
+
+      // Profile form submission
+      profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userId = auth.currentUser.uid;
+        const originalBtnText = updateProfileBtn.innerHTML;
+        
+        try {
+          updateProfileBtn.disabled = true;
+          updateProfileBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Updating...
+          `;
+          
+          // Get phone and add country code before saving
+          const phoneValue = document.getElementById('phone').value.trim();
+          const phoneWithCode = phoneValue ? '+91' + phoneValue : '';
+          
+          const profileData = {
+            name: document.getElementById('name').value.trim(),
+            phone: phoneWithCode,
+            address: document.getElementById('address').value.trim(),
+            driverLicense: document.getElementById('license').value.trim(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+          
+          await db.collection('users').doc(userId).update(profileData);
+          
+          showSuccess('Profile updated successfully!');
+          loadUserProfile(userId);
+          
+        } catch (error) {
+          console.error("Error updating profile:", error);
+          showError('Failed to update profile: ' + error.message);
+        } finally {
+          updateProfileBtn.disabled = false;
+          updateProfileBtn.innerHTML = originalBtnText;
+        }
+      });
+
+      // Profile picture upload
+      profilePicInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        try {
+          const userId = auth.currentUser.uid;
+          const storageRef = storage.ref(`profile_pictures/${userId}`);
+          const uploadTask = storageRef.put(file);
+          
+          // Show loading on profile picture
+          const originalSrc = profilePic.src;
+          profilePic.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+          
+          // Wait for upload to complete
+          const snapshot = await uploadTask;
+          const downloadURL = await snapshot.ref.getDownloadURL();
+          
+          // Update user profile with new picture URL
+          await db.collection('users').doc(userId).update({
+            profilePic: downloadURL,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          
+          // Update profile picture
+          profilePic.src = downloadURL;
+          showSuccess('Profile picture updated successfully!');
+        } catch (error) {
+          console.error("Error uploading profile picture:", error);
+          showError('Failed to update profile picture');
+        }
+      });
+    }
+
+    // Helper function to show success messages
+    function showSuccess(message) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-success alert-dismissible fade show';
+      alertDiv.role = 'alert';
+      alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      
+      const container = document.querySelector('.container.my-5');
+      container.prepend(alertDiv);
+      
+      setTimeout(() => {
+        alertDiv.classList.remove('show');
+        setTimeout(() => alertDiv.remove(), 150);
+      }, 5000);
+    }
+
+    // Helper function to show error messages
+    function showError(message) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+      alertDiv.role = 'alert';
+      alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      
+      const container = document.querySelector('.container.my-5');
+      container.prepend(alertDiv);
+      
+      setTimeout(() => {
+        alertDiv.classList.remove('show');
+        setTimeout(() => alertDiv.remove(), 150);
+      }, 8000);
+    }
   </script>
 </body>
 </html>
