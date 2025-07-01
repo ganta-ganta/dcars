@@ -423,6 +423,33 @@
       `;
     }
 
+    // Setup booking event listeners
+    function setupBookingEventListeners() {
+      // View booking details
+      document.querySelectorAll('.view-booking').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const bookingId = e.currentTarget.getAttribute('data-booking-id');
+          viewBookingDetails(bookingId);
+        });
+      });
+
+      // Pay for booking
+      document.querySelectorAll('.pay-now').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const bookingId = e.currentTarget.getAttribute('data-booking-id');
+          window.location.href = `pay.html?bookingId=${bookingId}`;
+        });
+      });
+
+      // Cancel booking
+      document.querySelectorAll('.cancel-booking').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const bookingId = e.currentTarget.getAttribute('data-booking-id');
+          cancelBooking(bookingId);
+        });
+      });
+    }
+
     // Helper function for status styling
     function getStatusClass(status) {
       switch(status) {
@@ -534,26 +561,6 @@
         } catch (error) {
           console.error("Error uploading profile picture:", error);
           showError('Failed to update profile picture');
-        }
-      });
-
-      // View booking details
-      document.addEventListener('click', (e) => {
-        if (e.target.closest('.view-booking')) {
-          const bookingId = e.target.closest('.view-booking').getAttribute('data-booking-id');
-          viewBookingDetails(bookingId);
-        }
-        
-        // Pay for booking
-        if (e.target.closest('.pay-now')) {
-          const bookingId = e.target.closest('.pay-now').getAttribute('data-booking-id');
-          window.location.href = `pay.html?bookingId=${bookingId}`;
-        }
-        
-        // Cancel booking
-        if (e.target.closest('.cancel-booking')) {
-          const bookingId = e.target.closest('.cancel-booking').getAttribute('data-booking-id');
-          cancelBooking(bookingId);
         }
       });
     }
