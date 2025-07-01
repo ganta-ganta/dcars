@@ -7,43 +7,143 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary-color: #6e8efb;
+      --secondary-color: #a777e3;
+    }
     body {
       background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .sidebar {
       min-height: 100vh;
-      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
     .sidebar .nav-link {
       color: rgba(255, 255, 255, 0.8);
       padding: 12px 20px;
       margin-bottom: 5px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
     }
     .sidebar .nav-link:hover, .sidebar .nav-link.active {
       color: white;
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
     }
     .sidebar .nav-link i {
       margin-right: 10px;
+      width: 20px;
+      text-align: center;
     }
     .main-content {
       padding: 20px;
+      background-color: #f8f9fa;
     }
     .card {
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: none;
+      margin-bottom: 20px;
+    }
+    .card-header {
+      background-color: white;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-weight: 600;
     }
     .badge-status {
       font-size: 0.85rem;
       padding: 5px 10px;
+      border-radius: 50px;
+      font-weight: 500;
     }
     .action-btn {
       padding: 5px 10px;
       font-size: 0.85rem;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+    }
+    .action-btn:hover {
+      transform: translateY(-2px);
     }
     .table-responsive {
       overflow-x: auto;
+    }
+    .table th {
+      font-weight: 600;
+      color: #495057;
+      border-top: none;
+    }
+    .table td {
+      vertical-align: middle;
+    }
+    .dropdown-menu {
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      border: none;
+    }
+    .form-control, .form-select {
+      border-radius: 8px;
+      padding: 10px 15px;
+    }
+    .btn {
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    .btn-primary:hover {
+      background-color: #5a7dfa;
+      border-color: #5a7dfa;
+    }
+    .text-primary {
+      color: var(--primary-color) !important;
+    }
+    .bg-primary {
+      background-color: var(--primary-color) !important;
+    }
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .search-box {
+      position: relative;
+    }
+    .search-box i {
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      color: #6c757d;
+    }
+    .search-box input {
+      padding-left: 40px;
+    }
+    .status-toggle {
+      width: 50px;
+      height: 26px;
+    }
+    .status-toggle .form-check-input {
+      width: 50px;
+      height: 26px;
+    }
+    .phone-number {
+      font-family: monospace;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        min-height: auto;
+      }
+      .main-content {
+        padding: 15px;
+      }
     }
   </style>
 </head>
@@ -51,9 +151,9 @@
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-      <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+      <div class="col-md-3 col-lg-2 d-md-block sidebar">
         <div class="position-sticky pt-3">
-          <div class="text-center mb-4">
+          <div class="text-center mb-4 mt-2">
             <h4><i class="fas fa-car me-2"></i> GoPandaCars</h4>
             <p class="text-white-50 mb-0">Admin Dashboard</p>
           </div>
@@ -74,12 +174,12 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#settings" data-bs-toggle="tab">
-                <i class="fas fa-cog"></i> Settings
+              <a class="nav-link" href="#reports" data-bs-toggle="tab">
+                <i class="fas fa-chart-bar"></i> Reports
               </a>
             </li>
             <li class="nav-item mt-4">
-              <a class="nav-link text-danger" href="#" id="logoutBtn">
+              <a class="nav-link text-white bg-danger bg-opacity-25" href="#" id="logoutBtn">
                 <i class="fas fa-sign-out-alt"></i> Logout
               </a>
             </li>
@@ -92,20 +192,26 @@
         <div class="tab-content">
           <!-- Bookings Tab -->
           <div class="tab-pane fade show active" id="bookings">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <h2><i class="fas fa-calendar-check me-2"></i> Bookings Management</h2>
-              <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2">
-                  <button class="btn btn-sm btn-outline-secondary" id="refreshBookings">
-                    <i class="fas fa-sync-alt me-1"></i> Refresh
-                  </button>
+            <div class="admin-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h2><i class="fas fa-calendar-check me-2"></i> Bookings Management</h2>
+                <div class="btn-toolbar">
+                  <div class="btn-group me-2">
+                    <button class="btn btn-light" id="refreshBookings">
+                      <i class="fas fa-sync-alt me-1"></i> Refresh
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div class="card mb-4">
-              <div class="card-header">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">All Bookings</h5>
+                <div class="search-box">
+                  <i class="fas fa-search"></i>
+                  <input type="text" class="form-control form-control-sm" id="bookingSearch" placeholder="Search bookings..." style="max-width: 250px;">
+                </div>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -123,7 +229,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <!-- Bookings will be loaded here -->
+                      <tr>
+                        <td colspan="8" class="text-center py-4">
+                          <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <p class="mt-2">Loading bookings...</p>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -133,20 +246,26 @@
 
           <!-- Users Tab -->
           <div class="tab-pane fade" id="users">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <h2><i class="fas fa-users me-2"></i> Users Management</h2>
-              <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2">
-                  <button class="btn btn-sm btn-outline-secondary" id="refreshUsers">
-                    <i class="fas fa-sync-alt me-1"></i> Refresh
-                  </button>
+            <div class="admin-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h2><i class="fas fa-users me-2"></i> Users Management</h2>
+                <div class="btn-toolbar">
+                  <div class="btn-group me-2">
+                    <button class="btn btn-light" id="refreshUsers">
+                      <i class="fas fa-sync-alt me-1"></i> Refresh
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div class="card mb-4">
-              <div class="card-header">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">All Users</h5>
+                <div class="search-box">
+                  <i class="fas fa-search"></i>
+                  <input type="text" class="form-control form-control-sm" id="userSearch" placeholder="Search users..." style="max-width: 250px;">
+                </div>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -162,7 +281,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <!-- Users will be loaded here -->
+                      <tr>
+                        <td colspan="6" class="text-center py-4">
+                          <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          <p class="mt-2">Loading users...</p>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -175,9 +301,9 @@
             <!-- Cars management content -->
           </div>
 
-          <!-- Settings Tab -->
-          <div class="tab-pane fade" id="settings">
-            <!-- Settings content -->
+          <!-- Reports Tab -->
+          <div class="tab-pane fade" id="reports">
+            <!-- Reports content -->
           </div>
         </div>
       </div>
@@ -186,27 +312,29 @@
 
   <!-- Cancel Booking Modal -->
   <div class="modal fade" id="cancelBookingModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header bg-warning">
-          <h5 class="modal-title">Cancel Booking</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header bg-warning text-white">
+          <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i> Cancel Booking</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <p>Are you sure you want to cancel this booking?</p>
-          <div class="alert alert-info">
+          <div class="alert alert-light">
             <p class="mb-1"><strong>Booking ID:</strong> <span id="cancelBookingId"></span></p>
             <p class="mb-1"><strong>Customer:</strong> <span id="cancelCustomerName"></span></p>
             <p class="mb-0"><strong>Car:</strong> <span id="cancelCarDetails"></span></p>
           </div>
           <div class="mb-3">
             <label for="cancelReason" class="form-label">Reason for cancellation</label>
-            <textarea class="form-control" id="cancelReason" rows="3"></textarea>
+            <textarea class="form-control" id="cancelReason" rows="3" placeholder="Enter reason for cancellation..." required></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" id="confirmCancelBooking">Confirm Cancellation</button>
+          <button type="button" class="btn btn-danger" id="confirmCancelBooking">
+            <i class="fas fa-times-circle me-1"></i> Confirm Cancellation
+          </button>
         </div>
       </div>
     </div>
@@ -214,31 +342,42 @@
 
   <!-- User Status Modal -->
   <div class="modal fade" id="userStatusModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Change User Status</h5>
+          <h5 class="modal-title"><i class="fas fa-user-cog me-2"></i> Manage User</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Change account status for user:</p>
-          <div class="alert alert-light">
-            <p class="mb-1"><strong>Name:</strong> <span id="userStatusName"></span></p>
-            <p class="mb-1"><strong>Email:</strong> <span id="userStatusEmail"></span></p>
-            <p class="mb-0"><strong>Current Status:</strong> <span id="userCurrentStatus"></span></p>
+          <div id="userStatusLoading" class="text-center my-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading user data...</p>
           </div>
-          <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="userStatusToggle">
-            <label class="form-check-label" for="userStatusToggle">Active Account</label>
+          <div id="userStatusContent" style="display: none;">
+            <p>Change account status for user:</p>
+            <div class="alert alert-light">
+              <p class="mb-1"><strong>Name:</strong> <span id="userStatusName"></span></p>
+              <p class="mb-1"><strong>Email:</strong> <span id="userStatusEmail"></span></p>
+              <p class="mb-0"><strong>Current Status:</strong> <span id="userCurrentStatus"></span></p>
+            </div>
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="userStatusToggle">
+              <label class="form-check-label" for="userStatusToggle">Active Account</label>
+            </div>
+            <div class="mb-3" id="statusReasonDiv" style="display: none;">
+              <label for="statusChangeReason" class="form-label">Reason for deactivation</label>
+              <textarea class="form-control" id="statusChangeReason" rows="2" placeholder="Enter reason for deactivation..."></textarea>
+            </div>
           </div>
-          <div class="mb-3" id="statusReasonDiv" style="display: none;">
-            <label for="statusChangeReason" class="form-label">Reason for deactivation</label>
-            <textarea class="form-control" id="statusChangeReason" rows="2"></textarea>
-          </div>
+          <div id="userStatusError" class="alert alert-danger" style="display: none;"></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="confirmStatusChange">Save Changes</button>
+          <button type="button" class="btn btn-primary" id="confirmStatusChange">
+            <i class="fas fa-save me-1"></i> Save Changes
+          </button>
         </div>
       </div>
     </div>
@@ -266,8 +405,11 @@
     
     // Global variables
     let currentAdmin = null;
+    let currentAdminData = null;
     let selectedBookingId = null;
     let selectedUserId = null;
+    let bookingsData = [];
+    let usersData = [];
 
     // DOM elements
     const logoutBtn = document.getElementById('logoutBtn');
@@ -275,8 +417,10 @@
     const refreshUsers = document.getElementById('refreshUsers');
     const bookingsTable = document.getElementById('bookingsTable').getElementsByTagName('tbody')[0];
     const usersTable = document.getElementById('usersTable').getElementsByTagName('tbody')[0];
-    const userStatusToggle = document.getElementById('userStatusToggle');
-    const statusReasonDiv = document.getElementById('statusReasonDiv');
+    const bookingSearch = document.getElementById('bookingSearch');
+    const userSearch = document.getElementById('userSearch');
+    const confirmCancelBooking = document.getElementById('confirmCancelBooking');
+    const confirmStatusChange = document.getElementById('confirmStatusChange');
 
     // Initialize the admin dashboard
     function initAdminDashboard() {
@@ -298,68 +442,119 @@
       logoutBtn.addEventListener('click', logout);
       refreshBookings.addEventListener('click', loadBookings);
       refreshUsers.addEventListener('click', loadUsers);
+      confirmCancelBooking.addEventListener('click', cancelBooking);
+      confirmStatusChange.addEventListener('click', updateUserStatus);
       
-      // User status toggle
-      userStatusToggle.addEventListener('change', function() {
-        statusReasonDiv.style.display = this.checked ? 'none' : 'block';
-      });
-
-      // Modal confirmations
-      document.getElementById('confirmCancelBooking').addEventListener('click', cancelBooking);
-      document.getElementById('confirmStatusChange').addEventListener('click', updateUserStatus);
+      // Search functionality
+      bookingSearch.addEventListener('input', filterBookings);
+      userSearch.addEventListener('input', filterUsers);
     }
 
-    // Check if user is admin
+    // Check if user is admin and has data
     function checkAdminRole(uid) {
+      showLoading('Verifying admin access...');
+      
       db.collection('users').doc(uid).get()
         .then(doc => {
-          if (doc.exists) {
-            const userData = doc.data();
-            if (userData.role !== 'admin') {
-              alert('Access denied. Admins only.');
-              logout();
-            }
-          } else {
-            alert('User data not found');
-            logout();
+          if (!doc.exists) {
+            // Create admin record if not exists
+            return createAdminUser(uid);
           }
+          
+          currentAdminData = doc.data();
+          
+          if (currentAdminData.role !== 'admin') {
+            showError('Access denied. Admins only.');
+            setTimeout(logout, 2000);
+            return;
+          }
+          
+          hideLoading();
+          console.log('Admin authenticated:', currentAdminData);
         })
         .catch(error => {
           console.error('Error checking admin role:', error);
-          alert('Error verifying admin access');
-          logout();
+          showError('Error verifying admin access. Please try again later.');
+          setTimeout(logout, 2000);
         });
     }
 
-    // Load all bookings
+    // Create admin user record if not exists
+    function createAdminUser(uid) {
+      return db.collection('users').doc(uid).set({
+        email: currentAdmin.email,
+        name: currentAdmin.displayName || 'Admin User',
+        phoneNumber: currentAdmin.phoneNumber || '',
+        role: 'admin',
+        isActive: true,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        currentAdminData = {
+          email: currentAdmin.email,
+          name: currentAdmin.displayName || 'Admin User',
+          role: 'admin',
+          isActive: true
+        };
+        hideLoading();
+      })
+      .catch(error => {
+        console.error('Error creating admin record:', error);
+        showError('Error setting up admin account.');
+        setTimeout(logout, 2000);
+      });
+    }
+
+    // Load all bookings with proper error handling
     function loadBookings() {
       refreshBookings.disabled = true;
-      refreshBookings.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+      refreshBookings.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Refreshing...';
       
-      bookingsTable.innerHTML = '<tr><td colspan="8" class="text-center">Loading bookings...</td></tr>';
+      bookingsTable.innerHTML = `
+        <tr>
+          <td colspan="8" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading bookings...</p>
+          </td>
+        </tr>
+      `;
       
       db.collection('bookings')
         .orderBy('createdAt', 'desc')
         .get()
         .then(querySnapshot => {
+          bookingsData = [];
           bookingsTable.innerHTML = '';
           
           if (querySnapshot.empty) {
-            bookingsTable.innerHTML = '<tr><td colspan="8" class="text-center">No bookings found</td></tr>';
+            bookingsTable.innerHTML = `
+              <tr>
+                <td colspan="8" class="text-center text-muted py-4">
+                  <i class="fas fa-calendar-times me-2"></i> No bookings found
+                </td>
+              </tr>
+            `;
             return;
           }
           
           querySnapshot.forEach(doc => {
             const booking = doc.data();
-            const row = bookingsTable.insertRow();
+            booking.id = doc.id;
+            bookingsData.push(booking);
             
             // Format dates
-            const startDate = new Date(booking.startDate).toLocaleDateString();
-            const endDate = new Date(booking.endDate).toLocaleDateString();
-            const duration = calculateDays(booking.startDate, booking.endDate);
+            const startDate = booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A';
+            const endDate = booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A';
+            const duration = booking.startDate && booking.endDate ? 
+              calculateDays(booking.startDate, booking.endDate) : 'N/A';
             
             // Format phone number with +91
-            const phoneNumber = booking.phoneNumber ? `+91 ${booking.phoneNumber}` : 'Not provided';
+            const phoneNumber = booking.phoneNumber ? 
+              (booking.phoneNumber.startsWith('+') ? booking.phoneNumber : `+91 ${booking.phoneNumber}`) : 
+              'Not provided';
             
             // Status badge
             let statusBadge;
@@ -382,23 +577,22 @@
             if (booking.status === 'confirmed') {
               actions = `
                 <button class="btn btn-sm btn-outline-danger action-btn cancel-btn" data-id="${doc.id}">
-                  <i class="fas fa-times"></i> Cancel
+                  <i class="fas fa-times me-1"></i> Cancel
                 </button>
               `;
-            } else if (booking.status === 'cancelled') {
-              actions = '<span class="text-muted">No actions</span>';
             } else {
               actions = '<span class="text-muted">No actions</span>';
             }
             
             // Populate row
+            const row = bookingsTable.insertRow();
             row.innerHTML = `
-              <td>${doc.id}</td>
+              <td class="fw-bold">${doc.id.substring(0, 8)}...</td>
               <td>${booking.customerName || 'N/A'}</td>
-              <td>${phoneNumber}</td>
+              <td class="phone-number">${phoneNumber}</td>
               <td>${booking.carName || 'N/A'}</td>
-              <td>${startDate} to ${endDate} (${duration} days)</td>
-              <td>₹${booking.finalPrice?.toFixed(2) || '0.00'}</td>
+              <td>${startDate} to ${endDate}${duration !== 'N/A' ? ` (${duration} days)` : ''}</td>
+              <td>₹${booking.finalPrice ? booking.finalPrice.toFixed(2) : '0.00'}</td>
               <td>${statusBadge}</td>
               <td>${actions}</td>
             `;
@@ -414,7 +608,14 @@
         })
         .catch(error => {
           console.error('Error loading bookings:', error);
-          bookingsTable.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Error loading bookings</td></tr>';
+          bookingsTable.innerHTML = `
+            <tr>
+              <td colspan="8" class="text-center text-danger py-4">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Error loading bookings: ${error.message}
+              </td>
+            </tr>
+          `;
         })
         .finally(() => {
           refreshBookings.disabled = false;
@@ -422,37 +623,63 @@
         });
     }
 
-    // Show cancel booking modal
-    function showCancelBookingModal(bookingId) {
-      db.collection('bookings').doc(bookingId).get()
-        .then(doc => {
-          if (doc.exists) {
-            const booking = doc.data();
-            document.getElementById('cancelBookingId').textContent = bookingId;
-            document.getElementById('cancelCustomerName').textContent = booking.customerName || 'N/A';
-            document.getElementById('cancelCarDetails').textContent = booking.carName || 'N/A';
-            
-            const modal = new bootstrap.Modal(document.getElementById('cancelBookingModal'));
-            modal.show();
-          }
-        })
-        .catch(error => {
-          console.error('Error loading booking details:', error);
-          alert('Error loading booking details');
-        });
-    }
-
-    // Cancel booking
-    function cancelBooking() {
-      const reason = document.getElementById('cancelReason').value.trim();
-      if (!reason) {
-        alert('Please provide a reason for cancellation');
+    // Filter bookings based on search input
+    function filterBookings() {
+      const searchTerm = bookingSearch.value.toLowerCase();
+      const rows = bookingsTable.getElementsByTagName('tr');
+      
+      if (!searchTerm) {
+        // Show all rows if search is empty
+        for (let i = 0; i < rows.length; i++) {
+          rows[i].style.display = '';
+        }
         return;
       }
       
-      const confirmBtn = document.getElementById('confirmCancelBooking');
-      confirmBtn.disabled = true;
-      confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+      // Filter rows based on search term
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        let shouldShow = false;
+        
+        for (let j = 0; j < cells.length; j++) {
+          if (cells[j].textContent.toLowerCase().includes(searchTerm)) {
+            shouldShow = true;
+            break;
+          }
+        }
+        
+        rows[i].style.display = shouldShow ? '' : 'none';
+      }
+    }
+
+    // Show cancel booking modal
+    function showCancelBookingModal(bookingId) {
+      const booking = bookingsData.find(b => b.id === bookingId);
+      
+      if (!booking) {
+        showError('Booking data not found');
+        return;
+      }
+      
+      document.getElementById('cancelBookingId').textContent = bookingId;
+      document.getElementById('cancelCustomerName').textContent = booking.customerName || 'N/A';
+      document.getElementById('cancelCarDetails').textContent = booking.carName || 'N/A';
+      
+      const modal = new bootstrap.Modal(document.getElementById('cancelBookingModal'));
+      modal.show();
+    }
+
+    // Cancel booking with proper validation
+    function cancelBooking() {
+      const reason = document.getElementById('cancelReason').value.trim();
+      
+      if (!reason) {
+        showError('Please provide a reason for cancellation');
+        return;
+      }
+      
+      confirmCancelBooking.disabled = true;
+      confirmCancelBooking.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
       
       db.collection('bookings').doc(selectedBookingId).update({
         status: 'cancelled',
@@ -461,43 +688,64 @@
         cancelledAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        alert('Booking cancelled successfully');
+        showSuccess('Booking cancelled successfully');
         loadBookings();
         bootstrap.Modal.getInstance(document.getElementById('cancelBookingModal')).hide();
+        document.getElementById('cancelReason').value = '';
       })
       .catch(error => {
         console.error('Error cancelling booking:', error);
-        alert('Error cancelling booking');
+        showError('Error cancelling booking: ' + error.message);
       })
       .finally(() => {
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = 'Confirm Cancellation';
+        confirmCancelBooking.disabled = false;
+        confirmCancelBooking.innerHTML = '<i class="fas fa-times-circle me-1"></i> Confirm Cancellation';
       });
     }
 
-    // Load all users
+    // Load all users with proper error handling
     function loadUsers() {
       refreshUsers.disabled = true;
-      refreshUsers.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+      refreshUsers.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Refreshing...';
       
-      usersTable.innerHTML = '<tr><td colspan="6" class="text-center">Loading users...</td></tr>';
+      usersTable.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading users...</p>
+          </td>
+        </tr>
+      `;
       
       db.collection('users')
+        .orderBy('createdAt', 'desc')
         .get()
         .then(querySnapshot => {
+          usersData = [];
           usersTable.innerHTML = '';
           
           if (querySnapshot.empty) {
-            usersTable.innerHTML = '<tr><td colspan="6" class="text-center">No users found</td></tr>';
+            usersTable.innerHTML = `
+              <tr>
+                <td colspan="6" class="text-center text-muted py-4">
+                  <i class="fas fa-user-slash me-2"></i> No users found
+                </td>
+              </tr>
+            `;
             return;
           }
           
           querySnapshot.forEach(doc => {
             const user = doc.data();
-            const row = usersTable.insertRow();
+            user.id = doc.id;
+            usersData.push(user);
             
             // Format phone number with +91 if available
-            const phoneNumber = user.phoneNumber ? `+91 ${user.phoneNumber}` : 'Not provided';
+            const phoneNumber = user.phoneNumber ? 
+              (user.phoneNumber.startsWith('+') ? user.phoneNumber : `+91 ${user.phoneNumber}`) : 
+              'Not provided';
             
             // Status badge
             const statusBadge = user.isActive ? 
@@ -512,15 +760,16 @@
             // Action buttons
             const actions = `
               <button class="btn btn-sm btn-outline-primary action-btn status-btn" data-id="${doc.id}">
-                <i class="fas fa-user-cog"></i> Status
+                <i class="fas fa-user-cog me-1"></i> Manage
               </button>
             `;
             
             // Populate row
+            const row = usersTable.insertRow();
             row.innerHTML = `
-              <td>${user.name || 'N/A'}</td>
-              <td>${user.email || 'N/A'}</td>
-              <td>${phoneNumber}</td>
+              <td>${user.name || 'Unknown User'}</td>
+              <td>${user.email || 'No email'}</td>
+              <td class="phone-number">${phoneNumber}</td>
               <td>${roleBadge}</td>
               <td>${statusBadge}</td>
               <td>${actions}</td>
@@ -537,7 +786,14 @@
         })
         .catch(error => {
           console.error('Error loading users:', error);
-          usersTable.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading users</td></tr>';
+          usersTable.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center text-danger py-4">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Error loading users: ${error.message}
+              </td>
+            </tr>
+          `;
         })
         .finally(() => {
           refreshUsers.disabled = false;
@@ -545,43 +801,114 @@
         });
     }
 
-    // Show user status modal
-    function showUserStatusModal(userId) {
-      db.collection('users').doc(userId).get()
-        .then(doc => {
-          if (doc.exists) {
-            const user = doc.data();
-            document.getElementById('userStatusName').textContent = user.name || 'N/A';
-            document.getElementById('userStatusEmail').textContent = user.email || 'N/A';
-            document.getElementById('userCurrentStatus').textContent = user.isActive ? 'Active' : 'Inactive';
-            
-            // Set toggle state
-            userStatusToggle.checked = user.isActive;
-            statusReasonDiv.style.display = user.isActive ? 'none' : 'block';
-            
-            const modal = new bootstrap.Modal(document.getElementById('userStatusModal'));
-            modal.show();
-          }
-        })
-        .catch(error => {
-          console.error('Error loading user details:', error);
-          alert('Error loading user details');
-        });
-    }
-
-    // Update user status
-    function updateUserStatus() {
-      const newStatus = userStatusToggle.checked;
-      const reason = document.getElementById('statusChangeReason').value.trim();
+    // Filter users based on search input
+    function filterUsers() {
+      const searchTerm = userSearch.value.toLowerCase();
+      const rows = usersTable.getElementsByTagName('tr');
       
-      if (!newStatus && !reason) {
-        alert('Please provide a reason for deactivation');
+      if (!searchTerm) {
+        // Show all rows if search is empty
+        for (let i = 0; i < rows.length; i++) {
+          rows[i].style.display = '';
+        }
         return;
       }
       
-      const confirmBtn = document.getElementById('confirmStatusChange');
-      confirmBtn.disabled = true;
-      confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+      // Filter rows based on search term
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        let shouldShow = false;
+        
+        for (let j = 0; j < cells.length; j++) {
+          if (cells[j].textContent.toLowerCase().includes(searchTerm)) {
+            shouldShow = true;
+            break;
+          }
+        }
+        
+        rows[i].style.display = shouldShow ? '' : 'none';
+      }
+    }
+
+    // Show user status modal with loading state
+    function showUserStatusModal(userId) {
+      const modalElement = document.getElementById('userStatusModal');
+      const modal = new bootstrap.Modal(modalElement);
+      
+      // Show loading state
+      document.getElementById('userStatusLoading').style.display = 'block';
+      document.getElementById('userStatusContent').style.display = 'none';
+      document.getElementById('userStatusError').style.display = 'none';
+      
+      modal.show();
+      
+      const user = usersData.find(u => u.id === userId);
+      
+      if (!user) {
+        document.getElementById('userStatusLoading').style.display = 'none';
+        document.getElementById('userStatusError').style.display = 'block';
+        document.getElementById('userStatusError').innerHTML = `
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          User data not found in local cache. Trying to fetch from server...
+        `;
+        
+        // Fallback to direct Firestore fetch if not in local cache
+        db.collection('users').doc(userId).get()
+          .then(doc => {
+            if (!doc.exists) {
+              throw new Error('User document not found');
+            }
+            
+            displayUserData(doc.data());
+          })
+          .catch(error => {
+            console.error('Error fetching user:', error);
+            document.getElementById('userStatusError').innerHTML = `
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              Error loading user: ${error.message}
+            `;
+          });
+        return;
+      }
+      
+      // Display user data from local cache
+      displayUserData(user);
+      
+      function displayUserData(user) {
+        document.getElementById('userStatusLoading').style.display = 'none';
+        document.getElementById('userStatusContent').style.display = 'block';
+        document.getElementById('userStatusError').style.display = 'none';
+        
+        document.getElementById('userStatusName').textContent = user.name || 'Unknown User';
+        document.getElementById('userStatusEmail').textContent = user.email || 'No email';
+        document.getElementById('userCurrentStatus').innerHTML = user.isActive ? 
+          '<span class="text-success">Active</span>' : 
+          '<span class="text-danger">Inactive</span>';
+        
+        const toggle = document.getElementById('userStatusToggle');
+        toggle.checked = user.isActive !== false;
+        
+        const reasonDiv = document.getElementById('statusReasonDiv');
+        reasonDiv.style.display = toggle.checked ? 'none' : 'block';
+        
+        toggle.addEventListener('change', function() {
+          reasonDiv.style.display = this.checked ? 'none' : 'block';
+        });
+      }
+    }
+
+    // Update user status with validation
+    function updateUserStatus() {
+      const newStatus = document.getElementById('userStatusToggle').checked;
+      const reason = document.getElementById('statusChangeReason').value.trim();
+      
+      if (!newStatus && !reason) {
+        showError('Please provide a reason for deactivation');
+        return;
+      }
+      
+      confirmStatusChange.disabled = true;
+      confirmStatusChange.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
       
       const updateData = {
         isActive: newStatus,
@@ -599,28 +926,27 @@
       
       db.collection('users').doc(selectedUserId).update(updateData)
         .then(() => {
-          alert('User status updated successfully');
+          showSuccess('User status updated successfully');
           loadUsers();
           bootstrap.Modal.getInstance(document.getElementById('userStatusModal')).hide();
         })
         .catch(error => {
           console.error('Error updating user status:', error);
-          alert('Error updating user status');
+          showError('Error updating user status: ' + error.message);
         })
         .finally(() => {
-          confirmBtn.disabled = false;
-          confirmBtn.textContent = 'Save Changes';
+          confirmStatusChange.disabled = false;
+          confirmStatusChange.innerHTML = '<i class="fas fa-save me-1"></i> Save Changes';
         });
     }
 
-    // Helper function to calculate days between dates
+    // Helper functions
     function calculateDays(startDate, endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
       return Math.round((end - start) / (1000 * 60 * 60 * 24));
     }
 
-    // Logout function
     function logout() {
       auth.signOut()
         .then(() => {
@@ -628,7 +954,51 @@
         })
         .catch(error => {
           console.error('Error signing out:', error);
+          showError('Error during logout. Please try again.');
         });
+    }
+
+    function showLoading(message) {
+      // Implement a global loading indicator if needed
+      console.log('Loading:', message);
+    }
+
+    function hideLoading() {
+      // Hide global loading indicator
+    }
+
+    function showError(message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'alert alert-danger position-fixed top-0 end-0 m-3';
+      errorDiv.style.zIndex = '9999';
+      errorDiv.innerHTML = `
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        ${message}
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
+      `;
+      document.body.appendChild(errorDiv);
+      
+      // Auto-dismiss after 5 seconds
+      setTimeout(() => {
+        errorDiv.remove();
+      }, 5000);
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.createElement('div');
+      successDiv.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+      successDiv.style.zIndex = '9999';
+      successDiv.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>
+        ${message}
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
+      `;
+      document.body.appendChild(successDiv);
+      
+      // Auto-dismiss after 5 seconds
+      setTimeout(() => {
+        successDiv.remove();
+      }, 5000);
     }
 
     // Initialize the dashboard when DOM is loaded
