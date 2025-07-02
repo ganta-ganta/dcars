@@ -350,76 +350,59 @@ document.addEventListener('DOMContentLoaded', function() {
 </head>
 <body class="index-page">
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-primary sticky-top" style="background-color: #87CEEB !important;">
-    <div class="container">
-      <a class="navbar-brand fw-bold text-white" href="index.html">GoPandaCars</a>
+<header id="header" class="header sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-primary" style="background-color: #87CEEB !important;">
+    <div class="container position-relative d-flex align-items-center justify-content-between">
+      <!-- Logo/Brand -->
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <h1 class="sitename m-0">GoPandaCars</h1>
+        <span class="d-none d-md-inline">.in</span>
+      </a>
+
+      <!-- Mobile Toggle Button -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
+        <i class="mobile-nav-toggle bi bi-list"></i>
       </button>
+
+      <!-- Main Navigation -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link active text-white" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="#economy">Economy</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="#premium">Premium</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="#luxury">Luxury</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html#hero"><i class="bi bi-house navicon"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#economy"><i class="bi bi-car-front"></i> Economy</a></li>
+          <li class="nav-item"><a class="nav-link" href="#premium"><i class="bi bi-speedometer2"></i> Premium</a></li>
+          <li class="nav-item"><a class="nav-link" href="#luxury"><i class="bi bi-gem"></i> Luxury</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#gallery"><i class="bi bi-images"></i> Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#contact"><i class="bi bi-telephone"></i> Contact</a></li>
         </ul>
-        <div id="authButtons">
-          <a href="login.html" class="btn btn-outline-light me-2">Login</a>
-          <a href="register.html" class="btn btn-info" style="background-color: #1E90FF;">Sign Up</a>
-        </div>
-        <div id="userProfile" style="display:none;">
-          <div class="dropdown">
-            <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-              <i class="fas fa-user-circle me-1"></i>
-              <span id="userName">Profile</span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
-            </ul>
+
+        <!-- Auth Buttons/User Profile -->
+        <div class="d-flex align-items-center">
+          <div id="authButtons">
+            <a href="login.html" class="btn btn-outline-light me-2"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+            <a href="register.html" class="btn btn-info" style="background-color: #1E90FF;"><i class="bi bi-person-plus"></i> Sign Up</a>
           </div>
+          <div id="userProfile" style="display:none;">
+            <div class="dropdown ms-2">
+              <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-1"></i>
+                <span id="userName">Profile</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person"></i> Profile</a></li>
+                <li><a class="dropdown-item" href="pay.html"><i class="bi bi-credit-card"></i> Payments</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+              </ul>
+            </div>
+          </div>
+          <a href="booking1.html" class="btn-getstarted ms-3 d-none d-lg-inline-block">
+            <i class="bi bi-car-front"></i> Book A Car
+          </a>
         </div>
       </div>
     </div>
-</nav>
-<header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container position-relative d-flex align-items-center justify-content-between">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        
-        <h1 class="sitename">GoPand-Self drive cars</h1>
-        <span>.</span>
-        <span>in</span>
-      </a>
-     <!---- <div class="banner" id="important-note-banner">
-         <p><strong>Welcome To</strong> GoPanda</p>
-         <button class="dismiss-btn" onclick="dismissBanner()">Dismiss</button>
-      </div>--
-
-
-      <nav id="navmenu" class="navmenu">
-            <ul>
-              <li><a href="index.html#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
-              <li><a href="index.html#about"><i class="bi bi-person navicon"></i> About</a></li>
-              <li><a href="index.html#gallery"><i class="bi bi-images navicon"></i> Gallery</a></li>
-              <li><a href="index.html#contact"><i class="bi bi-car-front"></i> Contact</a></li>
-              <li><a href="pay.html"><i class="bi bi-credit-card"></i> Payment</a></li>
-              
-            
-            </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>-->
-     
-
-  
-  </div>
-
-      <a class="btn-getstarted" href="index.html#carList">Book A Car</a>
-      
-
-    </div>
-  </header>
-
+  </nav>
+</header>
   <main class="main">
 
      <!-- Hero Section -->
