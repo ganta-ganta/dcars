@@ -1,476 +1,239 @@
 <!DOCTYPE html>
-<html>
-<head>
-<style>
-.construction-popup {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ffecb3;
-    border: 2px solid #ff9800;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 10000;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    animation: pulse 2s infinite;
-}
-
-.construction-message {
-    font-weight: bold;
-    color: #d84315;
-    font-size: 18px;
-    margin: 0;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255,152,0,0.5); }
-    70% { box-shadow: 0 0 0 10px rgba(255,152,0,0); }
-    100% { box-shadow: 0 0 0 0 rgba(255,152,0,0); }
-}
-</style>
-</head>
-<body>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Create popup element
-    const popup = document.createElement('div');
-    popup.className = 'construction-popup';
-    
-    // Create bold message
-    const message = document.createElement('p');
-    message.className = 'construction-message';
-    message.innerHTML = 'THIS WEB SITE IS UNDER CONSTRUCTION<br>PLEASE UTILISE AVAILABLE FEATURES<br>SOME GLITCHES MAY OCCUR<br>WITHIN 2-3 DAYS IT WILL BE READY';
-    
-    popup.appendChild(message);
-    document.body.appendChild(popup);
-    
-    // Auto-remove after 7 seconds
-    setTimeout(() => {
-        popup.style.transition = 'opacity 0.5s ease-out';
-        popup.style.opacity = '0';
-        setTimeout(() => document.body.removeChild(popup), 500);
-    }, 7000);
-});
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>gopanda</title>
-  <meta name="description" content="Self-Drive Car Rentals in Guntur, Andhra Pradesh | Unlimited Mileage">
-  <meta name="keywords" content=" unlimited kilometers, self drive cars ,self-drive cars,rental cars,guntur">
-  <meta name="google-adsense-account" content="ca-pub-6469896533000410">
-    <title>Self-Drive Car Rentals in Guntur, Andhra Pradesh | Unlimited Mileage</title>
-	
-	
-  <!-- Meta Tags for SEO -->
-<title>Go Panda Cars | Self Drive Cars in Guntur | Affordable & Unlimited Kilometers</title>
-<meta name="description" content="Go Panda Cars offers affordable self-drive cars in Guntur, Andhra Pradesh. Enjoy unlimited kilometers and the best rental rates only at Go Panda Cars.">
-<meta name="keywords" content="self drive cars Guntur, affordable car rentals, unlimited kilometers, car hire Guntur, Andhra Pradesh car rentals">
-<meta name="robots" content="index, follow">
-<meta name="author" content="Go Panda Cars">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="canonical" href="https://gopandacars.in/">
-  <!-- Meta Description -->
-  <meta name="description" content="Rent self-drive cars with unlimited mileage in Guntur, Andhra Pradesh. Go Panda offers affordable, reliable vehicles perfect for local and long trips. Book now!">
-
-  <!-- Meta Keywords -->
-  <meta name="keywords" content="self-drive car rental Guntur, unlimited mileage rental Andhra Pradesh, car hire Guntur, Go Panda rentals, self-drive cars Andhra Pradesh">
-
-  <!-- Open Graph Meta Tags (for social media previews) -->
-  <meta property="og:title" content="Self-Drive Car Rentals in Guntur | Go Panda">
-  <meta property="og:description" content="Explore Guntur with Go Panda's self-drive cars. Affordable rates, unlimited mileage, and reliable vehicles await!">
-  <meta property="og:image" content="https://gopandacars.in/img/car-rental-guntur.jpg">
-  <meta property="og:url" content="https://gopandacars.in/guntur-self-drive-cars">
-
-  <!-- Twitter Card Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Self-Drive Car Rentals in Guntur | Go Panda">
-  <meta name="twitter:description" content="Affordable self-drive cars with unlimited mileage in Guntur, Andhra Pradesh. Book now for a seamless travel experience.">
-  <meta name="twitter:image" content="https://yourdomain.com/img/car-rental-guntur.jpg">
-  <!-- Favicons -->
-  <link href="img/favicon.jpg" rel="icon">
-  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
-  <title>GoPandaCars - Rent Premium Cars</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoPanda Cars - Self Drive Car Rentals</title>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-   <!-- Vendor CSS Files -->
-   <link href="rk/bootstrap.min.css" rel="stylesheet">
-   <link href="rk/bootstrap-icons.css" rel="stylesheet">
-   <link href="rk/aos.css" rel="stylesheet">
-   <link href="rk/glightbox.min.css" rel="stylesheet">
-   <link href="rk/swiper-bundle.min.css" rel="stylesheet">
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
- 
-   <!-- Main CSS File -->
-   <link href="rk/main.css" rel="stylesheet">
-   <link rel="stylesheet" href="rk/styles1.css">
-
-	<!-- Google Analytics GA4 Tag -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-M2YHZBK81F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-M2YHZBK81F');
-</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3761996194684744"
-     crossorigin="anonymous"></script>
   <style>
-    .car-card { transition: transform 0.3s; margin-bottom: 20px; }
-    .car-card:hover { transform: translateY(-5px); }
+    .car-card { 
+      transition: transform 0.3s; 
+      margin-bottom: 20px; 
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .car-card:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
     .hero-section { 
       background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://source.unsplash.com/random/1200x400/?car,rental');
       background-size: cover;
+      background-position: center;
       color: white;
       padding: 100px 0;
       margin-bottom: 40px;
+      border-radius: 0;
     }
-    .badge-category { font-size: 0.8rem; }
-    .nav-link { font-weight: 500; }
+    .badge-category { 
+      font-size: 0.8rem; 
+      text-transform: capitalize;
+    }
     .card-img-top {
       height: 200px;
       object-fit: cover;
+      width: 100%;
+    }
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 40px;
+      right: 40px;
+      background-color: #25d366;
+      color: #FFF;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 3px #999;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s;
+      text-decoration: none;
+    }
+    .whatsapp-float:hover {
+      background-color: #128C7E;
+      transform: scale(1.05);
+    }
+    .section-title {
+      margin-bottom: 40px;
+    }
+    .section-title h2 {
+      font-weight: 700;
+      color: #333;
+    }
+    .btn-primary {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+    .btn-primary:hover {
+      background-color: #0b5ed7;
+      border-color: #0a58ca;
     }
   </style>
-	<style>
-        
-
-        .car-icon {
-            font-size: 24px;
-            color: #007bff;
-        }
-
-        .badge-top-end {
-            background-color: #ffc107;
-            color: #000;
-            margin-left: 10px;
-        }
-        
-        .modal-img {
-            max-height: 300px;
-            object-fit: contain;
-        }
-        
-        .price-highlight {
-            font-weight: bold;
-            color: #28a745;
-        }
-        
-        .category-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 0.8rem;
-        }
-        
-        .premium-badge {
-            background-color: #6f42c1;
-        }
-        
-        .economy-badge {
-            background-color: #00ff84;
-        }
-        
-        .luxury-badge {
-            background-color: #fd7e14;
-        }
-        
-        .search-container {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        
-        .no-results {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-        
-        .tel-link {
-            color: #0d6efd;
-            text-decoration: none;
-        }
-        
-        .tel-link:hover {
-            text-decoration: underline;
-        }
-        .payment-btn {
-        background-color: #ff5100;
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    .payment-btn:hover {
-        background-color: #45a049;
-    }
-    .payment-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .payment-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-            transition: all 0.3s;
-        }
-        .payment-option:hover {
-            border-color: #4CAF50;
-            background: #f9f9f9;
-        }
-        .payment-option img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-        }
-        .payment-option span {
-            margin-top: 5px;
-            font-size: 14px;
-        }
-        .advance-payment-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
-        }
-        .advance-payment-btn:hover {
-            background-color: #45a049;
-        }
-	/* WhatsApp Floating Button */
-        .whatsapp-float {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 40px;
-            right: 40px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 3px #999;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s;
-            text-decoration: none;
-        }
-
-        .whatsapp-float:hover {
-            background-color: #128C7E;
-            transform: scale(1.05);
-        }
-
-        /* Tooltip Text on Hover */
-        .whatsapp-float::after {
-            content: "Chat Now";
-            position: absolute;
-            right: 70px;
-            background: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            opacity: 0;
-            transition: all 0.4s;
-            pointer-events: none;
-        }
-
-        .whatsapp-float:hover::after {
-            opacity: 1;
-            right: 75px;
-        }
-
-        /* Pulse Animation (Optional) */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .whatsapp-float.pulse {
-            animation: pulse 2s infinite;
-        }
-    </style>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-   <!-- Vendor CSS Files -->
-   <link href="rk/bootstrap.min.css" rel="stylesheet">
-   <link href="rk/bootstrap-icons.css" rel="stylesheet">
-   <link href="rk/aos.css" rel="stylesheet">
-   <link href="rk/glightbox.min.css" rel="stylesheet">
-   <link href="rk/swiper-bundle.min.css" rel="stylesheet">
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
- 
 </head>
-<body class="index-page">
-   
-  <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container position-relative d-flex align-items-center justify-content-between">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        
-        <h1 class="sitename">GoPand-Self drive cars</h1>
-        <span>.</span>
-        <span>in</span>
-      </a>
-     <!---- <div class="banner" id="important-note-banner">
-         <p><strong>Welcome To</strong> GoPanda</p>
-         <button class="dismiss-btn" onclick="dismissBanner()">Dismiss</button>
-      </div>-->
-
-
-      <nav id="navmenu" class="navmenu">
-            <ul>
-              <li><a href="index.html#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
-              <li><a href="profile.html"><i class="bi bi-person navicon"></i> profile</a></li>
-              <li><a href="index.html#gallery"><i class="bi bi-images navicon"></i> Gallery</a></li>
-              <li><a href="profile.html"><i class="bi bi-car-front"></i> My Bookings</a></li>
-	      <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-             
-              
-            
-            </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-     
-
-  
-  </div>
-
-      <a class="btn-getstarted" href="profile.html">profile</a>
-      
-
-    </div>
-  </header>
-  <main class="main">
-
-     <!-- Hero Section -->
-    <section id="hero" class="hero section light-background">
-      
-
-      <div class="container">
-        <div class="row gy-4 justify-content-center justify-content-lg-between">
-          <div class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center">
-            <h1 data-aos="fade-up"> " Drive Freely -Unlimited Kilometers, ”<br>Unmatched Freedom </h1>
-            <p data-aos="fade-up" data-aos-delay="100">Go Panda Car Self-Drive Rental offers a convenient and flexible car rental service in Guntur, providing customers with the option of unlimited kilometers, making it ideal for long-distance travel without the worry of extra charges.
-            </p>
-            <div class="d-flex" data-aos="fade-up" data-aos-delay="100">
-             <!-- <a href="booking1.html" class="btn-get-started">Rent Now</a>
-              <!--<a href="https://youtu.be/o5cmdDSjgi4?si=SzdI7bGPMzG8b4CS&t=60" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>-->
-            </div>
-          </div>
-          <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
-            <a href="booking1.html"><img src="img/hero-img.png" class="img-fluid animated" alt="Hero Image" style="width: 300px; height: auto;"></a>
-          </div>
+<body>
+  <!-- Header -->
+  <header class="bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark container">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <h1 class="m-0">GoPanda Cars</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html#mybookings">My Bookings</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html" id="loginLink">Login</a>
+            </li>
+          </ul>
         </div>
       </div>
+    </nav>
+  </header>
 
-
-
-    </section><!-- /Hero Section --
-	  <div class="container mt-4">
-  <h1 class="text-center mb-4">Car Rental Services</h1>--
-   <div class="container section-title" data-aos="fade-up">
-        <h2>Car Rental Services<br></h2>
-        <p><span></span> <span class="description-title">Cars For Rent</span></p>
-      </div><!-- End Section Title -->
-	  
-  
-
-  <!-- Hero Section --
-  <section class="hero-section text-center">
-    <div class="container">
-      <h1 class="display-4 fw-bold mb-4">Premium Car Rentals</h1>
-      <p class="lead mb-5">Choose from our wide range of vehicles for your perfect journey</p>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container text-center">
+      <h1 class="display-4 fw-bold mb-4">Drive Freely - Unlimited Kilometers</h1>
+      <p class="lead mb-5">Experience unmatched freedom with our self-drive car rentals in Guntur</p>
       <a href="#cars" class="btn btn-primary btn-lg px-4 me-2">Browse Cars</a>
       <a href="login.html" class="btn btn-outline-light btn-lg px-4">Book Now</a>
     </div>
   </section>
 
   <!-- Cars Section -->
-  <div class="container mb-5" id="cars">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold">Cars For Rent</h2>
-      <p class="lead text-muted">Select from our premium collection</p>
-    </div>
+  <section id="cars" class="py-5">
+    <div class="container">
+      <div class="section-title text-center">
+        <h2>Cars For Rent</h2>
+        <p class="text-muted">Select from our premium collection</p>
+      </div>
 
-   
-	  
-    <div class="container mb-5" id="cars">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold">Econamy Cars </h2>
+      <!-- Economy Cars -->
+      <h3 class="mb-4">Economy Cars</h3>
+      <div class="row g-4 mb-5" id="economyCars"></div>
+
+      <!-- Premium Cars -->
+      <h3 class="mb-4">Premium Cars</h3>
+      <div class="row g-4 mb-5" id="premiumCars"></div>
+
+      <!-- Luxury Cars -->
+      <h3 class="mb-4">Luxury Cars</h3>
+      <div class="row g-4" id="luxuryCars"></div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-5 bg-light">
+    <div class="container">
+      <div class="section-title text-center">
+        <h2>Contact Us</h2>
+        <p>Need help? We're here for you</p>
+      </div>
       
-    <div class="row g-4 mb-5" id="economyCars"></div>
-
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title"><i class="fas fa-map-marker-alt me-2"></i> Address</h5>
+              <p class="card-text">Beside Andhra Muslim College, Ponnur Road, Guntur 522001</p>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d490882.84700774145!2d80.07906971221986!3d16.012357610181883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4a0be58a4cd3cd%3A0x7c5eb18eed4de38!2sGo%20Panda%20Cars!5e0!3m2!1sen!2sin!4v1728323715773!5m2!1sen!2sin" 
+                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title"><i class="fas fa-phone-alt me-2"></i> Contact Info</h5>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="fas fa-phone me-2"></i> <a href="tel:9052017979">9052017979</a></li>
+                <li class="mb-2"><i class="fas fa-phone me-2"></i> <a href="tel:9052027979">9052027979</a></li>
+                <li class="mb-2"><i class="fas fa-phone me-2"></i> <a href="tel:9052037979">9052037979</a></li>
+                <li class="mb-2"><i class="fas fa-envelope me-2"></i> <a href="mailto:gopandaindia@gmail.com">gopandaindia@gmail.com</a></li>
+                <li class="mb-2"><i class="fas fa-clock me-2"></i> Mon-Sun: 6AM - 11PM</li>
+              </ul>
+              
+              <h5 class="mt-4"><i class="fab fa-whatsapp me-2"></i> WhatsApp</h5>
+              <a href="https://wa.me/9052017979" target="_blank" class="btn btn-success">
+                <i class="fab fa-whatsapp me-2"></i> Chat Now
+              </a>
+              
+              <h5 class="mt-4">Follow Us</h5>
+              <div class="social-links">
+                <a href="https://www.instagram.com/gopanda_cars" class="btn btn-outline-primary me-2">
+                  <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="btn btn-outline-primary me-2">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-		<!-- Economy Cars -->
-    <h3 id="economy" class="mb-4 mt-5">Economy Cars</h3>
-    <div class="row g-4 mb-5" id="economyCars"></div>
-   <div class="container mb-5" id="cars">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold">Premium cars</h2>
-      
-   <div class="row g-4 mb-5" id="premiumCars"></div>
+  </section>
 
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>GoPanda Cars</h5>
+          <p>Self-drive car rentals with unlimited kilometers in Guntur, Andhra Pradesh.</p>
+        </div>
+        <div class="col-md-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="index.html" class="text-white">Home</a></li>
+            <li><a href="#cars" class="text-white">Cars</a></li>
+            <li><a href="profile.html" class="text-white">My Bookings</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li><i class="fas fa-phone me-2"></i> 9052017979</li>
+            <li><i class="fas fa-envelope me-2"></i> gopandaindia@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center">
+        <p class="mb-0">© 2023 GoPanda Cars. All Rights Reserved.</p>
+        <p class="small">Developed by GANTA Solutions</p>
+      </div>
     </div>
+  </footer>
 
-    <!-- Premium Cars --
-    <h3 id="premium" class="mb-4 mt-5">Premium Cars</h3>
-    <div class="row g-4 mb-5" id="premiumCars"></div>-->
-
-     <div class="text-center mb-5">
-      <h4 class="fw-bold">Luxury cars</h4>
-     
-     <div class="row g-4" id="luxuryCars"></div>
-    </div>
-
-    <!-- Luxury Cars -->
-    <h3 id="luxury" class="mb-4 mt-5">Luxury Cars</h3>
-    <div class="row g-4" id="luxuryCars"></div>
-  </div>
+  <!-- WhatsApp Float Button -->
+  <a href="https://wa.me/9052017979" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 
   <!-- Booking Modal -->
   <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Book <span id="modalCarName"></span></h5>
@@ -510,540 +273,273 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 
-     <!-- Contact Section -->
-    <section id="contact" class="contact section">
-
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Contact</h2>
-        <p><span>Need Help?</span> <span class="description-title">Contact Us</span></p>
-      </div><!-- End Section Title -->
-
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="mb-5">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d490882.84700774145!2d80.07906971221986!3d16.012357610181883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4a0be58a4cd3cd%3A0x7c5eb18eed4de38!2sGo%20Panda%20Cars!5e0!3m2!1sen!2sin!4v1728323715773!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div><!-- End Google Maps -->
-
-        <div class="row gy-4">
-
-          <div class="col-md-6">
-            <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="200">
-              <i class="icon bi bi-geo-alt flex-shrink-0"></i>
-              <div>
-                <h3>Address</h3>
-                <p>Beside Andhra Muslim collage, ponnur Road , Guntur 522001</p>
-              </div>
-            </div>
-          </div><!-- End Info Item -->
-
-          <div class="col-md-6">
-            <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="300">
-              <i class="icon bi bi-telephone flex-shrink-0"></i>
-              <div>
-                <h3>Call Us</h3>
-                <a href="tel:9052017979">9052017979</a><br>
-                <a href="tel:9052027979">9052027979</a><br>
-                <a href="tel:9052037979">9052037979</a>
-              </div>
-            </div>
-          </div><!-- End Info Item -->
-
-        
-
-          <div class="col-md-6">
-            <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="400">
-              <i class="icon bi bi-envelope flex-shrink-0"></i>
-              <div>
-                <h3>Email Us</h3>
-                <a href="mailto:gopandaindia@gmail.com">
-                  <i  style="font-size: 1.2em;"></i>  gopandaindia@gmail.com
-              </a>
-              
-              </div>
-            </div>
-          </div><!-- End Info Item -->
-
-          <div class="col-md-6">
-            <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="500">
-              <i class="icon bi bi-clock flex-shrink-0"></i>
-              <div>
-                <h3>Opening Hours<br></h3>
-                <p><strong>Mon-Sat:</strong> 6AM - 11PM; <strong>Sunday:</strong> 6AM - 11PM</p>
-              </div>
-            </div>
-          </div><!-- End Info Item -->
-
-          <div class="col-md-6"></div>
-            <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="600">
-              <i class="icon bi bi-whatsapp flex-shrink-0"></i>
-              <div>
-                <h3>WhatsApp</h3>
-                 <a href="https://wa.me/9052017979"; target="_blank">WhatsApp: 9052017979</a>
-              </div>
-            </div>
-          </div><!-- End Info Item -->
-
-        </div>
-        
-    </section><!-- /Contact Section -->
-
-  </main>
-
-  <footer id="footer" class="footer dark-background">
-
-    <div class="container">
-      <div class="row gy-3">
-        <div class="col-lg-3 col-md-6 d-flex">
-          <i class="bi bi-geo-alt icon"></i>
-          <div class="address">
-            <h4>Address</h4>
-            <p>Guntur ponnur Road beside Muslim collage,</p>
-            <p>Guntur 522001</p>
-            <p></p>
-          </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6 d-flex">
-          <i class="bi bi-telephone icon"></i>
-          <div>
-            <h4>Contact</h4>
-            <p>
-              <strong>Phone:</strong> <span>9052017979,
-                9052027979,
-                9052037979</span><br>
-              <strong>Email:</strong> <span>gopandaindia@gmail.com</span><br>
-            </p>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 d-flex">
-          <i class="bi bi-clock icon"></i>
-          <div>
-            <h4>Opening Hours</h4>
-            <p>
-              <strong>Mon-Sat:</strong> <span>6AM - 11PM</span><br>
-              <strong>Sunday</strong>: <span>6AM - 11PM</span>
-            </p>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <h4>Follow Us</h4>
-          <div class="social-links d-flex">
-            <a href="https://www.instagram.com/gopanda_cars?igsh=MWxsbjI1MDBtcnllcw==" class="facebook"><i class="bi bi-facebook"></i></a>
-            <a href="https://www.instagram.com/gopanda_cars?igsh=MWxsbjI1MDBtcnllcw==" class="instagram"><i class="bi bi-instagram"></i></a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Go Panda</strong> <span>All Rights Reserved</span></p>
-      <div class="credits">
-       
-        Developed by <a href="gantasolutions.com">GANTA</a>
-      </div>
-    </div>
-
-  </footer>
-
-  <!-- Bootstrap JS -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   
   <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
-      authDomain: "gopandacars-7085f.firebaseapp.com",
-      projectId: "gopandacars-7085f",
-      storageBucket: "gopandacars-7085f.appspot.com",
-      messagingSenderId: "486383420605"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    // Car data with consistent naming
-    const cars = [
-  {
-    id: 'car1',
-    name: 'Maruti Swift',
-    image: 'img/swift.jpg',
-    price12hrs: 1200,
-    price24hrs: 2000,
-    description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.',
-    category: 'economy'
-  },
-  {
-    id: 'car2',
-    name: 'Toyota Etios',
-    image: 'img/etios.jpg',
-    price12hrs: 1200,
-    price24hrs: 2000,
-    description: 'Reliable sedan with spacious interior and good mileage.',
-    category: 'economy'
-  },
-  {
-    id: 'car3',
-    name: 'Hyundai i10 Nios',
-    image: 'img/i10nios.jpg',
-    price12hrs: 1500,
-    price24hrs: 2300,
-    description: 'Premium hatchback with modern features and stylish design.',
-    category: 'economy'
-  },
-  {
-    id: 'car4',
-    name: 'Maruti Swift Dzire',
-    image: 'img/swiftdzire.jpg',
-    price12hrs: 1500,
-    price24hrs: 2300,
-    description: 'Popular compact sedan with excellent ride quality.',
-    category: 'economy'
-  },
-  {
-    id: 'car5',
-    name: 'Hyundai Aura',
-    image: 'img/aura.jpg',
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Stylish compact sedan with premium features.',
-    category: 'premium'
-  },
-  {
-    id: 'car6',
-    name: 'Tata Punch',
-    image: 'img/punch.jpg',
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Compact SUV with rugged design and modern features.',
-    category: 'premium'
-  },
-  {
-    id: 'car7',
-    name: 'Hyundai i20',
-    image: 'img/i20.jpg',
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Premium hatchback with sporty looks and advanced features.',
-    sunroof: true,
-    category: 'premium'
-  },
-  {
-    id: 'car8',
-    name: 'Renault Kiger',
-    image: 'img/kiger.jpg',
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Compact SUV with bold styling and spacious interior.',
-    category: 'premium'
-  },
-  {
-    id: 'car9',
-    name: 'Maruti Brezza',
-    image: 'img/brezza.jpg',
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Popular compact SUV with excellent build quality.',
-    category: 'premium'
-  },
-  {
-    id: 'car10',
-    name: 'Hyundai Creta',
-    image: 'img/creta.jpg',
-    price12hrs: 2000,
-    price24hrs: 3000,
-    description: 'Premium SUV with luxurious features and spacious cabin.',
-    category: 'premium'
-  },
-  {
-    id: 'car11',
-    name: 'Mahindra Thar',
-    image: 'img/thar.jpg',
-    price12hrs: 3500,
-    price24hrs: 5000,
-    description: 'Iconic off-roader with convertible top and powerful engine.',
-    category: 'luxury'
-  },
-  {
-    id: 'car12',
-    name: 'Toyota Innova Crysta',
-    image: 'img/innova.jpg',
-    price12hrs: 3500,
-    price24hrs: 5000,
-    description: 'Premium 7-seater MPV with luxurious comfort.',
-    category: 'luxury'
-  },
-  {
-    id: 'car13',
-    name: 'Toyota Fortuner',
-    image: 'img/fortuner.jpg',
-    price12hrs: 8000,
-    price24hrs: 12000,
-    description: 'Premium full-size SUV with powerful engine and luxury features.',
-    withDriver: true,
-    category: 'luxury'
-  },
-  {
-    id: 'car14',
-    name: 'Maruti Baleno',
-    image: 'img/baleno.jpg',
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Premium hatchback with comfort, style, and great fuel efficiency.',
-    category: 'premium'
-  },
-  {
-    id: 'car15',
-    name: 'Tata Nexon',
-    image: 'img/nexon.jpg',
-    price12hrs: 1800,
-    price24hrs: 2800,
-    description: 'Safe and stylish compact SUV with panoramic sunroof.',
-    sunroof: true,
-    category: 'premium'
-  },
-  {
-    id: 'car16',
-    name: 'Kia Seltos',
-    image: 'img/seltos.jpg',
-    price12hrs: 1800,
-    price24hrs: 2800,
-    description: 'Stylish SUV with premium features and spacious cabin.',
-    category: 'premium'
-  }
-];
-
-    // Initialize Bootstrap modal
-    const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-    let selectedCar = null;
-
-    // DOM elements
-    const authButtons = document.getElementById('authButtons');
-    const userProfile = document.getElementById('userProfile');
-    const userName = document.getElementById('userName');
-
-    // Check auth state
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        // Check if user is blocked
-        db.collection('users').doc(user.uid).get().then(doc => {
-          if (doc.exists && doc.data().isBlocked) {
-            auth.signOut();
-            alert('Your account has been blocked by admin');
-            return;
-          }
-          
-          authButtons.style.display = 'none';
-          userProfile.style.display = 'block';
-          userName.textContent = user.email.split('@')[0];
-          
-          if (user.email === 'admin@gopandacars.com') {
-            // Add admin link if user is admin
-            const dropdown = document.querySelector('.dropdown-menu');
-            dropdown.innerHTML += `<li><a class="dropdown-item" href="admin.html"><i class="fas fa-cog me-1"></i>Admin Panel</a></li>`;
-          }
-        });
-      } else {
-        authButtons.style.display = 'block';
-        userProfile.style.display = 'none';
-      }
-    });
-
-    // Function to render cars by category
-    function renderCars() {
-      const economyCars = cars.filter(car => car.category === 'economy');
-      const premiumCars = cars.filter(car => car.category === 'premium');
-      const luxuryCars = cars.filter(car => car.category === 'luxury');
-
-      renderCarCategory(economyCars, 'economyCars');
-      renderCarCategory(premiumCars, 'premiumCars');
-      renderCarCategory(luxuryCars, 'luxuryCars');
-    }
-
-    function renderCarCategory(carList, elementId) {
-      const container = document.getElementById(elementId);
-      container.innerHTML = '';
-
-      carList.forEach((car) => {
-        const card = document.createElement('div');
-        card.className = 'col-md-4';
-        card.innerHTML = `
-          <div class="card car-card h-100">
-            <img src="${car.image}" class="card-img-top" alt="${car.name}" 
-                 onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Car+Image'">
-            <div class="card-body">
-              <h5 class="card-title">${car.name}</h5>
-              <p class="card-text text-muted">${car.description}</p>
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <div>
-                  <span class="fw-bold">₹${car.price12hrs}</span>/12h
-                  <span class="mx-2">•</span>
-                  <span class="fw-bold">₹${car.price24hrs}</span>/24h
-                </div>
-                <span class="badge bg-${getCategoryColor(car.category)} badge-category">${car.category}</span>
-              </div>
-              ${car.sunroof ? '<span class="badge bg-info me-1">Sunroof</span>' : ''}
-              ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
-            </div>
-            <div class="card-footer bg-transparent">
-              <button class="btn btn-primary w-100 book-btn" data-car-id="${car.id}">Book Now</button>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      // Add event listeners to book buttons
-      document.querySelectorAll('.book-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const carId = this.getAttribute('data-car-id');
-          const car = cars.find(c => c.id === carId);
-          showBookingModal(car);
-        });
-      });
-    }
-
-    function getCategoryColor(category) {
-      switch(category) {
-        case 'economy': return 'success';
-        case 'premium': return 'primary';
-        case 'luxury': return 'danger';
-        default: return 'secondary';
-      }
-    }
-
-    function showBookingModal(car) {
-      selectedCar = car;
-      document.getElementById('modalCarName').textContent = car.name;
-      document.getElementById('price12hrs').textContent = car.price12hrs;
-      document.getElementById('price24hrs').textContent = car.price24hrs;
-      
-      const user = auth.currentUser;
-      if (user) {
-        document.getElementById('loginRequired').style.display = 'none';
-        document.getElementById('bookingForm').style.display = 'block';
-        document.getElementById('confirmBookingBtn').style.display = 'block';
-      } else {
-        document.getElementById('loginRequired').style.display = 'block';
-        document.getElementById('bookingForm').style.display = 'none';
-        document.getElementById('confirmBookingBtn').style.display = 'none';
-      }
-      
-      // Set minimum date to today
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('startDate').min = today;
-      document.getElementById('endDate').min = today;
-      
-      updateEstimatedTotal();
-      bookingModal.show();
-    }
-
-    function updateEstimatedTotal() {
-      if (!selectedCar) return;
-      
-      const option = document.getElementById('rentalOption').value;
-      const startDate = new Date(document.getElementById('startDate').value);
-      const endDate = new Date(document.getElementById('endDate').value);
-      
-      if (isNaN(startDate.getTime())) return;
-      
-      if (isNaN(endDate.getTime())) {
-        // Single day booking
-        const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
-        document.getElementById('estimatedTotal').textContent = price;
-      } else {
-        // Multi-day booking
-        const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-        const pricePerDay = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
-        document.getElementById('estimatedTotal').textContent = days * pricePerDay;
-      }
-    }
-
-    // Event listeners for booking form
-    document.getElementById('rentalOption').addEventListener('change', updateEstimatedTotal);
-    document.getElementById('startDate').addEventListener('change', function() {
-      document.getElementById('endDate').min = this.value;
-      updateEstimatedTotal();
-    });
-    document.getElementById('endDate').addEventListener('change', updateEstimatedTotal);
-
-    // Confirm booking
-    document.getElementById('confirmBookingBtn').addEventListener('click', () => {
-      const user = auth.currentUser;
-      if (!user) {
-        alert('Please login to complete booking');
-        return;
-      }
-
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
-      const option = document.getElementById('rentalOption').value;
-      const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
-      const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-
-      db.collection('bookings').doc(bookingId).set({
-        userId: user.uid,
-        userEmail: user.email,
-        carId: selectedCar.id,
-        carName: selectedCar.name,
-        carImage: selectedCar.image,
-        startDate: startDate,
-        endDate: endDate,
-        rentalOption: option,
-        originalPrice: price,
-        finalPrice: price, // Initially same as original price
-        status: 'pending_payment',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        bookingId: bookingId
-      }).then(() => {
-        bookingModal.hide();
-        window.location.href = `pay.html?bookingId=${bookingId}`;
-      }).catch(error => {
-        alert('Error submitting booking: ' + error.message);
-      });
-    });
-
-    // Logout handler
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      auth.signOut().then(() => {
-        window.location.href = 'index.html';
-      });
-    });
-
-    // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-      renderCars();
-    });
-	  
-  </script>
-	<!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+        authDomain: "gopandacars-7085f.firebaseapp.com",
+        projectId: "gopandacars-7085f",
+        storageBucket: "gopandacars-7085f.appspot.com",
+        messagingSenderId: "486383420605"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
 
-  <!-- Preloader -->
-<div id="preloader">
-  <img src="img/preloder.gif" alt="Loading..." />
-  <p>Loading, please wait...</p>
-</div>
-	
-     <!-- Vendor JS Files -->
-  <script src="rk/bootstrap.bundle.min.js"></script>
-  <script src="rk/validate.js"></script>
-  <script src="rk/aos.js"></script>
-  <script src="rk/glightbox.min.js"></script>
-  <script src="rk/purecounter_vanilla.js"></script>
-  <script src="rk/swiper-bundle.min.js"></script>
- 
-  <!-- Main JS File -->
-  <script src="rk/main.js"></script>
-  <script src="rk/script1.js"></script>
-	    
-	   
+      // Car data
+      const cars = [
+        {
+          id: 'car1',
+          name: 'Maruti Swift',
+          image: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGNhcnN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
+          price12hrs: 1200,
+          price24hrs: 2000,
+          description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.',
+          category: 'economy'
+        },
+        {
+          id: 'car2',
+          name: 'Hyundai i20',
+          image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2Fyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
+          price12hrs: 1500,
+          price24hrs: 2500,
+          description: 'Premium hatchback with sporty looks and advanced features.',
+          category: 'premium',
+          sunroof: true
+        },
+        {
+          id: 'car3',
+          name: 'Toyota Fortuner',
+          image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y2Fyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
+          price12hrs: 3500,
+          price24hrs: 5000,
+          description: 'Premium SUV with powerful engine and luxury features.',
+          category: 'luxury',
+          withDriver: true
+        },
+        {
+          id: 'car4',
+          name: 'Tata Nexon',
+          image: 'https://images.unsplash.com/photo-1494976388901-7509ad593e19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y2Fyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
+          price12hrs: 1800,
+          price24hrs: 2800,
+          description: 'Safe and stylish compact SUV with panoramic sunroof.',
+          category: 'premium',
+          sunroof: true
+        },
+        {
+          id: 'car5',
+          name: 'Maruti Swift Dzire',
+          image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhcnN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
+          price12hrs: 1500,
+          price24hrs: 2300,
+          description: 'Popular compact sedan with excellent ride quality.',
+          category: 'economy'
+        }
+      ];
+
+      // Initialize Bootstrap modal
+      const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+      let selectedCar = null;
+
+      // Check auth state
+      auth.onAuthStateChanged(user => {
+        const loginLink = document.getElementById('loginLink');
+        if (user) {
+          loginLink.textContent = 'Logout';
+          loginLink.href = '#';
+          loginLink.onclick = () => {
+            auth.signOut().then(() => window.location.href = 'index.html');
+          };
+        } else {
+          loginLink.textContent = 'Login';
+          loginLink.href = 'login.html';
+          loginLink.onclick = null;
+        }
+        
+        // Render cars regardless of auth state
+        renderCars();
+      });
+
+      // Function to render cars by category
+      function renderCars() {
+        const economyContainer = document.getElementById('economyCars');
+        const premiumContainer = document.getElementById('premiumCars');
+        const luxuryContainer = document.getElementById('luxuryCars');
+        
+        if (!economyContainer || !premiumContainer || !luxuryContainer) {
+          console.error('Car containers not found');
+          return;
+        }
+
+        const economyCars = cars.filter(car => car.category === 'economy');
+        const premiumCars = cars.filter(car => car.category === 'premium');
+        const luxuryCars = cars.filter(car => car.category === 'luxury');
+
+        renderCarCategory(economyCars, economyContainer);
+        renderCarCategory(premiumCars, premiumContainer);
+        renderCarCategory(luxuryCars, luxuryContainer);
+      }
+
+      function renderCarCategory(carList, container) {
+        if (!container) return;
+        
+        container.innerHTML = '';
+
+        if (!carList || carList.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center">No cars available in this category</div>';
+          return;
+        }
+
+        carList.forEach((car) => {
+          const card = document.createElement('div');
+          card.className = 'col-md-4 mb-4';
+          card.innerHTML = `
+            <div class="card car-card h-100">
+              <img src="${car.image}" class="card-img-top" alt="${car.name}" 
+                   onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Car+Image'">
+              <div class="card-body">
+                <h5 class="card-title">${car.name}</h5>
+                <p class="card-text text-muted">${car.description}</p>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div>
+                    <span class="fw-bold">₹${car.price12hrs}</span>/12h
+                    <span class="mx-2">•</span>
+                    <span class="fw-bold">₹${car.price24hrs}</span>/24h
+                  </div>
+                  <span class="badge bg-${getCategoryColor(car.category)}">${car.category}</span>
+                </div>
+                ${car.sunroof ? '<span class="badge bg-info me-1">Sunroof</span>' : ''}
+                ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
+              </div>
+              <div class="card-footer bg-transparent">
+                <button class="btn btn-primary w-100 book-btn" data-car-id="${car.id}">Book Now</button>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        // Add event listeners to book buttons
+        document.querySelectorAll('.book-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const carId = this.getAttribute('data-car-id');
+            const car = cars.find(c => c.id === carId);
+            if (car) showBookingModal(car);
+          });
+        });
+      }
+
+      function getCategoryColor(category) {
+        switch(category) {
+          case 'economy': return 'success';
+          case 'premium': return 'primary';
+          case 'luxury': return 'danger';
+          default: return 'secondary';
+        }
+      }
+
+      function showBookingModal(car) {
+        selectedCar = car;
+        document.getElementById('modalCarName').textContent = car.name;
+        document.getElementById('price12hrs').textContent = car.price12hrs;
+        document.getElementById('price24hrs').textContent = car.price24hrs;
+        
+        const user = auth.currentUser;
+        if (user) {
+          document.getElementById('loginRequired').style.display = 'none';
+          document.getElementById('bookingForm').style.display = 'block';
+          document.getElementById('confirmBookingBtn').style.display = 'block';
+        } else {
+          document.getElementById('loginRequired').style.display = 'block';
+          document.getElementById('bookingForm').style.display = 'none';
+          document.getElementById('confirmBookingBtn').style.display = 'none';
+        }
+        
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').min = today;
+        document.getElementById('endDate').min = today;
+        
+        updateEstimatedTotal();
+        bookingModal.show();
+      }
+
+      function updateEstimatedTotal() {
+        if (!selectedCar) return;
+        
+        const option = document.getElementById('rentalOption').value;
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
+        
+        if (isNaN(startDate.getTime())) return;
+        
+        if (isNaN(endDate.getTime())) {
+          // Single day booking
+          const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+          document.getElementById('estimatedTotal').textContent = price;
+        } else {
+          // Multi-day booking
+          const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+          const pricePerDay = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+          document.getElementById('estimatedTotal').textContent = days * pricePerDay;
+        }
+      }
+
+      // Event listeners for booking form
+      document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
+      document.getElementById('startDate')?.addEventListener('change', function() {
+        document.getElementById('endDate').min = this.value;
+        updateEstimatedTotal();
+      });
+      document.getElementById('endDate')?.addEventListener('change', updateEstimatedTotal);
+
+      // Confirm booking
+      document.getElementById('confirmBookingBtn')?.addEventListener('click', () => {
+        const user = auth.currentUser;
+        if (!user) {
+          alert('Please login to complete booking');
+          return;
+        }
+
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const option = document.getElementById('rentalOption').value;
+        const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+        const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+        db.collection('bookings').doc(bookingId).set({
+          userId: user.uid,
+          userEmail: user.email,
+          carId: selectedCar.id,
+          carName: selectedCar.name,
+          carImage: selectedCar.image,
+          startDate: startDate,
+          endDate: endDate,
+          rentalOption: option,
+          originalPrice: price,
+          finalPrice: price,
+          status: 'pending_payment',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          bookingId: bookingId
+        }).then(() => {
+          bookingModal.hide();
+          window.location.href = `pay.html?bookingId=${bookingId}`;
+        }).catch(error => {
+          console.error('Booking error:', error);
+          alert('Error submitting booking: ' + error.message);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
