@@ -305,131 +305,132 @@
       const db = firebase.firestore();
 
       // Car data
-     const cars = [
-  {
-    id: 'car1',
-    name: 'Swift',
-    image: 'img/swift.jpg',
-    priceHourly: 85,    // 2000/24 ≈ 83.33 → rounded to 85
-    price12hrs: 1200,
-    price24hrs: 2000,
-    description: 'Compact hatchback with great fuel efficiency.',
-    category: 'economy'
-  },
-  {
-    id: 'car2',
-    name: 'Etios',
-    image: 'img/etios.jpg',
-    priceHourly: 85,
-    price12hrs: 1200,
-    price24hrs: 2000,
-    description: 'Reliable sedan with spacious interior.',
-    category: 'economy'
-  },
-  {
-    id: 'car3',
-    name: 'I10 Nios',
-    image: 'img/i10nios.jpg',
-    priceHourly: 100,   // 2300/24 ≈ 95.83 → rounded to 100
-    price12hrs: 1500,
-    price24hrs: 2300,
-    description: 'Premium hatchback with modern features.',
-    category: 'economy'
-  },
-  {
-    id: 'car4',
-    name: 'Swift Dzire',
-    image: 'img/swiftdzire.jpg',
-    priceHourly: 100,
-    price12hrs: 1500,
-    price24hrs: 2300,
-    description: 'Popular compact sedan.',
-    category: 'economy'
-  },
-  {
-    id: 'car5',
-    name: 'Hyundai Aura',
-    image: 'img/aura.jpg',
-    priceHourly: 105,   // 2500/24 ≈ 104.16 → rounded to 105
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Stylish compact sedan.',
-    category: 'premium'
-  },
-  {
-    id: 'car6',
-    name: 'Tata Punch',
-    image: 'img/punch.jpg',
-    priceHourly: 105,
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Compact SUV with rugged design.',
-    category: 'premium'
-  },
-  {
-    id: 'car7',
-    name: 'Hyundai i20',
-    image: 'img/i20.jpg',
-    priceHourly: 105,
-    price12hrs: 1500,
-    price24hrs: 2500,
-    description: 'Premium hatchback with sunroof.',
-    sunroof: true,
-    category: 'premium'
-  },
-  {
-    id: 'car8',
-    name: 'Creta',
-    image: 'img/creta.jpg',
-    priceHourly: 125,   // 3000/24 = 125
-    price12hrs: 2000,
-    price24hrs: 3000,
-    description: 'Premium SUV with spacious cabin.',
-    category: 'premium'
-  },
-  {
-    id: 'car9',
-    name: 'Grand Vitara',
-    image: 'img/grandvitara.jpg',
-    priceHourly: 125,
-    price12hrs: 2000,
-    price24hrs: 3000,
-    description: 'Hybrid SUV with elegant design.',
-    category: 'premium'
-  },
-  {
-    id: 'car10',
-    name: 'Mahindra Thar',
-    image: 'img/thar.jpg',
-    priceHourly: 210,   // 5000/24 ≈ 208.33 → rounded to 210
-    price12hrs: 3500,
-    price24hrs: 5000,
-    description: 'Iconic off-roader.',
-    category: 'luxury'
-  },
-  {
-    id: 'car11',
-    name: 'Fortuner',
-    image: 'img/fortuner.jpg',
-    priceHourly: 500,   // 12000/24 = 500
-    price12hrs: 8000,
-    price24hrs: 12000,
-    description: 'Full-size luxury SUV.',
-    withDriver: true,
-    category: 'luxury'
-  },
-  {
-    id: 'car12',
-    name: 'XUV700',
-    image: 'img/xuv700.jpg',
-    priceHourly: 270,   // 6500/24 ≈ 270.83 → rounded to 270
-    price12hrs: 4500,
-    price24hrs: 6500,
-    description: 'Premium SUV with advanced features.',
-    withDriver: true,
-    category: 'luxury'
-  }
-];
+      const cars = [
+        {
+          id: 'car1',
+          name: 'Swift',
+          image: 'img/swift.jpg',
+          priceHourly: 85,
+          price12hrs: 1200,
+          price24hrs: 2000,
+          description: 'Compact hatchback with great fuel efficiency.',
+          category: 'economy'
+        },
+        {
+          id: 'car2',
+          name: 'Etios',
+          image: 'img/etios.jpg',
+          priceHourly: 85,
+          price12hrs: 1200,
+          price24hrs: 2000,
+          description: 'Reliable sedan with spacious interior.',
+          category: 'economy'
+        },
+        {
+          id: 'car3',
+          name: 'I10 Nios',
+          image: 'img/i10nios.jpg',
+          priceHourly: 100,
+          price12hrs: 1500,
+          price24hrs: 2300,
+          description: 'Premium hatchback with modern features.',
+          category: 'economy'
+        },
+        {
+          id: 'car4',
+          name: 'Swift Dzire',
+          image: 'img/swiftdzire.jpg',
+          priceHourly: 100,
+          price12hrs: 1500,
+          price24hrs: 2300,
+          description: 'Popular compact sedan.',
+          category: 'economy'
+        },
+        {
+          id: 'car5',
+          name: 'Hyundai Aura',
+          image: 'img/aura.jpg',
+          priceHourly: 105,
+          price12hrs: 1500,
+          price24hrs: 2500,
+          description: 'Stylish compact sedan.',
+          category: 'premium'
+        },
+        {
+          id: 'car6',
+          name: 'Tata Punch',
+          image: 'img/punch.jpg',
+          priceHourly: 105,
+          price12hrs: 1500,
+          price24hrs: 2500,
+          description: 'Compact SUV with rugged design.',
+          category: 'premium'
+        },
+        {
+          id: 'car7',
+          name: 'Hyundai i20',
+          image: 'img/i20.jpg',
+          priceHourly: 105,
+          price12hrs: 1500,
+          price24hrs: 2500,
+          description: 'Premium hatchback with sunroof.',
+          sunroof: true,
+          category: 'premium'
+        },
+        {
+          id: 'car8',
+          name: 'Creta',
+          image: 'img/creta.jpg',
+          priceHourly: 125,
+          price12hrs: 2000,
+          price24hrs: 3000,
+          description: 'Premium SUV with spacious cabin.',
+          category: 'premium'
+        },
+        {
+          id: 'car9',
+          name: 'Grand Vitara',
+          image: 'img/grandvitara.jpg',
+          priceHourly: 125,
+          price12hrs: 2000,
+          price24hrs: 3000,
+          description: 'Hybrid SUV with elegant design.',
+          category: 'premium'
+        },
+        {
+          id: 'car10',
+          name: 'Mahindra Thar',
+          image: 'img/thar.jpg',
+          priceHourly: 210,
+          price12hrs: 3500,
+          price24hrs: 5000,
+          description: 'Iconic off-roader.',
+          category: 'luxury'
+        },
+        {
+          id: 'car11',
+          name: 'Fortuner',
+          image: 'img/fortuner.jpg',
+          priceHourly: 500,
+          price12hrs: 8000,
+          price24hrs: 12000,
+          description: 'Full-size luxury SUV.',
+          withDriver: true,
+          category: 'luxury'
+        },
+        {
+          id: 'car12',
+          name: 'XUV700',
+          image: 'img/xuv700.jpg',
+          priceHourly: 270,
+          price12hrs: 4500,
+          price24hrs: 6500,
+          description: 'Premium SUV with advanced features.',
+          withDriver: true,
+          category: 'luxury'
+        }
+      ];
+
       // Initialize Bootstrap modal
       const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
       let selectedCar = null;
@@ -602,6 +603,37 @@
         }
       }
 
+      // Function to check car availability
+      async function isCarAvailable(carId, startDateTime, endDateTime) {
+        try {
+          const bookingsRef = db.collection('bookings');
+          const snapshot = await bookingsRef
+            .where('carId', '==', carId)
+            .where('status', 'in', ['pending_payment', 'confirmed', 'active'])
+            .get();
+
+          const newStart = new Date(startDateTime);
+          const newEnd = new Date(endDateTime);
+
+          for (const doc of snapshot.docs) {
+            const booking = doc.data();
+            const existingStart = booking.startDateTime.toDate();
+            const existingEnd = booking.endDateTime.toDate();
+
+            // Check for overlap
+            if ((newStart >= existingStart && newStart < existingEnd) ||
+                (newEnd > existingStart && newEnd <= existingEnd) ||
+                (newStart <= existingStart && newEnd >= existingEnd)) {
+              return false; // Car is not available
+            }
+          }
+          return true; // Car is available
+        } catch (error) {
+          console.error('Error checking availability:', error);
+          return false; // Assume not available if there's an error
+        }
+      }
+
       // Initialize date time pickers when modal shows
       bookingModal._element.addEventListener('shown.bs.modal', function() {
         // Set default start time to now (rounded to nearest hour)
@@ -642,7 +674,7 @@
       });
 
       // Confirm booking
-      document.getElementById('confirmBookingBtn')?.addEventListener('click', () => {
+      document.getElementById('confirmBookingBtn')?.addEventListener('click', async () => {
         const user = auth.currentUser;
         if (!user) {
           alert('Please login to complete booking');
@@ -671,6 +703,13 @@
         // Validate end date is after start date
         if (endDate <= startDate) {
           alert('End date/time must be after start date/time');
+          return;
+        }
+
+        // Check if car is available
+        const isAvailable = await isCarAvailable(selectedCar.id, startDateTime, endDateTime);
+        if (!isAvailable) {
+          alert('This car is already booked for the selected time period. Please choose different dates/times.');
           return;
         }
 
@@ -707,8 +746,8 @@
           carId: selectedCar.id,
           carName: selectedCar.name,
           carImage: selectedCar.image,
-          startDateTime: startDateTime,
-          endDateTime: endDateTime,
+          startDateTime: firebase.firestore.Timestamp.fromDate(new Date(startDateTime)),
+          endDateTime: firebase.firestore.Timestamp.fromDate(new Date(endDateTime)),
           rentalOption: option,
           originalPrice: pricePerUnit,
           finalPrice: finalPrice,
