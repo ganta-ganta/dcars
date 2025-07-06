@@ -200,7 +200,7 @@
       <h4 class="mb-3"><i class="fas fa-check-circle me-2"></i> Payment Verification</h4>
       <p>Please submit your payment details for admin verification. Your booking will be confirmed after verification.</p>
       <button class="btn btn-success btn-lg" id="verifyPaymentBtn">
-        <i class="fas fa-upload me-2"></i> Submit Payment Proof
+        <i class="fas fa-check me-2"></i> Verify Payment
       </button>
     </div>
   </div>
@@ -215,7 +215,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Submit Payment Proof</h5>
+          <h5 class="modal-title">Payment Verification</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -235,16 +235,16 @@
               <input type="date" class="form-control" id="paymentDate" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">Payment Screenshot*</label>
-              <input type="file" class="form-control" id="paymentScreenshot" accept="image/*" required>
-              <small class="text-muted">Upload clear screenshot of successful payment</small>
+              <label class="form-label">Payment Screenshot (Optional)</label>
+              <input type="file" class="form-control" id="paymentScreenshot" accept="image/*">
+              <small class="text-muted">You can upload payment proof if available</small>
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-primary" id="submitVerificationBtn">
-            <span class="submit-text">Submit for Verification</span>
+            <span class="submit-text">Submit Verification</span>
             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
           </button>
         </div>
@@ -435,7 +435,7 @@
         const screenshotFile = document.getElementById('paymentScreenshot').files[0];
         
         // Validate inputs
-        if (!transactionId || !paymentAmount || !paymentDate || !screenshotFile) {
+        if (!transactionId || !paymentAmount || !paymentDate) {
           alert('Please fill all required fields');
           return;
         }
@@ -456,13 +456,15 @@
         btn.disabled = true;
         
         try {
-          // Upload screenshot to Firebase Storage
-          const storageRef = storage.ref(`payment-proofs/${bookingId}_${Date.now()}`);
-          const uploadTask = storageRef.put(screenshotFile);
+          let screenshotUrl = null;
           
-          // Wait for upload to complete
-          const snapshot = await uploadTask;
-          const screenshotUrl = await snapshot.ref.getDownloadURL();
+          // Upload screenshot if provided (optional)
+          if (screenshotFile) {
+            const storageRef = storage.ref(`payment-proofs/${bookingId}_${Date.now()}`);
+            const uploadTask = storageRef.put(screenshotFile);
+            const snapshot = await uploadTask;
+            screenshotUrl = await snapshot.ref.getDownloadURL();
+          }
           
           // Prepare payment data
           const paymentData = {
@@ -494,7 +496,7 @@
           alert('Error submitting verification. Please try again or contact support.');
         } finally {
           // Reset button state
-          submitText.textContent = 'Submit for Verification';
+          submitText.textContent = 'Submit Verification';
           spinner.classList.add('d-none');
           btn.disabled = false;
         }
