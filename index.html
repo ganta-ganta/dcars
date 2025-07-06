@@ -11,6 +11,7 @@
     <style>
         .car-card {
             transition: transform 0.3s;
+            margin-bottom: 20px;
         }
         .car-card:hover {
             transform: translateY(-5px);
@@ -19,6 +20,7 @@
         .car-img {
             height: 200px;
             object-fit: cover;
+            width: 100%;
         }
         .badge {
             font-size: 0.8rem;
@@ -35,6 +37,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .loading-spinner {
+            display: none;
+            width: 3rem;
+            height: 3rem;
         }
     </style>
 </head>
@@ -88,6 +95,13 @@
                             <input type="date" class="form-control" id="customDateFilter">
                             <button class="btn btn-primary" type="button" id="applyCustomDate">Go</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-primary loading-spinner" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
             </div>
@@ -199,12 +213,42 @@
             const auth = firebase.auth();
             const db = firebase.firestore();
 
+            // Show loading spinner
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            
+            function showLoading() {
+                loadingSpinner.style.display = 'block';
+            }
+            
+            function hideLoading() {
+                loadingSpinner.style.display = 'none';
+            }
+
+            // Helper function to safely convert Firestore timestamps
+            function getDateFromFirestore(timestamp) {
+                try {
+                    if (timestamp && timestamp.toDate) {
+                        return timestamp.toDate();
+                    }
+                    if (timestamp && timestamp.seconds) {
+                        return new Date(timestamp.seconds * 1000);
+                    }
+                    if (timestamp instanceof Date) {
+                        return timestamp;
+                    }
+                    return null;
+                } catch (e) {
+                    console.error('Error converting timestamp:', e);
+                    return null;
+                }
+            }
+
             // Car data
             const cars = [
                 {
                     id: 'car1',
                     name: 'Swift',
-                    image: 'img/swift.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Swift',
                     priceHourly: 85,
                     price12hrs: 1200,
                     price24hrs: 2000,
@@ -214,7 +258,7 @@
                 {
                     id: 'car2',
                     name: 'Etios',
-                    image: 'img/etios.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Etios',
                     priceHourly: 85,
                     price12hrs: 1200,
                     price24hrs: 2000,
@@ -224,7 +268,7 @@
                 {
                     id: 'car3',
                     name: 'I10 Nios',
-                    image: 'img/i10nios.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=I10+Nios',
                     priceHourly: 100,
                     price12hrs: 1500,
                     price24hrs: 2300,
@@ -234,7 +278,7 @@
                 {
                     id: 'car4',
                     name: 'Swift Dzire',
-                    image: 'img/swiftdzire.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Swift+Dzire',
                     priceHourly: 100,
                     price12hrs: 1500,
                     price24hrs: 2300,
@@ -244,7 +288,7 @@
                 {
                     id: 'car5',
                     name: 'Hyundai Aura',
-                    image: 'img/aura.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Hyundai+Aura',
                     priceHourly: 105,
                     price12hrs: 1500,
                     price24hrs: 2500,
@@ -254,7 +298,7 @@
                 {
                     id: 'car6',
                     name: 'Tata Punch',
-                    image: 'img/punch.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Tata+Punch',
                     priceHourly: 105,
                     price12hrs: 1500,
                     price24hrs: 2500,
@@ -264,7 +308,7 @@
                 {
                     id: 'car7',
                     name: 'Hyundai i20',
-                    image: 'img/i20.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Hyundai+i20',
                     priceHourly: 105,
                     price12hrs: 1500,
                     price24hrs: 2500,
@@ -275,7 +319,7 @@
                 {
                     id: 'car8',
                     name: 'Creta',
-                    image: 'img/creta.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Creta',
                     priceHourly: 125,
                     price12hrs: 2000,
                     price24hrs: 3000,
@@ -285,7 +329,7 @@
                 {
                     id: 'car9',
                     name: 'Grand Vitara',
-                    image: 'img/grandvitara.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Grand+Vitara',
                     priceHourly: 125,
                     price12hrs: 2000,
                     price24hrs: 3000,
@@ -295,7 +339,7 @@
                 {
                     id: 'car10',
                     name: 'Mahindra Thar',
-                    image: 'img/thar.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Mahindra+Thar',
                     priceHourly: 210,
                     price12hrs: 3500,
                     price24hrs: 5000,
@@ -305,7 +349,7 @@
                 {
                     id: 'car11',
                     name: 'Fortuner',
-                    image: 'img/fortuner.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=Fortuner',
                     priceHourly: 500,
                     price12hrs: 8000,
                     price24hrs: 12000,
@@ -316,7 +360,7 @@
                 {
                     id: 'car12',
                     name: 'XUV700',
-                    image: 'img/xuv700.jpg',
+                    image: 'https://via.placeholder.com/600x400?text=XUV700',
                     priceHourly: 270,
                     price12hrs: 4500,
                     price24hrs: 6500,
@@ -340,6 +384,14 @@
                 luxury: document.getElementById('luxuryCars')
             };
 
+            // Set default date for custom filter
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            customDateInput.valueAsDate = today;
+            customDateInput.min = today.toISOString().split('T')[0];
+
             // Check auth state
             auth.onAuthStateChanged(user => {
                 const loginLink = document.getElementById('loginLink');
@@ -347,7 +399,7 @@
                     loginLink.textContent = 'Logout';
                     loginLink.href = '#';
                     loginLink.onclick = () => {
-                        auth.signOut().then(() => window.location.href = 'index.html');
+                        auth.signOut().then(() => window.location.reload());
                     };
                 } else {
                     loginLink.textContent = 'Login';
@@ -377,6 +429,8 @@
 
             // Main filtering function
             async function filterAvailableCars(filterType, customDate = null) {
+                showLoading();
+                
                 // Calculate date range based on filter type
                 let startDate, endDate;
                 
@@ -421,8 +475,15 @@
 
                     bookingsSnapshot.forEach(doc => {
                         const booking = doc.data();
-                        const bookingStart = booking.startDateTime.toDate();
-                        const bookingEnd = booking.endDateTime.toDate();
+                        
+                        // Safely get start and end dates
+                        const bookingStart = getDateFromFirestore(booking.startDateTime);
+                        const bookingEnd = getDateFromFirestore(booking.endDateTime);
+                        
+                        if (!bookingStart || !bookingEnd) {
+                            console.warn('Invalid booking dates', booking);
+                            return;
+                        }
 
                         // Check if booking overlaps with our filter date range
                         if ((bookingStart < endDate) && (bookingEnd > startDate)) {
@@ -431,6 +492,9 @@
                     });
                 } catch (error) {
                     console.error("Error fetching bookings:", error);
+                    alert("Error checking availability. Please try again.");
+                } finally {
+                    hideLoading();
                 }
 
                 // Filter cars to only show available ones
@@ -477,7 +541,7 @@
                     card.innerHTML = `
                         <div class="card car-card h-100">
                             <img src="${car.image}" class="card-img-top car-img" alt="${car.name}" 
-                                onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Car+Image'">
+                                onerror="this.onerror=null;this.src='https://via.placeholder.com/600x400?text=Car+Image'">
                             <div class="card-body">
                                 <h5 class="card-title">${car.name}</h5>
                                 <p class="card-text text-muted">${car.description}</p>
@@ -664,63 +728,66 @@
                 }
 
                 // Check if car is available
-                const isAvailable = await isCarAvailable(selectedCar.id, startDateTime, endDateTime);
-                if (!isAvailable) {
-                    alert('This car is already booked for the selected time period. Please choose different dates/times.');
-                    return;
-                }
-
-                const totalHours = (endDate - startDate) / (1000 * 60 * 60);
-                const totalDays = Math.ceil(totalHours / 24);
-                
-                let pricePerUnit, finalPrice, billingType;
-                
-                if (totalDays >= 2) {
-                    // For 2+ days, use 24-hour pricing
-                    pricePerUnit = selectedCar.price24hrs;
-                    finalPrice = totalDays * pricePerUnit;
-                    billingType = '24hr_auto';
-                } else {
-                    // For less than 2 days, use selected option
-                    if (option === '12hrs') {
-                        pricePerUnit = selectedCar.price12hrs;
-                        const blocks = Math.max(1, Math.ceil(totalHours / 12));
-                        finalPrice = blocks * pricePerUnit;
-                        billingType = '12hr';
-                    } else {
-                        pricePerUnit = selectedCar.price24hrs;
-                        finalPrice = pricePerUnit;
-                        billingType = '24hr';
+                try {
+                    const isAvailable = await isCarAvailable(selectedCar.id, startDateTime, endDateTime);
+                    if (!isAvailable) {
+                        alert('This car is already booked for the selected time period. Please choose different dates/times.');
+                        return;
                     }
-                }
 
-                const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+                    const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                    const totalDays = Math.ceil(totalHours / 24);
+                    
+                    let pricePerUnit, finalPrice, billingType;
+                    
+                    if (totalDays >= 2) {
+                        // For 2+ days, use 24-hour pricing
+                        pricePerUnit = selectedCar.price24hrs;
+                        finalPrice = totalDays * pricePerUnit;
+                        billingType = '24hr_auto';
+                    } else {
+                        // For less than 2 days, use selected option
+                        if (option === '12hrs') {
+                            pricePerUnit = selectedCar.price12hrs;
+                            const blocks = Math.max(1, Math.ceil(totalHours / 12));
+                            finalPrice = blocks * pricePerUnit;
+                            billingType = '12hr';
+                        } else {
+                            pricePerUnit = selectedCar.price24hrs;
+                            finalPrice = pricePerUnit;
+                            billingType = '24hr';
+                        }
+                    }
 
-                db.collection('bookings').doc(bookingId).set({
-                    userId: user.uid,
-                    userEmail: user.email,
-                    userPhone: phoneNumber,
-                    carId: selectedCar.id,
-                    carName: selectedCar.name,
-                    carImage: selectedCar.image,
-                    startDateTime: firebase.firestore.Timestamp.fromDate(new Date(startDateTime)),
-                    endDateTime: firebase.firestore.Timestamp.fromDate(new Date(endDateTime)),
-                    rentalOption: option,
-                    originalPrice: pricePerUnit,
-                    finalPrice: finalPrice,
-                    status: 'pending_payment',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    bookingId: bookingId,
-                    billingType: billingType,
-                    totalDays: totalDays,
-                    totalHours: totalHours
-                }).then(() => {
+                    const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+                    await db.collection('bookings').doc(bookingId).set({
+                        userId: user.uid,
+                        userEmail: user.email,
+                        userPhone: phoneNumber,
+                        carId: selectedCar.id,
+                        carName: selectedCar.name,
+                        carImage: selectedCar.image,
+                        startDateTime: firebase.firestore.Timestamp.fromDate(new Date(startDateTime)),
+                        endDateTime: firebase.firestore.Timestamp.fromDate(new Date(endDateTime)),
+                        rentalOption: option,
+                        originalPrice: pricePerUnit,
+                        finalPrice: finalPrice,
+                        status: 'pending_payment',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        bookingId: bookingId,
+                        billingType: billingType,
+                        totalDays: totalDays,
+                        totalHours: totalHours
+                    });
+                    
                     bookingModal.hide();
+                    alert(`Booking successful! Your booking ID is ${bookingId}`);
                     window.location.href = `pay.html?bookingId=${bookingId}`;
-                }).catch(error => {
+                } catch (error) {
                     console.error('Booking error:', error);
                     alert('Error submitting booking: ' + error.message);
-                });
+                }
             });
 
             // Function to check car availability
@@ -737,8 +804,15 @@
 
                     for (const doc of snapshot.docs) {
                         const booking = doc.data();
-                        const existingStart = booking.startDateTime.toDate();
-                        const existingEnd = booking.endDateTime.toDate();
+                        
+                        // Use the safe date conversion helper
+                        const existingStart = getDateFromFirestore(booking.startDateTime);
+                        const existingEnd = getDateFromFirestore(booking.endDateTime);
+                        
+                        if (!existingStart || !existingEnd) {
+                            console.warn('Invalid booking dates', booking);
+                            continue;
+                        }
 
                         // Check for overlap
                         if ((newStart >= existingStart && newStart < existingEnd) ||
