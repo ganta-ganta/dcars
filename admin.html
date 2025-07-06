@@ -7,13 +7,27 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .sidebar { min-height: 100vh; background-color: #f8f9fa; }
+    .sidebar { 
+      min-height: 100vh; 
+      background-color: #f8f9fa; 
+      position: sticky;
+      top: 0;
+    }
     .nav-link { color: #333; }
-    .nav-link.active { color: #0d6efd; font-weight: 500; }
+    .nav-link.active { 
+      color: #0d6efd; 
+      font-weight: 500;
+      background-color: rgba(13, 110, 253, 0.1);
+      border-radius: 5px;
+    }
     .badge-status { font-size: 0.8rem; }
     .booking-card { transition: all 0.3s; }
     .booking-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    .card-img-top { height: 200px; object-fit: cover; }
+    .card-img-top { 
+      height: 200px; 
+      object-fit: cover;
+      border-radius: 5px 5px 0 0;
+    }
     .loading-spinner {
       display: flex;
       justify-content: center;
@@ -35,45 +49,94 @@
       font-size: 0.75rem;
       color: #6c757d;
     }
+    .car-feature-badge {
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+    .dashboard-card {
+      transition: transform 0.3s;
+    }
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
+    .chart-container {
+      height: 300px;
+      margin-bottom: 20px;
+    }
+    .status-badge {
+      font-size: 0.8rem;
+      padding: 5px 8px;
+      border-radius: 4px;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+    .action-buttons .btn {
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+    .search-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .search-box i {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      color: #6c757d;
+    }
+    .search-box input {
+      padding-left: 35px;
+    }
+    .pagination {
+      justify-content: center;
+      margin-top: 20px;
+    }
   </style>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-      <div class="col-md-3 col-lg-2 d-md-block sidebar">
-        <div class="position-sticky pt-3">
-          <div class="text-center mb-4">
-            <h4>GoPandaCars</h4>
-            <hr>
+      <div class="col-md-3 col-lg-2 d-md-block sidebar p-0">
+        <div class="position-sticky pt-3 h-100">
+          <div class="text-center mb-4 p-3 bg-white shadow-sm">
+            <h4 class="mb-0">GoPandaCars</h4>
+            <p class="text-muted small mb-0">Admin Dashboard</p>
           </div>
-          <ul class="nav flex-column">
-            <li class="nav-item">
+          <ul class="nav flex-column px-3">
+            <li class="nav-item mb-2">
               <a class="nav-link active" href="#" data-target="dashboard">
                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <a class="nav-link" href="#" data-target="bookings">
                 <i class="fas fa-calendar-check me-2"></i>Bookings
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <a class="nav-link" href="#" data-target="users">
                 <i class="fas fa-users me-2"></i>Users
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <a class="nav-link" href="#" data-target="offers">
                 <i class="fas fa-tag me-2"></i>Offers
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <a class="nav-link" href="#" data-target="cars">
                 <i class="fas fa-car me-2"></i>Cars
               </a>
             </li>
-            <li class="nav-item mt-4">
+            <li class="nav-item mt-4 mb-2">
               <a class="nav-link text-danger" href="#" id="logoutBtn">
                 <i class="fas fa-sign-out-alt me-2"></i>Logout
               </a>
@@ -88,20 +151,26 @@
           <div class="d-flex align-items-center">
             <h1 class="h2 me-3">Admin Dashboard</h1>
             <div class="position-relative">
-              <button class="btn btn-outline-secondary" id="notificationsBtn">
+              <button class="btn btn-outline-secondary position-relative" id="notificationsBtn">
                 <i class="fas fa-bell"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationBadge" style="display: none;">
                   0
                 </span>
               </button>
-              <div class="dropdown-menu dropdown-menu-end p-0" id="notificationsDropdown" style="width: 350px; max-height: 400px; overflow-y: auto; display: none;">
-                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                  <h6 class="mb-0">Notifications</h6>
+              <div class="dropdown-menu dropdown-menu-end p-0 shadow" id="notificationsDropdown" style="width: 350px; max-height: 400px; overflow-y: auto; display: none;">
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+                  <h6 class="mb-0 fw-bold">Notifications</h6>
                   <button class="btn btn-sm btn-outline-secondary" id="clearNotificationsBtn">Clear All</button>
                 </div>
-                <div id="notificationsList"></div>
+                <div id="notificationsList">
+                  <div class="p-3 text-center text-muted">No new notifications</div>
+                </div>
               </div>
             </div>
+          </div>
+          <div class="text-muted">
+            <i class="fas fa-calendar-alt me-1"></i>
+            <span id="currentDate"></span>
           </div>
         </div>
 
@@ -109,187 +178,299 @@
         <div id="dashboardSection">
           <div class="row mb-4">
             <div class="col-md-3">
-              <div class="card text-white bg-primary mb-3">
+              <div class="card text-white bg-primary mb-3 dashboard-card">
                 <div class="card-body">
-                  <h5 class="card-title">Total Bookings</h5>
-                  <h2 class="card-text" id="totalBookings">0</h2>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 class="card-title">Total Bookings</h5>
+                      <h2 class="card-text" id="totalBookings">0</h2>
+                    </div>
+                    <i class="fas fa-calendar fa-2x opacity-50"></i>
+                  </div>
+                  <p class="card-text small mb-0">This month: <span id="monthlyBookings">0</span></p>
                 </div>
               </div>
             </div>
             <div class="col-md-3">
-              <div class="card text-white bg-success mb-3">
+              <div class="card text-white bg-success mb-3 dashboard-card">
                 <div class="card-body">
-                  <h5 class="card-title">Confirmed</h5>
-                  <h2 class="card-text" id="confirmedBookings">0</h2>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 class="card-title">Confirmed</h5>
+                      <h2 class="card-text" id="confirmedBookings">0</h2>
+                    </div>
+                    <i class="fas fa-check-circle fa-2x opacity-50"></i>
+                  </div>
+                  <p class="card-text small mb-0">This month: <span id="monthlyConfirmed">0</span></p>
                 </div>
               </div>
             </div>
             <div class="col-md-3">
-              <div class="card text-white bg-warning mb-3">
+              <div class="card text-white bg-warning mb-3 dashboard-card">
                 <div class="card-body">
-                  <h5 class="card-title">Pending</h5>
-                  <h2 class="card-text" id="pendingBookings">0</h2>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 class="card-title">Pending</h5>
+                      <h2 class="card-text" id="pendingBookings">0</h2>
+                    </div>
+                    <i class="fas fa-clock fa-2x opacity-50"></i>
+                  </div>
+                  <p class="card-text small mb-0">Needs action: <span id="pendingAction">0</span></p>
                 </div>
               </div>
             </div>
             <div class="col-md-3">
-              <div class="card text-white bg-danger mb-3">
+              <div class="card text-white bg-danger mb-3 dashboard-card">
                 <div class="card-body">
-                  <h5 class="card-title">Cancelled</h5>
-                  <h2 class="card-text" id="cancelledBookings">0</h2>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 class="card-title">Cancelled</h5>
+                      <h2 class="card-text" id="cancelledBookings">0</h2>
+                    </div>
+                    <i class="fas fa-times-circle fa-2x opacity-50"></i>
+                  </div>
+                  <p class="card-text small mb-0">This month: <span id="monthlyCancelled">0</span></p>
                 </div>
               </div>
             </div>
           </div>
 
-          <h4>Recent Bookings</h4>
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Car</th>
-                  <th>Customer</th>
-                  <th>Dates</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody id="recentBookingsTable">
-                <tr>
-                  <td colspan="6" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="row mb-4">
+            <div class="col-md-8">
+              <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                  <h5 class="mb-0">Bookings Overview</h5>
+                </div>
+                <div class="card-body">
+                  <div class="chart-container">
+                    <canvas id="bookingsChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                  <h5 class="mb-0">Revenue</h5>
+                </div>
+                <div class="card-body">
+                  <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                  </div>
+                  <div class="text-center mt-3">
+                    <h4>₹<span id="totalRevenue">0</span></h4>
+                    <p class="text-muted small mb-0">Total revenue this month</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                  <h5 class="mb-0">Recent Bookings</h5>
+                  <a href="#" class="btn btn-sm btn-outline-primary" id="viewAllBookings">View All</a>
+                </div>
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Booking ID</th>
+                          <th>Car</th>
+                          <th>Customer</th>
+                          <th>Dates</th>
+                          <th>Status</th>
+                          <th>Amount</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="recentBookingsTable">
+                        <tr>
+                          <td colspan="7" class="text-center loading-spinner">
+                            <div class="spinner-border text-primary" role="status">
+                              <span class="visually-hidden">Loading...</span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Bookings Section -->
         <div id="bookingsSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Bookings</h4>
-            <div class="btn-group">
-              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Filter
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item filter-booking" data-status="all" href="#">All</a></li>
-                <li><a class="dropdown-item filter-booking" data-status="pending_payment" href="#">Pending Payment</a></li>
-                <li><a class="dropdown-item filter-booking" data-status="confirmed" href="#">Confirmed</a></li>
-                <li><a class="dropdown-item filter-booking" data-status="cancelled" href="#">Cancelled</a></li>
-              </ul>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Manage Bookings</h4>
+            <div class="d-flex">
+              <div class="search-box me-3">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control" id="bookingSearch" placeholder="Search bookings...">
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Filter
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item filter-booking active" data-status="all" href="#">All Bookings</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item filter-booking" data-status="pending_payment" href="#">Pending Payment</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="awaiting_verification" href="#">Awaiting Verification</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="confirmed" href="#">Confirmed</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="active" href="#">Active</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="completed" href="#">Completed</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="cancelled" href="#">Cancelled</a></li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Booking ID</th>
-                  <th>Car</th>
-                  <th>Customer</th>
-                  <th>Dates</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="bookingsList">
-                <tr>
-                  <td colspan="7" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          
+          <div class="card shadow-sm">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Booking ID</th>
+                      <th>Car</th>
+                      <th>Customer</th>
+                      <th>Dates</th>
+                      <th>Status</th>
+                      <th>Amount</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bookingsList">
+                    <tr>
+                      <td colspan="7" class="text-center loading-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <nav aria-label="Bookings pagination" class="p-3">
+                <ul class="pagination mb-0" id="bookingsPagination">
+                  <!-- Pagination will be added here dynamically -->
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
 
         <!-- Users Section -->
         <div id="usersSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Users</h4>
-            <div class="btn-group">
-              <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Filter
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item filter-user" data-status="all" href="#">All</a></li>
-                <li><a class="dropdown-item filter-user" data-status="active" href="#">Active</a></li>
-                <li><a class="dropdown-item filter-user" data-status="blocked" href="#">Blocked</a></li>
-              </ul>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Manage Users</h4>
+            <div class="d-flex">
+              <div class="search-box me-3">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control" id="userSearch" placeholder="Search users...">
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Filter
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item filter-user active" data-status="all" href="#">All Users</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item filter-user" data-status="active" href="#">Active</a></li>
+                  <li><a class="dropdown-item filter-user" data-status="blocked" href="#">Blocked</a></li>
+                  <li><a class="dropdown-item filter-user" data-status="with_bookings" href="#">With Bookings</a></li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>User ID</th>
-                  <th>Email</th>
-                  <th>Joined</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="usersList">
-                <tr>
-                  <td colspan="5" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          
+          <div class="card shadow-sm">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>User</th>
+                      <th>Email</th>
+                      <th>Joined</th>
+                      <th>Bookings</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersList">
+                    <tr>
+                      <td colspan="6" class="text-center loading-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <nav aria-label="Users pagination" class="p-3">
+                <ul class="pagination mb-0" id="usersPagination">
+                  <!-- Pagination will be added here dynamically -->
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
 
         <!-- Offers Section -->
         <div id="offersSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Offers</h4>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Manage Offers</h4>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOfferModal">
               <i class="fas fa-plus me-1"></i> Add New Offer
             </button>
           </div>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Name</th>
-                  <th>Discount</th>
-                  <th>Valid Until</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="offersList">
-                <tr>
-                  <td colspan="6" class="text-center loading-spinner">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          
+          <div class="card shadow-sm">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Code</th>
+                      <th>Name</th>
+                      <th>Discount</th>
+                      <th>Valid Until</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="offersList">
+                    <tr>
+                      <td colspan="6" class="text-center loading-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Cars Section -->
         <div id="carsSection" style="display: none;">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>Manage Cars</h4>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Manage Cars</h4>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCarModal">
               <i class="fas fa-plus me-1"></i> Add New Car
             </button>
           </div>
+          
           <div class="row" id="carsGrid">
             <div class="col-12 text-center loading-spinner">
               <div class="spinner-border text-primary" role="status">
@@ -313,11 +494,12 @@
         <div class="modal-body">
           <form id="offerForm">
             <div class="mb-3">
-              <label class="form-label">Offer Code</label>
+              <label class="form-label">Offer Code*</label>
               <input type="text" class="form-control" id="offerCode" required>
+              <small class="text-muted">Unique code customers will enter (e.g., SUMMER20)</small>
             </div>
             <div class="mb-3">
-              <label class="form-label">Offer Name</label>
+              <label class="form-label">Offer Name*</label>
               <input type="text" class="form-control" id="offerName" required>
             </div>
             <div class="mb-3">
@@ -326,22 +508,22 @@
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label">Discount Type</label>
+                <label class="form-label">Discount Type*</label>
                 <select class="form-select" id="discountType" required>
                   <option value="percentage">Percentage</option>
                   <option value="fixed">Fixed Amount</option>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label">Discount Value</label>
+                <label class="form-label">Discount Value*</label>
                 <input type="number" class="form-control" id="discountValue" required>
               </div>
             </div>
             <div class="mb-3">
-              <label class="form-label">Valid Until</label>
+              <label class="form-label">Valid Until*</label>
               <input type="date" class="form-control" id="validUntil" required>
             </div>
-            <div class="form-check mb-3">
+            <div class="form-check form-switch mb-3">
               <input class="form-check-input" type="checkbox" id="isActive" checked>
               <label class="form-check-label" for="isActive">Active</label>
             </div>
@@ -349,7 +531,10 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" id="saveOfferBtn" class="btn btn-primary">Save Offer</button>
+          <button type="button" id="saveOfferBtn" class="btn btn-primary">
+            <span class="submit-text">Save Offer</span>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+          </button>
         </div>
       </div>
     </div>
@@ -357,7 +542,7 @@
 
   <!-- Add Car Modal -->
   <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Add New Car</h5>
@@ -365,37 +550,40 @@
         </div>
         <div class="modal-body">
           <form id="carForm">
-            <div class="mb-3">
-              <label class="form-label">Car Name</label>
-              <input type="text" class="form-control" id="carName" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Image URL</label>
-              <input type="url" class="form-control" id="carImage" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Description</label>
-              <textarea class="form-control" id="carDescription" rows="3" required></textarea>
-            </div>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label">Category</label>
+                <label class="form-label">Car Name*</label>
+                <input type="text" class="form-control" id="carName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Category*</label>
                 <select class="form-select" id="carCategory" required>
                   <option value="economy">Economy</option>
                   <option value="premium">Premium</option>
                   <option value="luxury">Luxury</option>
                 </select>
               </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">12 Hours Price (₹)</label>
-                <input type="number" class="form-control" id="carPrice12hrs" required>
-              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Image URL*</label>
+              <input type="url" class="form-control" id="carImage" required>
+              <small class="text-muted">Paste a direct image URL (e.g., from Imgur)</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description*</label>
+              <textarea class="form-control" id="carDescription" rows="3" required></textarea>
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label">24 Hours Price (₹)</label>
+                <label class="form-label">12 Hours Price (₹)*</label>
+                <input type="number" class="form-control" id="carPrice12hrs" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">24 Hours Price (₹)*</label>
                 <input type="number" class="form-control" id="carPrice24hrs" required>
               </div>
+            </div>
+            <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label">Features</label>
                 <div class="form-check">
@@ -407,12 +595,22 @@
                   <label class="form-check-label" for="carWithDriver">With Driver</label>
                 </div>
               </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Transmission</label>
+                <select class="form-select" id="carTransmission">
+                  <option value="automatic">Automatic</option>
+                  <option value="manual">Manual</option>
+                </select>
+              </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" id="saveCarBtn" class="btn btn-primary">Save Car</button>
+          <button type="button" id="saveCarBtn" class="btn btn-primary">
+            <span class="submit-text">Save Car</span>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+          </button>
         </div>
       </div>
     </div>
@@ -433,6 +631,7 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-danger" id="cancelBookingBtn" style="display:none;">Cancel Booking</button>
           <button type="button" class="btn btn-success" id="confirmBookingBtn" style="display:none;">Confirm Booking</button>
+          <button type="button" class="btn btn-primary" id="verifyPaymentBtn" style="display:none;">Verify Payment</button>
         </div>
       </div>
     </div>
@@ -458,15 +657,51 @@
     </div>
   </div>
 
+  <!-- Verify Payment Modal -->
+  <div class="modal fade" id="verifyPaymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Verify Payment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="verifyPaymentForm">
+            <div class="mb-3">
+              <label class="form-label">Payment Verified?</label>
+              <select class="form-select" id="verificationStatus" required>
+                <option value="verified">Yes, Payment Verified</option>
+                <option value="rejected">No, Reject Payment</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Admin Notes</label>
+              <textarea class="form-control" id="verificationNotes" rows="3"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="submitVerificationBtn" class="btn btn-primary">
+            <span class="submit-text">Submit Verification</span>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Notification Sound -->
   <audio id="notificationSound" preload="auto">
     <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   
   <script>
     // Firebase configuration
@@ -484,6 +719,7 @@
     }
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
     // DOM elements
     const logoutBtn = document.getElementById('logoutBtn');
@@ -496,17 +732,27 @@
     const userModal = new bootstrap.Modal(document.getElementById('userModal'));
     const addOfferModal = new bootstrap.Modal(document.getElementById('addOfferModal'));
     const addCarModal = new bootstrap.Modal(document.getElementById('addCarModal'));
+    const verifyPaymentModal = new bootstrap.Modal(document.getElementById('verifyPaymentModal'));
     const notificationSound = document.getElementById('notificationSound');
     const notificationBadge = document.getElementById('notificationBadge');
     const notificationsList = document.getElementById('notificationsList');
     const notificationsDropdown = document.getElementById('notificationsDropdown');
     const notificationsBtn = document.getElementById('notificationsBtn');
     const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
+    const viewAllBookings = document.getElementById('viewAllBookings');
+    const currentDateElement = document.getElementById('currentDate');
     
+    // Global variables
     let currentBookingId = null;
     let currentUserId = null;
     let lastBookingTimestamp = null;
     let unreadNotifications = 0;
+    let bookingsChart = null;
+    let revenueChart = null;
+    
+    // Current date display
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    currentDateElement.textContent = new Date().toLocaleDateString('en-US', options);
 
     // Check auth state
     auth.onAuthStateChanged(user => {
@@ -653,10 +899,39 @@
         const confirmed = snap.docs.filter(doc => doc.data().status === 'confirmed').length;
         const pending = snap.docs.filter(doc => doc.data().status === 'pending_payment').length;
         const cancelled = snap.docs.filter(doc => doc.data().status === 'cancelled').length;
+        const awaiting = snap.docs.filter(doc => doc.data().status === 'awaiting_verification').length;
         
         document.getElementById('confirmedBookings').textContent = confirmed;
-        document.getElementById('pendingBookings').textContent = pending;
+        document.getElementById('pendingBookings').textContent = pending + awaiting;
+        document.getElementById('pendingAction').textContent = awaiting;
         document.getElementById('cancelledBookings').textContent = cancelled;
+        
+        // Monthly stats
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        
+        const monthlyQuery = db.collection('bookings')
+          .where('createdAt', '>=', startOfMonth);
+          
+        monthlyQuery.get().then(monthlySnap => {
+          const monthlyTotal = monthlySnap.size;
+          const monthlyConfirmed = monthlySnap.docs.filter(doc => doc.data().status === 'confirmed').length;
+          const monthlyCancelled = monthlySnap.docs.filter(doc => doc.data().status === 'cancelled').length;
+          
+          document.getElementById('monthlyBookings').textContent = monthlyTotal;
+          document.getElementById('monthlyConfirmed').textContent = monthlyConfirmed;
+          document.getElementById('monthlyCancelled').textContent = monthlyCancelled;
+          
+          // Calculate monthly revenue
+          let monthlyRevenue = 0;
+          monthlySnap.forEach(doc => {
+            const booking = doc.data();
+            if (booking.status === 'confirmed' || booking.status === 'completed') {
+              monthlyRevenue += booking.finalPrice || 0;
+            }
+          });
+          document.getElementById('totalRevenue').textContent = monthlyRevenue.toLocaleString();
+        });
       }).catch(error => {
         console.error("Error loading booking counts:", error);
       });
@@ -670,7 +945,7 @@
           if (snap.empty) {
             tableBody.innerHTML = `
               <tr>
-                <td colspan="6" class="text-center py-5"><h6 class="text-muted">No recent bookings found</h6></td>
+                <td colspan="7" class="text-center py-5"><h6 class="text-muted">No recent bookings found</h6></td>
               </tr>
             `;
             return;
@@ -681,12 +956,17 @@
             const row = document.createElement('tr');
             row.className = 'booking-card';
             row.innerHTML = `
-              <td>${doc.id.substring(0, 6)}...</td>
+              <td>${doc.id.substring(0, 8)}</td>
               <td>${booking.carName || 'N/A'}</td>
               <td>${booking.userEmail || 'N/A'}</td>
-              <td>${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}</td>
-              <td><span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></td>
+              <td>${formatDate(booking.startDateTime)} - ${formatDate(booking.endDateTime)}</td>
+              <td><span class="status-badge ${getStatusBadgeClass(booking.status)}">${booking.status.replace('_', ' ')}</span></td>
               <td>₹${booking.finalPrice || booking.originalPrice || '0'}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary view-booking" data-booking-id="${doc.id}">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </td>
             `;
             tableBody.appendChild(row);
           });
@@ -694,14 +974,150 @@
           console.error("Error loading recent bookings:", error);
           document.getElementById('recentBookingsTable').innerHTML = `
             <tr>
-              <td colspan="6" class="text-center py-5 text-danger">Error loading bookings</td>
+              <td colspan="7" class="text-center py-5 text-danger">Error loading bookings</td>
             </tr>
           `;
         });
+        
+      // Initialize charts
+      initCharts();
     }
 
-    // Load all bookings
-    function loadAllBookings(filter = 'all') {
+    // Initialize dashboard charts
+    function initCharts() {
+      // Bookings chart
+      const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
+      
+      // Get data for last 7 days
+      const dates = [];
+      const bookingCounts = [];
+      const now = new Date();
+      
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        bookingCounts.push(0); // Initialize with 0
+      }
+      
+      // Query bookings from last 7 days
+      const sevenDaysAgo = new Date(now);
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      sevenDaysAgo.setHours(0, 0, 0, 0);
+      
+      db.collection('bookings')
+        .where('createdAt', '>=', sevenDaysAgo)
+        .get()
+        .then(snap => {
+          snap.forEach(doc => {
+            const bookingDate = doc.data().createdAt.toDate();
+            const dayIndex = 6 - Math.floor((now - bookingDate) / (1000 * 60 * 60 * 24));
+            
+            if (dayIndex >= 0 && dayIndex < 7) {
+              bookingCounts[dayIndex]++;
+            }
+          });
+          
+          // Create chart
+          bookingsChart = new Chart(bookingsCtx, {
+            type: 'line',
+            data: {
+              labels: dates,
+              datasets: [{
+                label: 'Bookings',
+                data: bookingCounts,
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                borderColor: '#0d6efd',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  display: false
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+              }
+            }
+          });
+        });
+      
+      // Revenue chart
+      const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+      
+      revenueChart = new Chart(revenueCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Economy', 'Premium', 'Luxury'],
+          datasets: [{
+            data: [0, 0, 0], // Will be updated
+            backgroundColor: [
+              '#28a745',
+              '#007bff',
+              '#dc3545'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          cutout: '70%',
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+      
+      // Get revenue data by category
+      db.collection('bookings')
+        .where('status', 'in', ['confirmed', 'completed'])
+        .get()
+        .then(snap => {
+          const revenueByCategory = {
+            economy: 0,
+            premium: 0,
+            luxury: 0
+          };
+          
+          snap.forEach(doc => {
+            const booking = doc.data();
+            const category = booking.carCategory || 'economy';
+            revenueByCategory[category] += booking.finalPrice || 0;
+          });
+          
+          // Update chart data
+          revenueChart.data.datasets[0].data = [
+            revenueByCategory.economy,
+            revenueByCategory.premium,
+            revenueByCategory.luxury
+          ];
+          revenueChart.update();
+        });
+    }
+
+    // Load all bookings with pagination
+    let currentBookingsPage = 1;
+    const bookingsPerPage = 10;
+    let currentBookingsFilter = 'all';
+    let currentBookingsSearch = '';
+    
+    function loadAllBookings(page = 1, filter = 'all', search = '') {
+      currentBookingsPage = page;
+      currentBookingsFilter = filter;
+      currentBookingsSearch = search.toLowerCase();
+      
       let query = db.collection('bookings').orderBy('createdAt', 'desc');
       
       if (filter !== 'all') {
@@ -709,22 +1125,27 @@
       }
       
       query.get().then(snap => {
-        const bookingsList = document.getElementById('bookingsList');
-        bookingsList.innerHTML = '';
-        
-        if (snap.empty) {
-          bookingsList.innerHTML = `
-            <tr>
-              <td colspan="7" class="text-center py-5"><h6 class="text-muted">No bookings found</h6></td>
-            </tr>
-          `;
-          return;
-        }
-        
+        const allBookings = [];
         snap.forEach(doc => {
           const booking = doc.data();
-          addBookingRow(booking, doc.id);
+          booking.id = doc.id;
+          
+          // Apply search filter if any
+          if (search === '' || 
+              booking.carName.toLowerCase().includes(search) || 
+              booking.userEmail.toLowerCase().includes(search) || 
+              booking.id.toLowerCase().includes(search)) {
+            allBookings.push(booking);
+          }
         });
+        
+        const totalBookings = allBookings.length;
+        const totalPages = Math.ceil(totalBookings / bookingsPerPage);
+        const startIndex = (page - 1) * bookingsPerPage;
+        const paginatedBookings = allBookings.slice(startIndex, startIndex + bookingsPerPage);
+        
+        renderBookingsTable(paginatedBookings);
+        renderBookingsPagination(page, totalPages);
       }).catch(error => {
         console.error("Error loading bookings:", error);
         document.getElementById('bookingsList').innerHTML = `
@@ -735,6 +1156,87 @@
       });
     }
 
+    function renderBookingsTable(bookings) {
+      const bookingsList = document.getElementById('bookingsList');
+      bookingsList.innerHTML = '';
+      
+      if (bookings.length === 0) {
+        bookingsList.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-5"><h6 class="text-muted">No bookings found</h6></td>
+          </tr>
+        `;
+        return;
+      }
+      
+      bookings.forEach(booking => {
+        addBookingRow(booking, booking.id);
+      });
+    }
+
+    function renderBookingsPagination(currentPage, totalPages) {
+      const pagination = document.getElementById('bookingsPagination');
+      pagination.innerHTML = '';
+      
+      if (totalPages <= 1) return;
+      
+      // Previous button
+      const prevLi = document.createElement('li');
+      prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+      prevLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>`;
+      pagination.appendChild(prevLi);
+      
+      // Page numbers
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+      
+      if (startPage > 1) {
+        const firstLi = document.createElement('li');
+        firstLi.className = 'page-item';
+        firstLi.innerHTML = `<a class="page-link" href="#" data-page="1">1</a>`;
+        pagination.appendChild(firstLi);
+        
+        if (startPage > 2) {
+          const ellipsisLi = document.createElement('li');
+          ellipsisLi.className = 'page-item disabled';
+          ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+          pagination.appendChild(ellipsisLi);
+        }
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageLi = document.createElement('li');
+        pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+        pageLi.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+        pagination.appendChild(pageLi);
+      }
+      
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsisLi = document.createElement('li');
+          ellipsisLi.className = 'page-item disabled';
+          ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+          pagination.appendChild(ellipsisLi);
+        }
+        
+        const lastLi = document.createElement('li');
+        lastLi.className = 'page-item';
+        lastLi.innerHTML = `<a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>`;
+        pagination.appendChild(lastLi);
+      }
+      
+      // Next button
+      const nextLi = document.createElement('li');
+      nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+      nextLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>`;
+      pagination.appendChild(nextLi);
+    }
+
     function addBookingRow(booking, bookingId) {
       const row = document.createElement('tr');
       row.className = 'booking-card';
@@ -743,16 +1245,26 @@
         <td>${bookingId.substring(0, 8)}</td>
         <td>${booking.carName || 'N/A'}</td>
         <td>${booking.userEmail || 'N/A'}</td>
-        <td>${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}</td>
-        <td><span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></td>
+        <td>${formatDate(booking.startDateTime)} - ${formatDate(booking.endDateTime)}</td>
+        <td><span class="status-badge ${getStatusBadgeClass(booking.status)}">${booking.status.replace('_', ' ')}</span></td>
         <td>₹${booking.finalPrice || booking.originalPrice || '0'}</td>
-        <td>
+        <td class="action-buttons">
           <button class="btn btn-sm btn-outline-primary view-booking" data-booking-id="${bookingId}">
-            <i class="fas fa-eye me-1"></i> View
+            <i class="fas fa-eye"></i>
           </button>
           ${booking.status === 'pending_payment' ? `
-            <button class="btn btn-sm btn-success confirm-booking ms-1" data-booking-id="${bookingId}">
-              <i class="fas fa-check me-1"></i> Confirm
+            <button class="btn btn-sm btn-success confirm-booking" data-booking-id="${bookingId}">
+              <i class="fas fa-check"></i>
+            </button>
+          ` : ''}
+          ${booking.status === 'awaiting_verification' ? `
+            <button class="btn btn-sm btn-info verify-payment" data-booking-id="${bookingId}">
+              <i class="fas fa-check-circle"></i>
+            </button>
+          ` : ''}
+          ${booking.status !== 'cancelled' && booking.status !== 'completed' ? `
+            <button class="btn btn-sm btn-danger cancel-booking" data-booking-id="${bookingId}">
+              <i class="fas fa-times"></i>
             </button>
           ` : ''}
         </td>
@@ -761,66 +1273,172 @@
       document.getElementById('bookingsList').appendChild(row);
     }
 
-    // Load all users
-    function loadUsers(filter = 'all') {
+    // Load all users with pagination
+    let currentUsersPage = 1;
+    const usersPerPage = 10;
+    let currentUsersFilter = 'all';
+    let currentUsersSearch = '';
+    
+    function loadUsers(page = 1, filter = 'all', search = '') {
+      currentUsersPage = page;
+      currentUsersFilter = filter;
+      currentUsersSearch = search.toLowerCase();
+      
       let query = db.collection('users').orderBy('createdAt', 'desc');
       
       if (filter === 'active') {
         query = query.where('isBlocked', '==', false);
       } else if (filter === 'blocked') {
         query = query.where('isBlocked', '==', true);
+      } else if (filter === 'with_bookings') {
+        // This would require a more complex query in a real app
       }
       
       query.get().then(snap => {
-        const usersList = document.getElementById('usersList');
-        usersList.innerHTML = '';
-        
-        if (snap.empty) {
-          usersList.innerHTML = `
-            <tr>
-              <td colspan="5" class="text-center py-5"><h6 class="text-muted">No users found</h6></td>
-            </tr>
-          `;
-          return;
-        }
-        
+        const allUsers = [];
         snap.forEach(doc => {
           const user = doc.data();
-          addUserRow(user, doc.id);
+          user.id = doc.id;
+          
+          // Apply search filter if any
+          if (search === '' || 
+              user.email.toLowerCase().includes(search) || 
+              user.name?.toLowerCase().includes(search) || 
+              user.phone?.includes(search)) {
+            allUsers.push(user);
+          }
         });
+        
+        const totalUsers = allUsers.length;
+        const totalPages = Math.ceil(totalUsers / usersPerPage);
+        const startIndex = (page - 1) * usersPerPage;
+        const paginatedUsers = allUsers.slice(startIndex, startIndex + usersPerPage);
+        
+        renderUsersTable(paginatedUsers);
+        renderUsersPagination(page, totalPages);
       }).catch(error => {
         console.error("Error loading users:", error);
         document.getElementById('usersList').innerHTML = `
           <tr>
-            <td colspan="5" class="text-center py-5 text-danger">Error loading users</td>
+            <td colspan="6" class="text-center py-5 text-danger">Error loading users</td>
           </tr>
         `;
       });
+    }
+
+    function renderUsersTable(users) {
+      const usersList = document.getElementById('usersList');
+      usersList.innerHTML = '';
+      
+      if (users.length === 0) {
+        usersList.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-5"><h6 class="text-muted">No users found</h6></td>
+          </tr>
+        `;
+        return;
+      }
+      
+      users.forEach(user => {
+        addUserRow(user, user.id);
+      });
+    }
+
+    function renderUsersPagination(currentPage, totalPages) {
+      const pagination = document.getElementById('usersPagination');
+      pagination.innerHTML = '';
+      
+      if (totalPages <= 1) return;
+      
+      // Previous button
+      const prevLi = document.createElement('li');
+      prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+      prevLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>`;
+      pagination.appendChild(prevLi);
+      
+      // Page numbers
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+      
+      if (startPage > 1) {
+        const firstLi = document.createElement('li');
+        firstLi.className = 'page-item';
+        firstLi.innerHTML = `<a class="page-link" href="#" data-page="1">1</a>`;
+        pagination.appendChild(firstLi);
+        
+        if (startPage > 2) {
+          const ellipsisLi = document.createElement('li');
+          ellipsisLi.className = 'page-item disabled';
+          ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+          pagination.appendChild(ellipsisLi);
+        }
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        const pageLi = document.createElement('li');
+        pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+        pageLi.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+        pagination.appendChild(pageLi);
+      }
+      
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsisLi = document.createElement('li');
+          ellipsisLi.className = 'page-item disabled';
+          ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+          pagination.appendChild(ellipsisLi);
+        }
+        
+        const lastLi = document.createElement('li');
+        lastLi.className = 'page-item';
+        lastLi.innerHTML = `<a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>`;
+        pagination.appendChild(lastLi);
+      }
+      
+      // Next button
+      const nextLi = document.createElement('li');
+      nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+      nextLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>`;
+      pagination.appendChild(nextLi);
     }
 
     function addUserRow(user, userId) {
       const row = document.createElement('tr');
       
       row.innerHTML = `
-        <td>${userId.substring(0, 8)}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <img src="${user.photoURL || 'https://via.placeholder.com/40?text=User'}" class="user-avatar" alt="${user.name || 'User'}">
+            <div>
+              <div class="fw-bold">${user.name || 'No name'}</div>
+              <div class="text-muted small">${user.phone || 'No phone'}</div>
+            </div>
+          </div>
+        </td>
         <td>${user.email || 'N/A'}</td>
         <td>${user.createdAt?.toDate().toLocaleDateString() || 'N/A'}</td>
+        <td>${user.totalBookings || 0}</td>
         <td>
-          <span class="badge ${user.isBlocked ? 'bg-danger' : 'bg-success'}">
+          <span class="status-badge ${user.isBlocked ? 'bg-danger' : 'bg-success'}">
             ${user.isBlocked ? 'Blocked' : 'Active'}
           </span>
         </td>
-        <td>
+        <td class="action-buttons">
           <button class="btn btn-sm btn-outline-primary view-user" data-user-id="${userId}">
-            <i class="fas fa-eye me-1"></i> View
+            <i class="fas fa-eye"></i>
           </button>
           ${!user.isBlocked ? `
-            <button class="btn btn-sm btn-outline-danger block-user ms-1" data-user-id="${userId}">
-              <i class="fas fa-ban me-1"></i> Block
+            <button class="btn btn-sm btn-outline-danger block-user" data-user-id="${userId}">
+              <i class="fas fa-ban"></i>
             </button>
           ` : `
-            <button class="btn btn-sm btn-outline-success unblock-user ms-1" data-user-id="${userId}">
-              <i class="fas fa-check-circle me-1"></i> Unblock
+            <button class="btn btn-sm btn-outline-success unblock-user" data-user-id="${userId}">
+              <i class="fas fa-check-circle"></i>
             </button>
           `}
         </td>
@@ -862,7 +1480,7 @@
       const row = document.createElement('tr');
       
       row.innerHTML = `
-        <td>${offer.code || 'N/A'}</td>
+        <td class="fw-bold">${offer.code || 'N/A'}</td>
         <td>${offer.name || 'N/A'}</td>
         <td>
           ${offer.discountType === 'percentage' ? 
@@ -871,17 +1489,17 @@
         </td>
         <td>${offer.validUntil ? new Date(offer.validUntil).toLocaleDateString() : 'N/A'}</td>
         <td>
-          <span class="badge ${offer.isActive ? 'bg-success' : 'bg-secondary'}">
+          <span class="status-badge ${offer.isActive ? 'bg-success' : 'bg-secondary'}">
             ${offer.isActive ? 'Active' : 'Inactive'}
           </span>
         </td>
-        <td>
+        <td class="action-buttons">
           <button class="btn btn-sm btn-outline-primary toggle-offer" 
                   data-offer-id="${offerId}" 
                   data-current-status="${offer.isActive}">
             ${offer.isActive ? 'Deactivate' : 'Activate'}
           </button>
-          <button class="btn btn-sm btn-outline-danger delete-offer ms-1" 
+          <button class="btn btn-sm btn-outline-danger delete-offer" 
                   data-offer-id="${offerId}">
             <i class="fas fa-trash"></i>
           </button>
@@ -925,28 +1543,31 @@
       col.className = 'col-md-4 mb-4';
       
       col.innerHTML = `
-        <div class="card h-100">
-          <img src="${car.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${car.name}">
+        <div class="card h-100 shadow-sm">
+          <img src="${car.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${car.name}" 
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/300x200?text=No+Image'">
           <div class="card-body">
             <h5 class="card-title">${car.name || 'Unnamed Car'}</h5>
             <p class="card-text text-muted">${car.category ? car.category.toUpperCase() : 'N/A'}</p>
-            <p class="card-text">${car.description ? car.description.substring(0, 100) + '...' : 'No description'}</p>
+            <p class="card-text">${car.description ? car.description.substring(0, 100) + (car.description.length > 100 ? '...' : '') : 'No description'}</p>
             <div class="d-flex justify-content-between">
               <div>
                 <span class="badge bg-light text-dark me-2">12h: ₹${car.price12hrs || '0'}</span>
                 <span class="badge bg-light text-dark">24h: ₹${car.price24hrs || '0'}</span>
               </div>
               <div>
-                ${car.sunroof ? '<span class="badge bg-info me-1">Sunroof</span>' : ''}
-                ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
+                ${car.sunroof ? '<span class="badge bg-info car-feature-badge">Sunroof</span>' : ''}
+                ${car.withDriver ? '<span class="badge bg-warning car-feature-badge">With Driver</span>' : ''}
+                ${car.transmission === 'automatic' ? '<span class="badge bg-primary car-feature-badge">Automatic</span>' : ''}
+                ${car.transmission === 'manual' ? '<span class="badge bg-secondary car-feature-badge">Manual</span>' : ''}
               </div>
             </div>
           </div>
-          <div class="card-footer bg-white">
+          <div class="card-footer bg-white d-flex justify-content-between">
             <button class="btn btn-sm btn-outline-primary edit-car" data-car-id="${carId}">
               <i class="fas fa-edit me-1"></i> Edit
             </button>
-            <button class="btn btn-sm btn-outline-danger delete-car ms-1" data-car-id="${carId}">
+            <button class="btn btn-sm btn-outline-danger delete-car" data-car-id="${carId}">
               <i class="fas fa-trash me-1"></i> Delete
             </button>
           </div>
@@ -960,9 +1581,13 @@
     function getStatusBadgeClass(status) {
       switch(status) {
         case 'confirmed':
+        case 'active':
+        case 'completed':
           return 'bg-success';
         case 'pending_payment':
           return 'bg-warning text-dark';
+        case 'awaiting_verification':
+          return 'bg-info';
         case 'cancelled':
           return 'bg-danger';
         default:
@@ -974,9 +1599,19 @@
     function formatDate(date) {
       if (!date) return 'N/A';
       if (date.toDate) {
-        return date.toDate().toLocaleDateString();
+        return date.toDate().toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
       }
-      return new Date(date).toLocaleDateString();
+      return new Date(date).toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
 
     // Setup event listeners
@@ -1032,12 +1667,25 @@
         });
       });
 
+      // View all bookings
+      viewAllBookings.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector('.nav-link[data-target="bookings"]').click();
+      });
+
       // Booking filters
       document.querySelectorAll('.filter-booking').forEach(filter => {
         filter.addEventListener('click', (e) => {
           e.preventDefault();
           const status = filter.getAttribute('data-status');
-          loadAllBookings(status);
+          
+          // Update active filter
+          document.querySelectorAll('.filter-booking').forEach(f => {
+            f.classList.remove('active');
+          });
+          filter.classList.add('active');
+          
+          loadAllBookings(1, status, currentBookingsSearch);
         });
       });
 
@@ -1046,8 +1694,41 @@
         filter.addEventListener('click', (e) => {
           e.preventDefault();
           const status = filter.getAttribute('data-status');
-          loadUsers(status);
+          
+          // Update active filter
+          document.querySelectorAll('.filter-user').forEach(f => {
+            f.classList.remove('active');
+          });
+          filter.classList.add('active');
+          
+          loadUsers(1, status, currentUsersSearch);
         });
+      });
+
+      // Booking search
+      document.getElementById('bookingSearch').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.trim();
+        loadAllBookings(1, currentBookingsFilter, searchTerm);
+      });
+
+      // User search
+      document.getElementById('userSearch').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.trim();
+        loadUsers(1, currentUsersFilter, searchTerm);
+      });
+
+      // Pagination click handlers
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.page-link')) {
+          e.preventDefault();
+          const page = parseInt(e.target.getAttribute('data-page'));
+          
+          if (e.target.closest('#bookingsPagination')) {
+            loadAllBookings(page, currentBookingsFilter, currentBookingsSearch);
+          } else if (e.target.closest('#usersPagination')) {
+            loadUsers(page, currentUsersFilter, currentUsersSearch);
+          }
+        }
       });
 
       // View booking details
@@ -1061,6 +1742,18 @@
         if (e.target.closest('.confirm-booking')) {
           const bookingId = e.target.closest('.confirm-booking').getAttribute('data-booking-id');
           confirmBooking(bookingId);
+        }
+        
+        // Verify payment
+        if (e.target.closest('.verify-payment')) {
+          const bookingId = e.target.closest('.verify-payment').getAttribute('data-booking-id');
+          showVerifyPaymentModal(bookingId);
+        }
+        
+        // Cancel booking
+        if (e.target.closest('.cancel-booking')) {
+          const bookingId = e.target.closest('.cancel-booking').getAttribute('data-booking-id');
+          cancelBooking(bookingId);
         }
         
         // View user details
@@ -1133,6 +1826,19 @@
         }
       });
 
+      // Verify payment from modal
+      document.getElementById('verifyPaymentBtn').addEventListener('click', () => {
+        if (currentBookingId) {
+          showVerifyPaymentModal(currentBookingId);
+          bookingModal.hide();
+        }
+      });
+
+      // Submit verification
+      document.getElementById('submitVerificationBtn').addEventListener('click', () => {
+        submitVerification();
+      });
+
       // Block user from modal
       document.getElementById('blockUserBtn').addEventListener('click', () => {
         if (currentUserId) {
@@ -1164,20 +1870,33 @@
         const booking = doc.data();
         const modalBody = document.getElementById('bookingModalBody');
         
+        // Format dates
+        const startDate = booking.startDateTime.toDate();
+        const endDate = booking.endDateTime.toDate();
+        const createdAt = booking.createdAt.toDate();
+        
         modalBody.innerHTML = `
           <div class="row">
             <div class="col-md-6">
               <h6 class="text-muted">Booking Information</h6>
               <p><strong>Booking ID:</strong> ${bookingId}</p>
-              <p><strong>Status:</strong> <span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></p>
-              <p><strong>Created At:</strong> ${booking.createdAt?.toDate().toLocaleString() || 'N/A'}</p>
-              <p><strong>Dates:</strong> ${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}</p>
-              <p><strong>Pickup Location:</strong> ${booking.pickupLocation || 'Not specified'}</p>
+              <p><strong>Status:</strong> <span class="status-badge ${getStatusBadgeClass(booking.status)}">${booking.status.replace('_', ' ')}</span></p>
+              <p><strong>Created At:</strong> ${createdAt.toLocaleString()}</p>
+              <p><strong>Dates:</strong> ${startDate.toLocaleString()} to ${endDate.toLocaleString()}</p>
+              <p><strong>Duration:</strong> ${calculateDuration(startDate, endDate)}</p>
+              ${booking.pickupLocation ? `<p><strong>Pickup Location:</strong> ${booking.pickupLocation}</p>` : ''}
             </div>
             <div class="col-md-6">
               <h6 class="text-muted">Car Information</h6>
-              <p><strong>Car:</strong> ${booking.carName || 'N/A'}</p>
-              <p><strong>Category:</strong> ${booking.carCategory || 'N/A'}</p>
+              <div class="d-flex mb-3">
+                <img src="${booking.carImage || 'https://via.placeholder.com/100?text=Car'}" 
+                     class="img-thumbnail me-3" style="width: 100px; height: auto;">
+                <div>
+                  <h5>${booking.carName || 'N/A'}</h5>
+                  <p class="text-muted mb-1">${booking.carCategory ? booking.carCategory.toUpperCase() : 'N/A'}</p>
+                  ${booking.carWithDriver ? '<span class="badge bg-warning me-1">With Driver</span>' : ''}
+                </div>
+              </div>
               <p><strong>Original Price:</strong> ₹${booking.originalPrice || '0'}</p>
               ${booking.discountApplied ? `
                 <p><strong>Discount Applied:</strong> ${booking.discountCode || ''} (₹${booking.discountAmount || '0'})</p>
@@ -1188,16 +1907,32 @@
           <div class="row mt-3">
             <div class="col-md-6">
               <h6 class="text-muted">Customer Information</h6>
-              <p><strong>Name:</strong> ${booking.userName || 'Not specified'}</p>
-              <p><strong>Email:</strong> ${booking.userEmail || 'N/A'}</p>
-              <p><strong>Phone:</strong> ${booking.userPhone || 'Not specified'}</p>
+              <div class="d-flex mb-3">
+                <img src="${booking.userPhotoURL || 'https://via.placeholder.com/50?text=User'}" 
+                     class="rounded-circle me-3" style="width: 50px; height: 50px;">
+                <div>
+                  <h5>${booking.userName || 'Not specified'}</h5>
+                  <p class="text-muted mb-1">${booking.userEmail || 'N/A'}</p>
+                  <p class="text-muted mb-0">${booking.userPhone || 'Not specified'}</p>
+                </div>
+              </div>
             </div>
             <div class="col-md-6">
               <h6 class="text-muted">Payment Information</h6>
               <p><strong>Payment Method:</strong> ${booking.paymentMethod || 'Not specified'}</p>
               <p><strong>Payment Status:</strong> ${booking.paymentStatus || 'Pending'}</p>
-              ${booking.transactionId ? `
-                <p><strong>Transaction ID:</strong> ${booking.transactionId}</p>
+              ${booking.transactionId ? `<p><strong>Transaction ID:</strong> ${booking.transactionId}</p>` : ''}
+              ${booking.paymentDetails ? `
+                <div class="mt-3">
+                  <h6>Payment Details</h6>
+                  <p><strong>Amount:</strong> ₹${booking.paymentDetails.amount || '0'}</p>
+                  <p><strong>Date:</strong> ${new Date(booking.paymentDetails.date).toLocaleDateString()}</p>
+                  ${booking.paymentDetails.screenshotUrl ? `
+                    <a href="${booking.paymentDetails.screenshotUrl}" target="_blank" class="btn btn-sm btn-outline-primary">
+                      View Payment Proof
+                    </a>
+                  ` : ''}
+                </div>
               ` : ''}
             </div>
           </div>
@@ -1206,9 +1941,13 @@
         // Show appropriate action buttons
         document.getElementById('cancelBookingBtn').style.display = 'none';
         document.getElementById('confirmBookingBtn').style.display = 'none';
+        document.getElementById('verifyPaymentBtn').style.display = 'none';
         
         if (booking.status === 'pending_payment') {
           document.getElementById('confirmBookingBtn').style.display = 'inline-block';
+          document.getElementById('cancelBookingBtn').style.display = 'inline-block';
+        } else if (booking.status === 'awaiting_verification') {
+          document.getElementById('verifyPaymentBtn').style.display = 'inline-block';
           document.getElementById('cancelBookingBtn').style.display = 'inline-block';
         }
         
@@ -1221,6 +1960,24 @@
           </div>
         `;
       }
+    }
+
+    // Calculate duration between two dates
+    function calculateDuration(startDate, endDate) {
+      const diff = endDate - startDate;
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const days = Math.floor(hours / 24);
+      const remainingHours = hours % 24;
+      
+      let duration = '';
+      if (days > 0) {
+        duration += `${days} day${days > 1 ? 's' : ''} `;
+      }
+      if (remainingHours > 0) {
+        duration += `${remainingHours} hour${remainingHours > 1 ? 's' : ''}`;
+      }
+      
+      return duration || 'Less than 1 hour';
     }
 
     // View user details
@@ -1237,27 +1994,69 @@
         const user = doc.data();
         const modalBody = document.getElementById('userModalBody');
         
+        // Get user's bookings
+        const bookingsQuery = await db.collection('bookings')
+          .where('userId', '==', userId)
+          .orderBy('createdAt', 'desc')
+          .limit(5)
+          .get();
+        
+        let bookingsHtml = '';
+        if (bookingsQuery.empty) {
+          bookingsHtml = '<p class="text-muted">No bookings found</p>';
+        } else {
+          bookingsHtml = '<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Booking ID</th><th>Car</th><th>Date</th><th>Status</th><th>Amount</th></tr></thead><tbody>';
+          
+          bookingsQuery.forEach(bookingDoc => {
+            const booking = bookingDoc.data();
+            bookingsHtml += `
+              <tr>
+                <td>${bookingDoc.id.substring(0, 8)}</td>
+                <td>${booking.carName || 'N/A'}</td>
+                <td>${formatDate(booking.startDateTime)}</td>
+                <td><span class="status-badge ${getStatusBadgeClass(booking.status)}">${booking.status.replace('_', ' ')}</span></td>
+                <td>₹${booking.finalPrice || '0'}</td>
+              </tr>
+            `;
+          });
+          
+          bookingsHtml += '</tbody></table></div>';
+        }
+        
         modalBody.innerHTML = `
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4 text-center mb-4">
+              <img src="${user.photoURL || 'https://via.placeholder.com/150?text=User'}" 
+                   class="rounded-circle img-thumbnail mb-3" style="width: 150px; height: 150px;">
+              <h4>${user.name || 'No name'}</h4>
+              <p class="text-muted">${user.email || 'N/A'}</p>
+              <span class="status-badge ${user.isBlocked ? 'bg-danger' : 'bg-success'}">
+                ${user.isBlocked ? 'Blocked' : 'Active'}
+              </span>
+            </div>
+            <div class="col-md-8">
               <h6 class="text-muted">Basic Information</h6>
-              <p><strong>User ID:</strong> ${userId}</p>
-              <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
-              <p><strong>Phone:</strong> ${user.phone || 'Not provided'}</p>
-              <p><strong>Status:</strong> <span class="badge ${user.isBlocked ? 'bg-danger' : 'bg-success'}">${user.isBlocked ? 'Blocked' : 'Active'}</span></p>
-              <p><strong>Joined:</strong> ${user.createdAt?.toDate().toLocaleDateString() || 'N/A'}</p>
-            </div>
-            <div class="col-md-6">
-              <h6 class="text-muted">Additional Information</h6>
-              <p><strong>Name:</strong> ${user.name || 'Not provided'}</p>
-              <p><strong>Address:</strong> ${user.address || 'Not provided'}</p>
-              <p><strong>License Number:</strong> ${user.driverLicense || 'Not provided'}</p>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-12">
-              <h6 class="text-muted">Booking History</h6>
-              <p>Total bookings: ${user.totalBookings || 0}</p>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <p><strong>Phone:</strong> ${user.phone || 'Not provided'}</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Joined:</strong> ${user.createdAt?.toDate().toLocaleDateString() || 'N/A'}</p>
+                </div>
+              </div>
+              
+              <h6 class="text-muted mt-4">Additional Information</h6>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <p><strong>Address:</strong> ${user.address || 'Not provided'}</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>License Number:</strong> ${user.driverLicense || 'Not provided'}</p>
+                </div>
+              </div>
+              
+              <h6 class="text-muted mt-4">Recent Bookings</h6>
+              ${bookingsHtml}
             </div>
           </div>
         `;
@@ -1283,22 +2082,118 @@
       }
     }
 
+    // Show verify payment modal
+    async function showVerifyPaymentModal(bookingId) {
+      currentBookingId = bookingId;
+      
+      try {
+        const doc = await db.collection('bookings').doc(bookingId).get();
+        if (!doc.exists) {
+          alert('Booking not found');
+          return;
+        }
+        
+        const booking = doc.data();
+        
+        // Set default values in form
+        document.getElementById('verificationStatus').value = 'verified';
+        document.getElementById('verificationNotes').value = '';
+        
+        verifyPaymentModal.show();
+      } catch (error) {
+        console.error("Error loading booking for verification:", error);
+        alert('Error loading booking details');
+      }
+    }
+
+    // Submit payment verification
+    async function submitVerification() {
+      const status = document.getElementById('verificationStatus').value;
+      const notes = document.getElementById('verificationNotes').value;
+      
+      if (!currentBookingId) {
+        alert('No booking selected');
+        return;
+      }
+      
+      const btn = document.getElementById('submitVerificationBtn');
+      const submitText = btn.querySelector('.submit-text');
+      const spinner = btn.querySelector('.spinner-border');
+      
+      // Set loading state
+      submitText.textContent = 'Submitting...';
+      spinner.classList.remove('d-none');
+      btn.disabled = true;
+      
+      try {
+        const updateData = {
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          'paymentDetails.verified': status === 'verified',
+          'paymentDetails.verifiedBy': auth.currentUser.email,
+          'paymentDetails.verifiedAt': firebase.firestore.FieldValue.serverTimestamp(),
+          'paymentDetails.notes': notes
+        };
+        
+        if (status === 'verified') {
+          updateData.status = 'confirmed';
+          updateData.paymentStatus = 'paid';
+        } else {
+          updateData.status = 'pending_payment';
+        }
+        
+        await db.collection('bookings').doc(currentBookingId).update(updateData);
+        
+        verifyPaymentModal.hide();
+        alert('Payment verification submitted successfully');
+        
+        // Refresh data
+        if (bookingsSection.style.display !== 'none') {
+          loadAllBookings(currentBookingsPage, currentBookingsFilter, currentBookingsSearch);
+        }
+        if (dashboardSection.style.display !== 'none') {
+          loadDashboard();
+        }
+      } catch (error) {
+        console.error("Error submitting verification:", error);
+        alert('Failed to submit verification');
+      } finally {
+        // Reset button state
+        submitText.textContent = 'Submit Verification';
+        spinner.classList.add('d-none');
+        btn.disabled = false;
+      }
+    }
+
     // Confirm booking
     function confirmBooking(bookingId) {
       if (!confirm('Are you sure you want to confirm this booking?')) return;
       
+      const btn = document.getElementById('confirmBookingBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+      btn.disabled = true;
+      
       db.collection('bookings').doc(bookingId).update({
         status: 'confirmed',
+        paymentStatus: 'paid',
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
         alert('Booking confirmed successfully');
-        loadDashboard();
-        loadAllBookings();
+        if (bookingsSection.style.display !== 'none') {
+          loadAllBookings(currentBookingsPage, currentBookingsFilter, currentBookingsSearch);
+        }
+        if (dashboardSection.style.display !== 'none') {
+          loadDashboard();
+        }
       })
       .catch(error => {
         console.error("Error confirming booking:", error);
         alert('Failed to confirm booking');
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       });
     }
 
@@ -1306,24 +2201,42 @@
     function cancelBooking(bookingId) {
       if (!confirm('Are you sure you want to cancel this booking?')) return;
       
+      const btn = document.getElementById('cancelBookingBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+      btn.disabled = true;
+      
       db.collection('bookings').doc(bookingId).update({
         status: 'cancelled',
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
         alert('Booking cancelled successfully');
-        loadDashboard();
-        loadAllBookings();
+        if (bookingsSection.style.display !== 'none') {
+          loadAllBookings(currentBookingsPage, currentBookingsFilter, currentBookingsSearch);
+        }
+        if (dashboardSection.style.display !== 'none') {
+          loadDashboard();
+        }
       })
       .catch(error => {
         console.error("Error cancelling booking:", error);
         alert('Failed to cancel booking');
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       });
     }
 
     // Block user
     function blockUser(userId) {
-      if (!confirm('Are you sure you want to block this user?')) return;
+      if (!confirm('Are you sure you want to block this user? They will not be able to make new bookings.')) return;
+      
+      const btn = document.getElementById('blockUserBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+      btn.disabled = true;
       
       db.collection('users').doc(userId).update({
         isBlocked: true,
@@ -1331,17 +2244,28 @@
       })
       .then(() => {
         alert('User blocked successfully');
-        loadUsers();
+        if (usersSection.style.display !== 'none') {
+          loadUsers(currentUsersPage, currentUsersFilter, currentUsersSearch);
+        }
       })
       .catch(error => {
         console.error("Error blocking user:", error);
         alert('Failed to block user');
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       });
     }
 
     // Unblock user
     function unblockUser(userId) {
-      if (!confirm('Are you sure you want to unblock this user?')) return;
+      if (!confirm('Are you sure you want to unblock this user? They will be able to make new bookings.')) return;
+      
+      const btn = document.getElementById('unblockUserBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+      btn.disabled = true;
       
       db.collection('users').doc(userId).update({
         isBlocked: false,
@@ -1349,16 +2273,27 @@
       })
       .then(() => {
         alert('User unblocked successfully');
-        loadUsers();
+        if (usersSection.style.display !== 'none') {
+          loadUsers(currentUsersPage, currentUsersFilter, currentUsersSearch);
+        }
       })
       .catch(error => {
         console.error("Error unblocking user:", error);
         alert('Failed to unblock user');
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       });
     }
 
     // Toggle offer status
     function toggleOfferStatus(offerId, newStatus) {
+      const btn = document.querySelector(`.toggle-offer[data-offer-id="${offerId}"]`);
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+      btn.disabled = true;
+      
       db.collection('offers').doc(offerId).update({
         isActive: newStatus,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1369,12 +2304,21 @@
       .catch(error => {
         console.error("Error toggling offer status:", error);
         alert('Failed to update offer status');
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       });
     }
 
     // Delete offer
     function deleteOffer(offerId) {
-      if (!confirm('Are you sure you want to delete this offer?')) return;
+      if (!confirm('Are you sure you want to delete this offer? This cannot be undone.')) return;
+      
+      const btn = document.querySelector(`.delete-offer[data-offer-id="${offerId}"]`);
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+      btn.disabled = true;
       
       db.collection('offers').doc(offerId).delete()
       .then(() => {
@@ -1383,23 +2327,47 @@
       .catch(error => {
         console.error("Error deleting offer:", error);
         alert('Failed to delete offer');
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       });
     }
 
     // Save new offer
     function saveNewOffer() {
-      const offerCode = document.getElementById('offerCode').value;
-      const offerName = document.getElementById('offerName').value;
-      const offerDescription = document.getElementById('offerDescription').value;
+      const offerCode = document.getElementById('offerCode').value.trim();
+      const offerName = document.getElementById('offerName').value.trim();
+      const offerDescription = document.getElementById('offerDescription').value.trim();
       const discountType = document.getElementById('discountType').value;
       const discountValue = parseFloat(document.getElementById('discountValue').value);
       const validUntil = document.getElementById('validUntil').value;
       const isActive = document.getElementById('isActive').checked;
       
-      if (!offerCode || !offerName || !discountValue || !validUntil) {
+      // Validate inputs
+      if (!offerCode || !offerName || isNaN(discountValue) || !validUntil) {
         alert('Please fill all required fields');
         return;
       }
+      
+      if (discountValue <= 0) {
+        alert('Discount value must be greater than 0');
+        return;
+      }
+      
+      if (discountType === 'percentage' && discountValue > 100) {
+        alert('Percentage discount cannot be more than 100%');
+        return;
+      }
+      
+      const btn = document.getElementById('saveOfferBtn');
+      const submitText = btn.querySelector('.submit-text');
+      const spinner = btn.querySelector('.spinner-border');
+      
+      // Set loading state
+      submitText.textContent = 'Saving...';
+      spinner.classList.remove('d-none');
+      btn.disabled = true;
       
       const newOffer = {
         code: offerCode,
@@ -1423,24 +2391,45 @@
         .catch(error => {
           console.error("Error adding offer:", error);
           alert('Failed to create offer');
+        })
+        .finally(() => {
+          submitText.textContent = 'Save Offer';
+          spinner.classList.add('d-none');
+          btn.disabled = false;
         });
     }
 
     // Save new car
     function saveNewCar() {
-      const carName = document.getElementById('carName').value;
-      const carImage = document.getElementById('carImage').value;
-      const carDescription = document.getElementById('carDescription').value;
+      const carName = document.getElementById('carName').value.trim();
+      const carImage = document.getElementById('carImage').value.trim();
+      const carDescription = document.getElementById('carDescription').value.trim();
       const carCategory = document.getElementById('carCategory').value;
       const carPrice12hrs = parseFloat(document.getElementById('carPrice12hrs').value);
       const carPrice24hrs = parseFloat(document.getElementById('carPrice24hrs').value);
       const carSunroof = document.getElementById('carSunroof').checked;
       const carWithDriver = document.getElementById('carWithDriver').checked;
+      const carTransmission = document.getElementById('carTransmission').value;
       
-      if (!carName || !carImage || !carDescription || !carPrice12hrs || !carPrice24hrs) {
+      // Validate inputs
+      if (!carName || !carImage || !carDescription || isNaN(carPrice12hrs) || isNaN(carPrice24hrs)) {
         alert('Please fill all required fields');
         return;
       }
+      
+      if (carPrice12hrs <= 0 || carPrice24hrs <= 0) {
+        alert('Prices must be greater than 0');
+        return;
+      }
+      
+      const btn = document.getElementById('saveCarBtn');
+      const submitText = btn.querySelector('.submit-text');
+      const spinner = btn.querySelector('.spinner-border');
+      
+      // Set loading state
+      submitText.textContent = 'Saving...';
+      spinner.classList.remove('d-none');
+      btn.disabled = true;
       
       const newCar = {
         name: carName,
@@ -1451,6 +2440,7 @@
         price24hrs: carPrice24hrs,
         sunroof: carSunroof,
         withDriver: carWithDriver,
+        transmission: carTransmission,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
@@ -1465,18 +2455,29 @@
         .catch(error => {
           console.error("Error adding car:", error);
           alert('Failed to add car');
+        })
+        .finally(() => {
+          submitText.textContent = 'Save Car';
+          spinner.classList.add('d-none');
+          btn.disabled = false;
         });
     }
 
-    // Edit car (placeholder)
+    // Edit car
     function editCar(carId) {
+      // This would require fetching car details and populating the add car modal
+      // Then changing the save button to update instead of create
       alert('Edit car functionality would be implemented here');
-      // Would need to fetch car details and populate an edit modal
     }
 
     // Delete car
     function deleteCar(carId) {
       if (!confirm('Are you sure you want to delete this car? This cannot be undone.')) return;
+      
+      const btn = document.querySelector(`.delete-car[data-car-id="${carId}"]`);
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+      btn.disabled = true;
       
       db.collection('cars').doc(carId).delete()
         .then(() => {
@@ -1485,6 +2486,10 @@
         .catch(error => {
           console.error("Error deleting car:", error);
           alert('Failed to delete car');
+        })
+        .finally(() => {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
         });
     }
   </script>
