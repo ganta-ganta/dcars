@@ -305,57 +305,131 @@
       const db = firebase.firestore();
 
       // Car data
-      const cars = [
-        {
-          id: 'car1',
-          name: 'Maruti Swift',
-          image: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGNhcnN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
-          price12hrs: 1200,
-          price24hrs: 2000,
-          description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.',
-          category: 'economy'
-        },
-        {
-          id: 'car2',
-          name: 'Hyundai i20',
-          image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2Fyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-          price12hrs: 1500,
-          price24hrs: 2500,
-          description: 'Premium hatchback with sporty looks and advanced features.',
-          category: 'premium',
-          sunroof: true
-        },
-        {
-          id: 'car3',
-          name: 'Toyota Fortuner',
-          image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y2Fyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-          price12hrs: 3500,
-          price24hrs: 5000,
-          description: 'Premium SUV with powerful engine and luxury features.',
-          category: 'luxury',
-          withDriver: true
-        },
-        {
-          id: 'car4',
-          name: 'Tata Nexon',
-          image: 'https://images.unsplash.com/photo-1494976388901-7509ad593e19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y2Fyc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-          price12hrs: 1800,
-          price24hrs: 2800,
-          description: 'Safe and stylish compact SUV with panoramic sunroof.',
-          category: 'premium',
-          sunroof: true
-        },
-        {
-          id: 'car5',
-          name: 'Maruti Swift Dzire',
-          image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhcnN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
-          price12hrs: 1500,
-          price24hrs: 2300,
-          description: 'Popular compact sedan with excellent ride quality.',
-          category: 'economy'
-        }
-      ];
-
+     const cars = [
+  {
+    id: 'car1',
+    name: 'Swift',
+    image: 'img/swift.jpg',
+    priceHourly: 85,    // 2000/24 ≈ 83.33 → rounded to 85
+    price12hrs: 1200,
+    price24hrs: 2000,
+    description: 'Compact hatchback with great fuel efficiency.',
+    category: 'economy'
+  },
+  {
+    id: 'car2',
+    name: 'Etios',
+    image: 'img/etios.jpg',
+    priceHourly: 85,
+    price12hrs: 1200,
+    price24hrs: 2000,
+    description: 'Reliable sedan with spacious interior.',
+    category: 'economy'
+  },
+  {
+    id: 'car3',
+    name: 'I10 Nios',
+    image: 'img/i10nios.jpg',
+    priceHourly: 100,   // 2300/24 ≈ 95.83 → rounded to 100
+    price12hrs: 1500,
+    price24hrs: 2300,
+    description: 'Premium hatchback with modern features.',
+    category: 'economy'
+  },
+  {
+    id: 'car4',
+    name: 'Swift Dzire',
+    image: 'img/swiftdzire.jpg',
+    priceHourly: 100,
+    price12hrs: 1500,
+    price24hrs: 2300,
+    description: 'Popular compact sedan.',
+    category: 'economy'
+  },
+  {
+    id: 'car5',
+    name: 'Hyundai Aura',
+    image: 'img/aura.jpg',
+    priceHourly: 105,   // 2500/24 ≈ 104.16 → rounded to 105
+    price12hrs: 1500,
+    price24hrs: 2500,
+    description: 'Stylish compact sedan.',
+    category: 'premium'
+  },
+  {
+    id: 'car6',
+    name: 'Tata Punch',
+    image: 'img/punch.jpg',
+    priceHourly: 105,
+    price12hrs: 1500,
+    price24hrs: 2500,
+    description: 'Compact SUV with rugged design.',
+    category: 'premium'
+  },
+  {
+    id: 'car7',
+    name: 'Hyundai i20',
+    image: 'img/i20.jpg',
+    priceHourly: 105,
+    price12hrs: 1500,
+    price24hrs: 2500,
+    description: 'Premium hatchback with sunroof.',
+    sunroof: true,
+    category: 'premium'
+  },
+  {
+    id: 'car8',
+    name: 'Creta',
+    image: 'img/creta.jpg',
+    priceHourly: 125,   // 3000/24 = 125
+    price12hrs: 2000,
+    price24hrs: 3000,
+    description: 'Premium SUV with spacious cabin.',
+    category: 'premium'
+  },
+  {
+    id: 'car9',
+    name: 'Grand Vitara',
+    image: 'img/grandvitara.jpg',
+    priceHourly: 125,
+    price12hrs: 2000,
+    price24hrs: 3000,
+    description: 'Hybrid SUV with elegant design.',
+    category: 'premium'
+  },
+  {
+    id: 'car10',
+    name: 'Mahindra Thar',
+    image: 'img/thar.jpg',
+    priceHourly: 210,   // 5000/24 ≈ 208.33 → rounded to 210
+    price12hrs: 3500,
+    price24hrs: 5000,
+    description: 'Iconic off-roader.',
+    category: 'luxury'
+  },
+  {
+    id: 'car11',
+    name: 'Fortuner',
+    image: 'img/fortuner.jpg',
+    priceHourly: 500,   // 12000/24 = 500
+    price12hrs: 8000,
+    price24hrs: 12000,
+    description: 'Full-size luxury SUV.',
+    withDriver: true,
+    category: 'luxury'
+  },
+  {
+    id: 'car12',
+    name: 'XUV700',
+    image: 'img/xuv700.jpg',
+    priceHourly: 270,   // 6500/24 ≈ 270.83 → rounded to 270
+    price12hrs: 4500,
+    price24hrs: 6500,
+    description: 'Premium SUV with advanced features.',
+    withDriver: true,
+    category: 'luxury'
+  }
+];
       // Initialize Bootstrap modal
       const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
       let selectedCar = null;
