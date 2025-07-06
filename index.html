@@ -43,6 +43,11 @@
             width: 3rem;
             height: 3rem;
         }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -103,6 +108,7 @@
                     <div class="spinner-border text-primary loading-spinner" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
+                    <div id="errorMessage" class="error-message"></div>
                 </div>
             </div>
         </div>
@@ -114,19 +120,31 @@
             <!-- Economy Cars -->
             <h4 class="mb-4"><i class="fas fa-car me-2"></i> Economy Cars</h4>
             <div class="row" id="economyCars">
-                <!-- Cars will be loaded here -->
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        Loading economy cars...
+                    </div>
+                </div>
             </div>
 
             <!-- Premium Cars -->
             <h4 class="mb-4 mt-5"><i class="fas fa-car-side me-2"></i> Premium Cars</h4>
             <div class="row" id="premiumCars">
-                <!-- Cars will be loaded here -->
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        Loading premium cars...
+                    </div>
+                </div>
             </div>
 
             <!-- Luxury Cars -->
             <h4 class="mb-4 mt-5"><i class="fas fa-gem me-2"></i> Luxury Cars</h4>
             <div class="row" id="luxuryCars">
-                <!-- Cars will be loaded here -->
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        Loading luxury cars...
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -157,16 +175,19 @@
                             <div class="col-md-6">
                                 <label class="form-label">Start Date & Time</label>
                                 <input type="datetime-local" class="form-control" id="startDateTime">
+                                <div id="startDateError" class="error-message"></div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">End Date & Time</label>
                                 <input type="datetime-local" class="form-control" id="endDateTime">
+                                <div id="endDateError" class="error-message"></div>
                             </div>
                         </div>
                         
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
                             <input type="tel" class="form-control" id="phoneNumber" placeholder="10 digit mobile number">
+                            <div id="phoneError" class="error-message"></div>
                         </div>
                         
                         <div class="alert alert-secondary">
@@ -213,35 +234,11 @@
             const auth = firebase.auth();
             const db = firebase.firestore();
 
-            // Show loading spinner
+            // UI Elements
             const loadingSpinner = document.querySelector('.loading-spinner');
-            
-            function showLoading() {
-                loadingSpinner.style.display = 'block';
-            }
-            
-            function hideLoading() {
-                loadingSpinner.style.display = 'none';
-            }
-
-            // Helper function to safely convert Firestore timestamps
-            function getDateFromFirestore(timestamp) {
-                try {
-                    if (timestamp && timestamp.toDate) {
-                        return timestamp.toDate();
-                    }
-                    if (timestamp && timestamp.seconds) {
-                        return new Date(timestamp.seconds * 1000);
-                    }
-                    if (timestamp instanceof Date) {
-                        return timestamp;
-                    }
-                    return null;
-                } catch (e) {
-                    console.error('Error converting timestamp:', e);
-                    return null;
-                }
-            }
+            const errorMessage = document.getElementById('errorMessage');
+            const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            let selectedCar = null;
 
             // Car data
             const cars = [
@@ -370,11 +367,57 @@
                 }
             ];
 
-            // Initialize Bootstrap modal
-            const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-            let selectedCar = null;
+            // Helper functions
+            function showLoading() {
+                loadingSpinner.style.display = 'block';
+                errorMessage.textContent = '';
+            }
+            
+            function hideLoading() {
+                loadingSpinner.style.display = 'none';
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+            }
 
-            // UI Elements
+            function getCategoryColor(category) {
+                switch(category) {
+                    case 'economy': return 'success';
+                    case 'premium': return 'primary';
+                    case 'luxury': return 'danger';
+                    default: return 'secondary';
+                }
+            }
+
+            // Safe timestamp conversion helper
+            function getDateFromFirestore(timestamp) {
+                try {
+                    // If it's a Firestore Timestamp
+                    if (timestamp && typeof timestamp.toDate === 'function') {
+                        return timestamp.toDate();
+                    }
+                    // If it's a raw timestamp object with seconds
+                    if (timestamp && timestamp.seconds) {
+                        return new Date(timestamp.seconds * 1000);
+                    }
+                    // If it's already a Date object
+                    if (timestamp instanceof Date) {
+                        return timestamp;
+                    }
+                    // If it's a string that can be parsed as a date
+                    if (typeof timestamp === 'string') {
+                        const date = new Date(timestamp);
+                        if (!isNaN(date.getTime())) return date;
+                    }
+                    return null;
+                } catch (e) {
+                    console.error('Error converting timestamp:', e);
+                    return null;
+                }
+            }
+
+            // Initialize UI
             const dateFilterButtons = document.querySelectorAll('.date-filter-btn');
             const customDateInput = document.getElementById('customDateFilter');
             const applyCustomDateBtn = document.getElementById('applyCustomDate');
@@ -423,7 +466,7 @@
                 if (customDateInput.value) {
                     filterAvailableCars('custom', customDateInput.value);
                 } else {
-                    alert('Please select a date');
+                    showError('Please select a date');
                 }
             });
 
@@ -481,7 +524,7 @@
                         const bookingEnd = getDateFromFirestore(booking.endDateTime);
                         
                         if (!bookingStart || !bookingEnd) {
-                            console.warn('Invalid booking dates', booking);
+                            console.warn('Invalid booking dates - skipping', booking);
                             return;
                         }
 
@@ -492,7 +535,7 @@
                     });
                 } catch (error) {
                     console.error("Error fetching bookings:", error);
-                    alert("Error checking availability. Please try again.");
+                    showError("Error checking availability. Please try again.");
                 } finally {
                     hideLoading();
                 }
@@ -574,16 +617,6 @@
                 });
             }
 
-            // Helper function
-            function getCategoryColor(category) {
-                switch(category) {
-                    case 'economy': return 'success';
-                    case 'premium': return 'primary';
-                    case 'luxury': return 'danger';
-                    default: return 'secondary';
-                }
-            }
-
             function showBookingModal(car) {
                 selectedCar = car;
                 document.getElementById('modalCarName').textContent = car.name;
@@ -600,6 +633,11 @@
                     document.getElementById('bookingForm').style.display = 'none';
                     document.getElementById('confirmBookingBtn').style.display = 'none';
                 }
+                
+                // Clear previous errors
+                document.getElementById('startDateError').textContent = '';
+                document.getElementById('endDateError').textContent = '';
+                document.getElementById('phoneError').textContent = '';
                 
                 updateEstimatedTotal();
                 bookingModal.show();
@@ -676,7 +714,11 @@
             // Event listeners for the new fields
             document.getElementById('startDateTime')?.addEventListener('change', function() {
                 const startDate = new Date(this.value);
-                if (isNaN(startDate.getTime())) return;
+                if (isNaN(startDate.getTime())) {
+                    document.getElementById('startDateError').textContent = 'Invalid start date/time';
+                    return;
+                }
+                document.getElementById('startDateError').textContent = '';
                 
                 // Set minimum end date time to 1 hour after start
                 const minEndDate = new Date(startDate);
@@ -686,12 +728,26 @@
                 updateEstimatedTotal();
             });
 
-            document.getElementById('endDateTime')?.addEventListener('change', updateEstimatedTotal);
+            document.getElementById('endDateTime')?.addEventListener('change', function() {
+                const endDate = new Date(this.value);
+                if (isNaN(endDate.getTime())) {
+                    document.getElementById('endDateError').textContent = 'Invalid end date/time';
+                    return;
+                }
+                document.getElementById('endDateError').textContent = '';
+                updateEstimatedTotal();
+            });
+
             document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
             
             // Phone number validation
             document.getElementById('phoneNumber')?.addEventListener('input', function() {
                 this.value = this.value.replace(/\D/g, '').slice(0, 10);
+                if (this.value.length !== 10) {
+                    document.getElementById('phoneError').textContent = 'Please enter a 10-digit number';
+                } else {
+                    document.getElementById('phoneError').textContent = '';
+                }
             });
 
             // Confirm booking
@@ -707,23 +763,31 @@
                 const endDateTime = document.getElementById('endDateTime').value;
                 const option = document.getElementById('rentalOption').value;
                 
-                if (!phoneNumber || !startDateTime || !endDateTime) {
-                    alert('Please fill all required fields');
-                    return;
+                // Validate inputs
+                let isValid = true;
+                
+                if (!phoneNumber || phoneNumber.length !== 10) {
+                    document.getElementById('phoneError').textContent = 'Please enter a valid 10-digit phone number';
+                    isValid = false;
                 }
-
-                // Validate phone number
-                if (!/^[0-9]{10}$/.test(phoneNumber)) {
-                    alert('Please enter a valid 10-digit phone number');
-                    return;
-                }
-
+                
                 const startDate = new Date(startDateTime);
+                if (isNaN(startDate.getTime())) {
+                    document.getElementById('startDateError').textContent = 'Please select a valid start date/time';
+                    isValid = false;
+                }
+                
                 const endDate = new Date(endDateTime);
+                if (isNaN(endDate.getTime())) {
+                    document.getElementById('endDateError').textContent = 'Please select a valid end date/time';
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
                 
                 // Validate end date is after start date
                 if (endDate <= startDate) {
-                    alert('End date/time must be after start date/time');
+                    document.getElementById('endDateError').textContent = 'End date/time must be after start date/time';
                     return;
                 }
 
@@ -810,7 +874,7 @@
                         const existingEnd = getDateFromFirestore(booking.endDateTime);
                         
                         if (!existingStart || !existingEnd) {
-                            console.warn('Invalid booking dates', booking);
+                            console.warn('Invalid booking dates - skipping', booking);
                             continue;
                         }
 
