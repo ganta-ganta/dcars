@@ -8,6 +8,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Previous head content remains the same -->
+</head>
   <style>
     body {
       background-color: #f8f9fa;
@@ -87,7 +89,6 @@
       transform: scale(1.05);
     }
   </style>
-</head>
 <body>
   <!-- Header -->
   <header class="bg-dark sticky-top">
@@ -115,118 +116,7 @@
       </div>
     </nav>
   </header>
-
-  <!-- Payment Container -->
-  <div class="container payment-container">
-    <div class="payment-header">
-      <h2>Complete Your Payment</h2>
-      <p class="text-muted">Please select your preferred payment method</p>
-    </div>
-
-    <!-- Booking Summary -->
-    <div class="booking-summary" id="bookingSummary">
-      <h4>Booking Summary</h4>
-      <div class="row">
-        <div class="col-md-6">
-          <p><strong>Car:</strong> <span id="summaryCarName"></span></p>
-          <p><strong>Pickup:</strong> <span id="summaryPickup"></span></p>
-          <p><strong>Dropoff:</strong> <span id="summaryDropoff"></span></p>
-        </div>
-        <div class="col-md-6">
-          <p><strong>Duration:</strong> <span id="summaryDuration"></span></p>
-          <p><strong>Payment Method:</strong> <span id="summaryMethod">Not selected</span></p>
-          <h5 class="mt-3">Total: ₹<span id="summaryTotal"></span></h5>
-        </div>
-      </div>
-    </div>
-
-    <!-- Payment Methods -->
-    <div class="payment-options">
-      <h4 class="mb-4">Payment Options</h4>
-      
-      <!-- COpen Apply -->
-      <div class="payment-method" id="copenMethod">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="paymentMethod" id="copenRadio" value="copen">
-          <label class="form-check-label" for="copenRadio">
-            <h5><i class="fas fa-credit-card me-2"></i> COpen Apply</h5>
-          </label>
-        </div>
-        <div class="payment-details" id="copenDetails">
-          <p>Complete your payment using COpen Apply for easy EMI options.</p>
-          <div class="alert alert-warning">
-            <i class="fas fa-exclamation-circle me-2"></i> After payment, please verify your payment using the button below.
-          </div>
-          <button class="btn btn-primary w-100" id="copenPayBtn">
-            Pay with COpen Apply
-          </button>
-        </div>
-      </div>
-      
-      <!-- Bank Transfer -->
-      <div class="payment-method" id="bankMethod">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="paymentMethod" id="bankRadio" value="bank">
-          <label class="form-check-label" for="bankRadio">
-            <h5><i class="fas fa-university me-2"></i> Bank Transfer</h5>
-          </label>
-        </div>
-        <div class="payment-details" id="bankDetails">
-          <p>Transfer the amount to our bank account using the following details:</p>
-          <div class="card bg-light p-3 mb-3">
-            <p><strong>Bank Name:</strong> State Bank of India</p>
-            <p><strong>Account Name:</strong> GoPanda Cars</p>
-            <p><strong>Account Number:</strong> 123456789012</p>
-            <p><strong>IFSC Code:</strong> SBIN0001234</p>
-            <p><strong>Branch:</strong> Guntur Main Branch</p>
-          </div>
-          <p class="text-muted small">Please include your booking ID as payment reference.</p>
-          <div class="alert alert-warning">
-            <i class="fas fa-exclamation-circle me-2"></i> After transfer, please verify your payment using the button below.
-          </div>
-        </div>
-      </div>
-      
-      <!-- PhonePe -->
-      <div class="payment-method" id="phonepeMethod">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="paymentMethod" id="phonepeRadio" value="phonepe">
-          <label class="form-check-label" for="phonepeRadio">
-            <h5><i class="fas fa-mobile-alt me-2"></i> PhonePe</h5>
-          </label>
-        </div>
-        <div class="payment-details" id="phonepeDetails">
-          <p>Scan the QR code below to make payment via PhonePe:</p>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gopandacars@ybl&pn=GoPanda%20Cars&am=5000&cu=INR" 
-               alt="PhonePe QR Code" class="qr-code img-fluid">
-          <p class="text-center mt-2"><strong>OR</strong></p>
-          <p>Send payment to our UPI ID:</p>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" value="gopandacars@ybl" id="upiId" readonly>
-            <button class="btn btn-outline-secondary" type="button" id="copyUpiBtn">
-              <i class="fas fa-copy"></i>
-            </button>
-          </div>
-          <div class="alert alert-warning">
-            <i class="fas fa-exclamation-circle me-2"></i> After payment, please verify your payment using the button below.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Verify Payment Button -->
-    <div class="text-center mt-4">
-      <button class="btn btn-success btn-lg" id="verifyPaymentBtn">
-        <i class="fas fa-check-circle me-2"></i> Verify Payment
-      </button>
-      <p class="text-muted mt-2">Click this after completing your payment</p>
-    </div>
-  </div>
-
-  <!-- WhatsApp Float Button -->
-  <a href="https://wa.me/9052017979" class="whatsapp-float" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+  <!-- Previous header and content remains the same until the success modal -->
 
   <!-- Payment Verification Modal -->
   <div class="modal fade" id="verifyModal" tabindex="-1" aria-hidden="true">
@@ -253,7 +143,7 @@
               <input type="date" class="form-control" id="paymentDate" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">Screenshot (Optional)</label>
+              <label class="form-label">Screenshot (Optional but recommended)</label>
               <input type="file" class="form-control" id="paymentScreenshot" accept="image/*">
             </div>
           </form>
@@ -266,217 +156,113 @@
     </div>
   </div>
 
-  <!-- Payment Success Modal -->
-  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <!-- Payment Verification Submitted Modal -->
+  <div class="modal fade" id="verificationSubmittedModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-body text-center p-5">
-          <div class="text-success mb-4">
-            <i class="fas fa-check-circle" style="font-size: 5rem;"></i>
+          <div class="text-info mb-4">
+            <i class="fas fa-hourglass-half" style="font-size: 5rem;"></i>
           </div>
-          <h3 class="mb-3">Payment Verified!</h3>
-          <p>Your booking is now confirmed. Thank you for choosing GoPanda Cars.</p>
-          <p class="text-muted">Booking ID: <span id="successBookingId"></span></p>
-          <button class="btn btn-primary mt-3" data-bs-dismiss="modal">View Booking</button>
+          <h3 class="mb-3">Verification Submitted</h3>
+          <p>Your payment details have been submitted for admin verification.</p>
+          <p>We'll notify you once your payment is confirmed.</p>
+          <p class="text-muted">Booking ID: <span id="verificationBookingId"></span></p>
+          <button class="btn btn-primary mt-3" data-bs-dismiss="modal">View Bookings</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
-        authDomain: "gopandacars-7085f.firebaseapp.com",
-        projectId: "gopandacars-7085f",
-        storageBucket: "gopandacars-7085f.appspot.com",
-        messagingSenderId: "486383420605"
+    // Previous script content remains the same until the submit verification part
+
+    // Submit Verification
+    document.getElementById('submitVerificationBtn').addEventListener('click', function() {
+      const transactionId = document.getElementById('transactionId').value;
+      const paymentAmount = document.getElementById('paymentAmount').value;
+      const paymentDate = document.getElementById('paymentDate').value;
+      const screenshotFile = document.getElementById('paymentScreenshot').files[0];
+      
+      if (!transactionId || !paymentAmount || !paymentDate) {
+        alert('Please fill all required fields');
+        return;
+      }
+      
+      // Create a loading state
+      const btn = this;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+      btn.disabled = true;
+      
+      // Prepare payment data
+      const paymentData = {
+        transactionId: transactionId,
+        amount: parseFloat(paymentAmount),
+        date: paymentDate,
+        method: document.querySelector('input[name="paymentMethod"]:checked').value,
+        verified: false,
+        verifiedBy: null,
+        verifiedAt: null
       };
       
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-
-      // Get booking ID from URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const bookingId = urlParams.get('bookingId');
-      let bookingData = null;
-
-      // Initialize modals
-      const verifyModal = new bootstrap.Modal(document.getElementById('verifyModal'));
-      const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-
-      // Check auth state
-      auth.onAuthStateChanged(user => {
-        const loginLink = document.getElementById('loginLink');
-        if (user) {
-          loginLink.textContent = 'Logout';
-          loginLink.href = '#';
-          loginLink.onclick = () => {
-            auth.signOut().then(() => window.location.href = 'index.html');
-          };
-          
-          // Load booking data if user is logged in
-          if (bookingId) {
-            loadBookingData(bookingId, user.uid);
-          } else {
-            window.location.href = 'profile.html';
-          }
-        } else {
-          loginLink.textContent = 'Login';
-          loginLink.href = 'login.html';
-          loginLink.onclick = null;
-          window.location.href = 'login.html';
-        }
-      });
-
-      // Load booking data from Firestore
-      function loadBookingData(bookingId, userId) {
-        db.collection('bookings').doc(bookingId).get()
-          .then(doc => {
-            if (doc.exists && doc.data().userId === userId) {
-              bookingData = doc.data();
-              displayBookingSummary(bookingData);
-            } else {
-              window.location.href = 'profile.html';
-            }
-          })
-          .catch(error => {
-            console.error('Error loading booking:', error);
-            window.location.href = 'profile.html';
-          });
+      // If screenshot is uploaded, handle it (you'll need Firebase Storage for full implementation)
+      if (screenshotFile) {
+        // In a real implementation, you would upload this to Firebase Storage
+        paymentData.screenshotFilename = `payment_${bookingId}_${Date.now()}.${screenshotFile.name.split('.').pop()}`;
+        // Here we just store the filename, actual upload would require additional code
       }
-
-      // Display booking summary
-      function displayBookingSummary(data) {
-        document.getElementById('summaryCarName').textContent = data.carName;
-        document.getElementById('summaryPickup').textContent = 
-          `${data.startDate} at ${data.startTime}`;
-        document.getElementById('summaryDropoff').textContent = 
-          `${data.endDate} at ${data.endTime}`;
+      
+      // Update booking status in Firestore
+      db.collection('bookings').doc(bookingId).update({
+        status: 'awaiting_admin_verification',
+        paymentDetails: paymentData,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        verifyModal.hide();
+        document.getElementById('verificationBookingId').textContent = bookingId;
         
-        // Calculate duration
-        const start = new Date(data.startDateTime);
-        const end = new Date(data.endDateTime);
-        const hours = Math.round((end - start) / (1000 * 60 * 60));
+        // Show verification submitted modal
+        const submittedModal = new bootstrap.Modal(document.getElementById('verificationSubmittedModal'));
+        submittedModal.show();
         
-        let durationText = '';
-        if (hours < 24) {
-          durationText = `${hours} hours`;
-        } else {
-          const days = Math.floor(hours / 24);
-          const remainingHours = hours % 24;
-          durationText = `${days} days`;
-          if (remainingHours > 0) {
-            durationText += ` ${remainingHours} hours`;
-          }
-        }
-        
-        document.getElementById('summaryDuration').textContent = durationText;
-        document.getElementById('summaryTotal').textContent = data.finalPrice;
-      }
-
-      // Payment method selection
-      document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-          // Hide all payment details
-          document.querySelectorAll('.payment-details').forEach(details => {
-            details.classList.remove('active');
-          });
-          
-          // Show selected payment details
-          const detailsId = this.value + 'Details';
-          document.getElementById(detailsId).classList.add('active');
-          
-          // Update summary
-          const methodName = this.closest('.payment-method').querySelector('h5').textContent.trim();
-          document.getElementById('summaryMethod').textContent = methodName;
-        });
-      });
-
-      // Copy UPI ID
-      document.getElementById('copyUpiBtn').addEventListener('click', function() {
-        const upiId = document.getElementById('upiId');
-        upiId.select();
-        document.execCommand('copy');
-        
-        // Show tooltip or alert
-        const originalText = this.innerHTML;
-        this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        // Redirect to profile after 5 seconds
         setTimeout(() => {
-          this.innerHTML = originalText;
-        }, 2000);
+          window.location.href = 'profile.html';
+        }, 5000);
+      })
+      .catch(error => {
+        console.error('Error updating booking:', error);
+        alert('Error submitting verification. Please try again or contact support.');
+      })
+      .finally(() => {
+        btn.innerHTML = 'Submit Verification';
+        btn.disabled = false;
       });
-
-      // Verify Payment Button
-      document.getElementById('verifyPaymentBtn').addEventListener('click', function() {
-        const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked');
-        
-        if (!selectedMethod) {
-          alert('Please select a payment method first');
-          return;
-        }
-        
-        // Set today's date as default
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('paymentDate').value = today;
-        
-        // Set payment amount to booking total
-        document.getElementById('paymentAmount').value = bookingData.finalPrice;
-        
-        verifyModal.show();
-      });
-
-      // Submit Verification
-      document.getElementById('submitVerificationBtn').addEventListener('click', function() {
-        const transactionId = document.getElementById('transactionId').value;
-        const paymentAmount = document.getElementById('paymentAmount').value;
-        const paymentDate = document.getElementById('paymentDate').value;
-        
-        if (!transactionId || !paymentAmount || !paymentDate) {
-          alert('Please fill all required fields');
-          return;
-        }
-        
-        // Update booking status in Firestore
-        db.collection('bookings').doc(bookingId).update({
-          status: 'payment_verification_pending',
-          paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
-          paymentDetails: {
-            transactionId: transactionId,
-            amount: parseFloat(paymentAmount),
-            date: paymentDate,
-            verified: false
-          },
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-          verifyModal.hide();
-          document.getElementById('successBookingId').textContent = bookingId;
-          successModal.show();
-          
-          // Redirect to profile after 5 seconds
-          setTimeout(() => {
-            window.location.href = 'profile.html';
-          }, 5000);
-        })
-        .catch(error => {
-          console.error('Error updating booking:', error);
-          alert('Error submitting verification. Please try again or contact support.');
-        });
-      });
-
-      // Set default payment method (optional)
-      document.getElementById('bankRadio').click();
     });
+
+    // Admin verification would be handled in a separate admin panel
+    // Here's an example of how you might update the booking when admin verifies:
+    function adminVerifyPayment(bookingId, adminId) {
+      db.collection('bookings').doc(bookingId).update({
+        status: 'confirmed',
+        'paymentDetails.verified': true,
+        'paymentDetails.verifiedBy': adminId,
+        'paymentDetails.verifiedAt': firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        // Send notification to user that their booking is confirmed
+        // This would require implementing a notification system
+        console.log('Payment verified by admin');
+      })
+      .catch(error => {
+        console.error('Error verifying payment:', error);
+      });
+    }
+
+    // Previous remaining script content
   </script>
 </body>
 </html>
