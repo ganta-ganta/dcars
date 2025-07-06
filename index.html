@@ -76,6 +76,10 @@
       background-color: #0b5ed7;
       border-color: #0a58ca;
     }
+    #billingNote {
+      font-size: 0.9rem;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -246,6 +250,10 @@
           </div>
           <form id="bookingForm" style="display:none;">
             <div class="mb-3">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="phoneNumber" required placeholder="Enter your 10-digit mobile number">
+            </div>
+            <div class="mb-3">
               <label class="form-label">Rental Option</label>
               <select class="form-select" id="rentalOption">
                 <option value="12hrs">12 Hours (₹<span id="price12hrs"></span>)</option>
@@ -253,15 +261,16 @@
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label">Start Date</label>
-              <input type="date" class="form-control" id="startDate" required>
+              <label class="form-label">Start Date & Time</label>
+              <input type="datetime-local" class="form-control" id="startDateTime" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">End Date</label>
-              <input type="date" class="form-control" id="endDate" required>
+              <label class="form-label">End Date & Time</label>
+              <input type="datetime-local" class="form-control" id="endDateTime" required>
             </div>
             <div class="alert alert-info">
               Estimated Total: ₹<span id="estimatedTotal">0</span>
+              <div id="billingNote" class="small mt-1"></div>
             </div>
           </form>
         </div>
@@ -465,11 +474,6 @@
           document.getElementById('confirmBookingBtn').style.display = 'none';
         }
         
-        // Set minimum date to today
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('startDate').min = today;
-        document.getElementById('endDate').min = today;
-        
         updateEstimatedTotal();
         bookingModal.show();
       }
@@ -478,8 +482,13 @@
         if (!selectedCar) return;
         
         const option = document.getElementById('rentalOption').value;
-        const startDate = new Date(document.getElementById('startDate').value);
-        const endDate = new Date(document.getElementById('endDate').value);
+        const startDateTime = document.getElementById('startDateTime').value;
+        const endDateTime = document.getElementById('endDateTime').value;
+        
+        if (!startDateTime) return;
+        
+        const startDate = new Date(startDateTime);
+        const endDate = new Date(endDateTime);
         
         if (isNaN(startDate.getTime())) return;
         
@@ -487,21 +496,76 @@
           // Single day booking
           const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
           document.getElementById('estimatedTotal').textContent = price;
+          document.getElementById('billingNote').textContent = '';
         } else {
-          // Multi-day booking
-          const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-          const pricePerDay = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
-          document.getElementById('estimatedTotal').textContent = days * pricePerDay;
+          // Calculate total hours
+          const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+          
+          // Calculate total days (rounded up)
+          const totalDays = Math.ceil(totalHours / 24);
+          
+          let totalPrice = 0;
+          let billingNote = '';
+          
+          if (totalDays >= 2) {
+            // For rentals of 2 or more days, automatically use 24-hour pricing
+            totalPrice = totalDays * selectedCar.price24hrs;
+            billingNote = `For ${totalDays} days rental, 24-hour rate (₹${selectedCar.price24hrs}/day) is applied automatically.`;
+          } else {
+            // For less than 2 days, use selected option
+            if (option === '12hrs') {
+              // Calculate in 12-hour blocks (minimum 1)
+              const blocks = Math.max(1, Math.ceil(totalHours / 12));
+              totalPrice = blocks * selectedCar.price12hrs;
+            } else {
+              // 24-hour option
+              totalPrice = selectedCar.price24hrs;
+            }
+          }
+          
+          document.getElementById('estimatedTotal').textContent = totalPrice;
+          document.getElementById('billingNote').textContent = billingNote;
         }
       }
 
-      // Event listeners for booking form
-      document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
-      document.getElementById('startDate')?.addEventListener('change', function() {
-        document.getElementById('endDate').min = this.value;
+      // Initialize date time pickers when modal shows
+      bookingModal._element.addEventListener('shown.bs.modal', function() {
+        // Set default start time to now (rounded to nearest hour)
+        const now = new Date();
+        now.setMinutes(0, 0, 0);
+        const startDateTime = now.toISOString().slice(0, 16);
+        document.getElementById('startDateTime').value = startDateTime;
+        
+        // Set default end time to same time next day
+        const nextDay = new Date(now);
+        nextDay.setDate(nextDay.getDate() + 1);
+        const endDateTime = nextDay.toISOString().slice(0, 16);
+        document.getElementById('endDateTime').value = endDateTime;
+        
+        // Trigger calculation
         updateEstimatedTotal();
       });
-      document.getElementById('endDate')?.addEventListener('change', updateEstimatedTotal);
+
+      // Event listeners for the new fields
+      document.getElementById('startDateTime')?.addEventListener('change', function() {
+        const startDate = new Date(this.value);
+        if (isNaN(startDate.getTime())) return;
+        
+        // Set minimum end date time to 1 hour after start
+        const minEndDate = new Date(startDate);
+        minEndDate.setHours(minEndDate.getHours() + 1);
+        document.getElementById('endDateTime').min = minEndDate.toISOString().slice(0, 16);
+        
+        updateEstimatedTotal();
+      });
+
+      document.getElementById('endDateTime')?.addEventListener('change', updateEstimatedTotal);
+      document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
+      
+      // Phone number validation
+      document.getElementById('phoneNumber')?.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 10);
+      });
 
       // Confirm booking
       document.getElementById('confirmBookingBtn')?.addEventListener('click', () => {
@@ -511,26 +575,75 @@
           return;
         }
 
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const startDateTime = document.getElementById('startDateTime').value;
+        const endDateTime = document.getElementById('endDateTime').value;
         const option = document.getElementById('rentalOption').value;
-        const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+        
+        if (!phoneNumber || !startDateTime || !endDateTime) {
+          alert('Please fill all required fields');
+          return;
+        }
+
+        // Validate phone number
+        if (!/^[0-9]{10}$/.test(phoneNumber)) {
+          alert('Please enter a valid 10-digit phone number');
+          return;
+        }
+
+        const startDate = new Date(startDateTime);
+        const endDate = new Date(endDateTime);
+        
+        // Validate end date is after start date
+        if (endDate <= startDate) {
+          alert('End date/time must be after start date/time');
+          return;
+        }
+
+        const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+        const totalDays = Math.ceil(totalHours / 24);
+        
+        let pricePerUnit, finalPrice, billingType;
+        
+        if (totalDays >= 2) {
+          // For 2+ days, use 24-hour pricing
+          pricePerUnit = selectedCar.price24hrs;
+          finalPrice = totalDays * pricePerUnit;
+          billingType = '24hr_auto';
+        } else {
+          // For less than 2 days, use selected option
+          if (option === '12hrs') {
+            pricePerUnit = selectedCar.price12hrs;
+            const blocks = Math.max(1, Math.ceil(totalHours / 12));
+            finalPrice = blocks * pricePerUnit;
+            billingType = '12hr';
+          } else {
+            pricePerUnit = selectedCar.price24hrs;
+            finalPrice = pricePerUnit;
+            billingType = '24hr';
+          }
+        }
+
         const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
 
         db.collection('bookings').doc(bookingId).set({
           userId: user.uid,
           userEmail: user.email,
+          userPhone: phoneNumber,
           carId: selectedCar.id,
           carName: selectedCar.name,
           carImage: selectedCar.image,
-          startDate: startDate,
-          endDate: endDate,
+          startDateTime: startDateTime,
+          endDateTime: endDateTime,
           rentalOption: option,
-          originalPrice: price,
-          finalPrice: price,
+          originalPrice: pricePerUnit,
+          finalPrice: finalPrice,
           status: 'pending_payment',
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          bookingId: bookingId
+          bookingId: bookingId,
+          billingType: billingType,
+          totalDays: totalDays,
+          totalHours: totalHours
         }).then(() => {
           bookingModal.hide();
           window.location.href = `pay.html?bookingId=${bookingId}`;
