@@ -1,771 +1,759 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoPanda Cars - Self Drive Car Rentals</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .car-card { 
-      transition: transform 0.3s; 
-      margin-bottom: 20px; 
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .car-card:hover { 
-      transform: translateY(-5px); 
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-    .hero-section { 
-      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://source.unsplash.com/random/1200x400/?car,rental');
-      background-size: cover;
-      background-position: center;
-      color: white;
-      padding: 100px 0;
-      margin-bottom: 40px;
-      border-radius: 0;
-    }
-    .badge-category { 
-      font-size: 0.8rem; 
-      text-transform: capitalize;
-    }
-    .card-img-top {
-      height: 200px;
-      object-fit: cover;
-      width: 100%;
-    }
-    .whatsapp-float {
-      position: fixed;
-      width: 60px;
-      height: 60px;
-      bottom: 40px;
-      right: 40px;
-      background-color: #25d366;
-      color: #FFF;
-      border-radius: 50px;
-      text-align: center;
-      font-size: 30px;
-      box-shadow: 2px 2px 3px #999;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.4s;
-      text-decoration: none;
-    }
-    .whatsapp-float:hover {
-      background-color: #128C7E;
-      transform: scale(1.05);
-    }
-    .section-title {
-      margin-bottom: 40px;
-    }
-    .section-title h2 {
-      font-weight: 700;
-      color: #333;
-    }
-    .btn-primary {
-      background-color: #0d6efd;
-      border-color: #0d6efd;
-    }
-    .btn-primary:hover {
-      background-color: #0b5ed7;
-      border-color: #0a58ca;
-    }
-    #billingNote {
-      font-size: 0.9rem;
-      color: #666;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoPanda Cars - Rental Service</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .car-card {
+            transition: transform 0.3s;
+        }
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .car-img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .badge {
+            font-size: 0.8rem;
+        }
+        .date-filter-btn.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        #availabilityHeader {
+            font-weight: 600;
+        }
+        .no-cars-available {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="bg-dark sticky-top">
-    <nav class="navbar navbar-expand-lg navbar-dark container">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
-          <h1 class="m-0">GoPanda Cars</h1>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link active" href="index.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="profile.html">Profile</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="profile.html#mybookings">My Bookings</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="login.html" id="loginLink">Login</a>
-            </li>
-          </ul>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">GoPanda Cars</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="loginLink" href="login.html">Login</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
-  </header>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="container text-center">
-      <h1 class="display-4 fw-bold mb-4">Drive Freely - Unlimited Kilometers</h1>
-      <p class="lead mb-5">Experience unmatched freedom with our self-drive car rentals in Guntur</p>
-      <a href="#cars" class="btn btn-primary btn-lg px-4 me-2">Browse Cars</a>
-      <a href="login.html" class="btn btn-outline-light btn-lg px-4">Book Now</a>
-    </div>
-  </section>
-
-  <!-- Cars Section -->
-  <section id="cars" class="py-5">
-    <div class="container">
-      <div class="section-title text-center">
-        <h2>Cars For Rent</h2>
-        <p class="text-muted">Select from our premium collection</p>
-      </div>
-
-      <!-- Economy Cars -->
-      <h3 class="mb-4">Economy Cars</h3>
-      <div class="row g-4 mb-5" id="economyCars"></div>
-
-      <!-- Premium Cars -->
-      <h3 class="mb-4">Premium Cars</h3>
-      <div class="row g-4 mb-5" id="premiumCars"></div>
-
-      <!-- Luxury Cars -->
-      <h3 class="mb-4">Luxury Cars</h3>
-      <div class="row g-4" id="luxuryCars"></div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="py-5 bg-light">
-    <div class="container">
-      <div class="section-title text-center">
-        <h2>Contact Us</h2>
-        <p>Need help? We're here for you</p>
-      </div>
-      
-      <div class="row">
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title"><i class="fas fa-map-marker-alt me-2"></i> Address</h5>
-              <p class="card-text">Beside Andhra Muslim College, Ponnur Road, Guntur 522001</p>
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d490882.84700774145!2d80.07906971221986!3d16.012357610181883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4a0be58a4cd3cd%3A0x7c5eb18eed4de38!2sGo%20Panda%20Cars!5e0!3m2!1sen!2sin!4v1728323715773!5m2!1sen!2sin" 
-                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-            </div>
-          </div>
+    <!-- Hero Section -->
+    <header class="bg-primary text-white py-5">
+        <div class="container text-center">
+            <h1 class="display-4">Premium Car Rental Service</h1>
+            <p class="lead">Book your perfect car for any occasion</p>
         </div>
-        
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title"><i class="fas fa-phone-alt me-2"></i> Contact Info</h5>
-              <ul class="list-unstyled">
-                <li class="mb-2"><i class="fas fa-phone me-2"></i> <a href="tel:9052017979">9052017979</a></li>
-                <li class="mb-2"><i class="fas fa-phone me-2"></i> <a href="tel:9052027979">9052027979</a></li>
-                <li class="mb-2"><i class="fas fa-phone me-2"></i> <a href="tel:9052037979">9052037979</a></li>
-                <li class="mb-2"><i class="fas fa-envelope me-2"></i> <a href="mailto:gopandaindia@gmail.com">gopandaindia@gmail.com</a></li>
-                <li class="mb-2"><i class="fas fa-clock me-2"></i> Mon-Sun: 6AM - 11PM</li>
-              </ul>
-              
-              <h5 class="mt-4"><i class="fab fa-whatsapp me-2"></i> WhatsApp</h5>
-              <a href="https://wa.me/9052017979" target="_blank" class="btn btn-success">
-                <i class="fab fa-whatsapp me-2"></i> Chat Now
-              </a>
-              
-              <h5 class="mt-4">Follow Us</h5>
-              <div class="social-links">
-                <a href="https://www.instagram.com/gopanda_cars" class="btn btn-outline-primary me-2">
-                  <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="btn btn-outline-primary me-2">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Footer -->
-  <footer class="bg-dark text-white py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <h5>GoPanda Cars</h5>
-          <p>Self-drive car rentals with unlimited kilometers in Guntur, Andhra Pradesh.</p>
-        </div>
-        <div class="col-md-3">
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="index.html" class="text-white">Home</a></li>
-            <li><a href="#cars" class="text-white">Cars</a></li>
-            <li><a href="profile.html" class="text-white">My Bookings</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3">
-          <h5>Contact</h5>
-          <ul class="list-unstyled">
-            <li><i class="fas fa-phone me-2"></i> 9052017979</li>
-            <li><i class="fas fa-envelope me-2"></i> gopandaindia@gmail.com</li>
-          </ul>
-        </div>
-      </div>
-      <hr>
-      <div class="text-center">
-        <p class="mb-0">© 2023 GoPanda Cars. All Rights Reserved.</p>
-        <p class="small">Developed by GANTA Solutions</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- WhatsApp Float Button -->
-  <a href="https://wa.me/9052017979" class="whatsapp-float" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-  </a>
-
-  <!-- Booking Modal -->
-  <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Book <span id="modalCarName"></span></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div id="loginRequired" class="text-center py-4">
-            <h6>Please login to book this car</h6>
-            <a href="login.html" class="btn btn-primary mt-3">Login</a>
-          </div>
-          <form id="bookingForm" style="display:none;">
-            <div class="mb-3">
-              <label class="form-label">Phone Number</label>
-              <input type="tel" class="form-control" id="phoneNumber" required placeholder="Enter your 10-digit mobile number">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Rental Option</label>
-              <select class="form-select" id="rentalOption">
-                <option value="12hrs">12 Hours (₹<span id="price12hrs"></span>)</option>
-                <option value="24hrs">24 Hours (₹<span id="price24hrs"></span>)</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Start Date & Time</label>
-              <input type="datetime-local" class="form-control" id="startDateTime" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">End Date & Time</label>
-              <input type="datetime-local" class="form-control" id="endDateTime" required>
-            </div>
-            <div class="alert alert-info">
-              Estimated Total: ₹<span id="estimatedTotal">0</span>
-              <div id="billingNote" class="small mt-1"></div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" id="confirmBookingBtn" class="btn btn-primary" style="display:none;">Confirm Booking</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
-        authDomain: "gopandacars-7085f.firebaseapp.com",
-        projectId: "gopandacars-7085f",
-        storageBucket: "gopandacars-7085f.appspot.com",
-        messagingSenderId: "486383420605"
-      };
-      
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-
-      // Car data
-      const cars = [
-        {
-          id: 'car1',
-          name: 'Swift',
-          image: 'img/swift.jpg',
-          priceHourly: 85,
-          price12hrs: 1200,
-          price24hrs: 2000,
-          description: 'Compact hatchback with great fuel efficiency.',
-          category: 'economy'
-        },
-        {
-          id: 'car2',
-          name: 'Etios',
-          image: 'img/etios.jpg',
-          priceHourly: 85,
-          price12hrs: 1200,
-          price24hrs: 2000,
-          description: 'Reliable sedan with spacious interior.',
-          category: 'economy'
-        },
-        {
-          id: 'car3',
-          name: 'I10 Nios',
-          image: 'img/i10nios.jpg',
-          priceHourly: 100,
-          price12hrs: 1500,
-          price24hrs: 2300,
-          description: 'Premium hatchback with modern features.',
-          category: 'economy'
-        },
-        {
-          id: 'car4',
-          name: 'Swift Dzire',
-          image: 'img/swiftdzire.jpg',
-          priceHourly: 100,
-          price12hrs: 1500,
-          price24hrs: 2300,
-          description: 'Popular compact sedan.',
-          category: 'economy'
-        },
-        {
-          id: 'car5',
-          name: 'Hyundai Aura',
-          image: 'img/aura.jpg',
-          priceHourly: 105,
-          price12hrs: 1500,
-          price24hrs: 2500,
-          description: 'Stylish compact sedan.',
-          category: 'premium'
-        },
-        {
-          id: 'car6',
-          name: 'Tata Punch',
-          image: 'img/punch.jpg',
-          priceHourly: 105,
-          price12hrs: 1500,
-          price24hrs: 2500,
-          description: 'Compact SUV with rugged design.',
-          category: 'premium'
-        },
-        {
-          id: 'car7',
-          name: 'Hyundai i20',
-          image: 'img/i20.jpg',
-          priceHourly: 105,
-          price12hrs: 1500,
-          price24hrs: 2500,
-          description: 'Premium hatchback with sunroof.',
-          sunroof: true,
-          category: 'premium'
-        },
-        {
-          id: 'car8',
-          name: 'Creta',
-          image: 'img/creta.jpg',
-          priceHourly: 125,
-          price12hrs: 2000,
-          price24hrs: 3000,
-          description: 'Premium SUV with spacious cabin.',
-          category: 'premium'
-        },
-        {
-          id: 'car9',
-          name: 'Grand Vitara',
-          image: 'img/grandvitara.jpg',
-          priceHourly: 125,
-          price12hrs: 2000,
-          price24hrs: 3000,
-          description: 'Hybrid SUV with elegant design.',
-          category: 'premium'
-        },
-        {
-          id: 'car10',
-          name: 'Mahindra Thar',
-          image: 'img/thar.jpg',
-          priceHourly: 210,
-          price12hrs: 3500,
-          price24hrs: 5000,
-          description: 'Iconic off-roader.',
-          category: 'luxury'
-        },
-        {
-          id: 'car11',
-          name: 'Fortuner',
-          image: 'img/fortuner.jpg',
-          priceHourly: 500,
-          price12hrs: 8000,
-          price24hrs: 12000,
-          description: 'Full-size luxury SUV.',
-          withDriver: true,
-          category: 'luxury'
-        },
-        {
-          id: 'car12',
-          name: 'XUV700',
-          image: 'img/xuv700.jpg',
-          priceHourly: 270,
-          price12hrs: 4500,
-          price24hrs: 6500,
-          description: 'Premium SUV with advanced features.',
-          withDriver: true,
-          category: 'luxury'
-        }
-      ];
-
-      // Initialize Bootstrap modal
-      const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-      let selectedCar = null;
-
-      // Check auth state
-      auth.onAuthStateChanged(user => {
-        const loginLink = document.getElementById('loginLink');
-        if (user) {
-          loginLink.textContent = 'Logout';
-          loginLink.href = '#';
-          loginLink.onclick = () => {
-            auth.signOut().then(() => window.location.href = 'index.html');
-          };
-        } else {
-          loginLink.textContent = 'Login';
-          loginLink.href = 'login.html';
-          loginLink.onclick = null;
-        }
-        
-        // Render cars regardless of auth state
-        renderCars();
-      });
-
-      // Function to render cars by category
-      function renderCars() {
-        const economyContainer = document.getElementById('economyCars');
-        const premiumContainer = document.getElementById('premiumCars');
-        const luxuryContainer = document.getElementById('luxuryCars');
-        
-        if (!economyContainer || !premiumContainer || !luxuryContainer) {
-          console.error('Car containers not found');
-          return;
-        }
-
-        const economyCars = cars.filter(car => car.category === 'economy');
-        const premiumCars = cars.filter(car => car.category === 'premium');
-        const luxuryCars = cars.filter(car => car.category === 'luxury');
-
-        renderCarCategory(economyCars, economyContainer);
-        renderCarCategory(premiumCars, premiumContainer);
-        renderCarCategory(luxuryCars, luxuryContainer);
-      }
-
-      function renderCarCategory(carList, container) {
-        if (!container) return;
-        
-        container.innerHTML = '';
-
-        if (!carList || carList.length === 0) {
-          container.innerHTML = '<div class="col-12 text-center">No cars available in this category</div>';
-          return;
-        }
-
-        carList.forEach((car) => {
-          const card = document.createElement('div');
-          card.className = 'col-md-4 mb-4';
-          card.innerHTML = `
-            <div class="card car-card h-100">
-              <img src="${car.image}" class="card-img-top" alt="${car.name}" 
-                   onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Car+Image'">
-              <div class="card-body">
-                <h5 class="card-title">${car.name}</h5>
-                <p class="card-text text-muted">${car.description}</p>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <div>
-                    <span class="fw-bold">₹${car.price12hrs}</span>/12h
-                    <span class="mx-2">•</span>
-                    <span class="fw-bold">₹${car.price24hrs}</span>/24h
-                  </div>
-                  <span class="badge bg-${getCategoryColor(car.category)}">${car.category}</span>
+    <!-- Date Filters -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h3 id="availabilityHeader">Available Cars</h3>
                 </div>
-                ${car.sunroof ? '<span class="badge bg-info me-1">Sunroof</span>' : ''}
-                ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
-              </div>
-              <div class="card-footer bg-transparent">
-                <button class="btn btn-primary w-100 book-btn" data-car-id="${car.id}">Book Now</button>
-              </div>
+                <div class="col-md-4 text-end">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary date-filter-btn active" data-filter="today">Today</button>
+                        <button type="button" class="btn btn-outline-primary date-filter-btn" data-filter="tomorrow">Tomorrow</button>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="customDateFilter">
+                            <button class="btn btn-primary" type="button" id="applyCustomDate">Go</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          `;
-          container.appendChild(card);
-        });
+        </div>
+    </section>
 
-        // Add event listeners to book buttons
-        document.querySelectorAll('.book-btn').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const carId = this.getAttribute('data-car-id');
-            const car = cars.find(c => c.id === carId);
-            if (car) showBookingModal(car);
-          });
-        });
-      }
+    <!-- Cars Section -->
+    <section class="py-5">
+        <div class="container">
+            <!-- Economy Cars -->
+            <h4 class="mb-4"><i class="fas fa-car me-2"></i> Economy Cars</h4>
+            <div class="row" id="economyCars">
+                <!-- Cars will be loaded here -->
+            </div>
 
-      function getCategoryColor(category) {
-        switch(category) {
-          case 'economy': return 'success';
-          case 'premium': return 'primary';
-          case 'luxury': return 'danger';
-          default: return 'secondary';
-        }
-      }
+            <!-- Premium Cars -->
+            <h4 class="mb-4 mt-5"><i class="fas fa-car-side me-2"></i> Premium Cars</h4>
+            <div class="row" id="premiumCars">
+                <!-- Cars will be loaded here -->
+            </div>
 
-      function showBookingModal(car) {
-        selectedCar = car;
-        document.getElementById('modalCarName').textContent = car.name;
-        document.getElementById('price12hrs').textContent = car.price12hrs;
-        document.getElementById('price24hrs').textContent = car.price24hrs;
-        
-        const user = auth.currentUser;
-        if (user) {
-          document.getElementById('loginRequired').style.display = 'none';
-          document.getElementById('bookingForm').style.display = 'block';
-          document.getElementById('confirmBookingBtn').style.display = 'block';
-        } else {
-          document.getElementById('loginRequired').style.display = 'block';
-          document.getElementById('bookingForm').style.display = 'none';
-          document.getElementById('confirmBookingBtn').style.display = 'none';
-        }
-        
-        updateEstimatedTotal();
-        bookingModal.show();
-      }
+            <!-- Luxury Cars -->
+            <h4 class="mb-4 mt-5"><i class="fas fa-gem me-2"></i> Luxury Cars</h4>
+            <div class="row" id="luxuryCars">
+                <!-- Cars will be loaded here -->
+            </div>
+        </div>
+    </section>
 
-      function updateEstimatedTotal() {
-        if (!selectedCar) return;
-        
-        const option = document.getElementById('rentalOption').value;
-        const startDateTime = document.getElementById('startDateTime').value;
-        const endDateTime = document.getElementById('endDateTime').value;
-        
-        if (!startDateTime) return;
-        
-        const startDate = new Date(startDateTime);
-        const endDate = new Date(endDateTime);
-        
-        if (isNaN(startDate.getTime())) return;
-        
-        if (isNaN(endDate.getTime())) {
-          // Single day booking
-          const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
-          document.getElementById('estimatedTotal').textContent = price;
-          document.getElementById('billingNote').textContent = '';
-        } else {
-          // Calculate total hours
-          const totalHours = (endDate - startDate) / (1000 * 60 * 60);
-          
-          // Calculate total days (rounded up)
-          const totalDays = Math.ceil(totalHours / 24);
-          
-          let totalPrice = 0;
-          let billingNote = '';
-          
-          if (totalDays >= 2) {
-            // For rentals of 2 or more days, automatically use 24-hour pricing
-            totalPrice = totalDays * selectedCar.price24hrs;
-            billingNote = `For ${totalDays} days rental, 24-hour rate (₹${selectedCar.price24hrs}/day) is applied automatically.`;
-          } else {
-            // For less than 2 days, use selected option
-            if (option === '12hrs') {
-              // Calculate in 12-hour blocks (minimum 1)
-              const blocks = Math.max(1, Math.ceil(totalHours / 12));
-              totalPrice = blocks * selectedCar.price12hrs;
-            } else {
-              // 24-hour option
-              totalPrice = selectedCar.price24hrs;
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Book <span id="modalCarName"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="loginRequired" class="alert alert-info">
+                        Please <a href="login.html">login</a> to book this car.
+                    </div>
+                    
+                    <div id="bookingForm">
+                        <div class="mb-3">
+                            <label class="form-label">Rental Option</label>
+                            <select class="form-select" id="rentalOption">
+                                <option value="12hrs">12 Hours (₹<span id="price12hrs"></span>)</option>
+                                <option value="24hrs">24 Hours (₹<span id="price24hrs"></span>)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Start Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="startDateTime">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">End Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="endDateTime">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="10 digit mobile number">
+                        </div>
+                        
+                        <div class="alert alert-secondary">
+                            <strong>Estimated Total: ₹<span id="estimatedTotal">0</span></strong>
+                            <p class="mb-0 small" id="billingNote"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmBookingBtn">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>&copy; 2023 GoPanda Cars. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+                authDomain: "gopandacars-7085f.firebaseapp.com",
+                projectId: "gopandacars-7085f",
+                storageBucket: "gopandacars-7085f.appspot.com",
+                messagingSenderId: "486383420605"
+            };
+            
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            // Car data
+            const cars = [
+                {
+                    id: 'car1',
+                    name: 'Swift',
+                    image: 'img/swift.jpg',
+                    priceHourly: 85,
+                    price12hrs: 1200,
+                    price24hrs: 2000,
+                    description: 'Compact hatchback with great fuel efficiency.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car2',
+                    name: 'Etios',
+                    image: 'img/etios.jpg',
+                    priceHourly: 85,
+                    price12hrs: 1200,
+                    price24hrs: 2000,
+                    description: 'Reliable sedan with spacious interior.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car3',
+                    name: 'I10 Nios',
+                    image: 'img/i10nios.jpg',
+                    priceHourly: 100,
+                    price12hrs: 1500,
+                    price24hrs: 2300,
+                    description: 'Premium hatchback with modern features.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car4',
+                    name: 'Swift Dzire',
+                    image: 'img/swiftdzire.jpg',
+                    priceHourly: 100,
+                    price12hrs: 1500,
+                    price24hrs: 2300,
+                    description: 'Popular compact sedan.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car5',
+                    name: 'Hyundai Aura',
+                    image: 'img/aura.jpg',
+                    priceHourly: 105,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    description: 'Stylish compact sedan.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car6',
+                    name: 'Tata Punch',
+                    image: 'img/punch.jpg',
+                    priceHourly: 105,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    description: 'Compact SUV with rugged design.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car7',
+                    name: 'Hyundai i20',
+                    image: 'img/i20.jpg',
+                    priceHourly: 105,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    description: 'Premium hatchback with sunroof.',
+                    sunroof: true,
+                    category: 'premium'
+                },
+                {
+                    id: 'car8',
+                    name: 'Creta',
+                    image: 'img/creta.jpg',
+                    priceHourly: 125,
+                    price12hrs: 2000,
+                    price24hrs: 3000,
+                    description: 'Premium SUV with spacious cabin.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car9',
+                    name: 'Grand Vitara',
+                    image: 'img/grandvitara.jpg',
+                    priceHourly: 125,
+                    price12hrs: 2000,
+                    price24hrs: 3000,
+                    description: 'Hybrid SUV with elegant design.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car10',
+                    name: 'Mahindra Thar',
+                    image: 'img/thar.jpg',
+                    priceHourly: 210,
+                    price12hrs: 3500,
+                    price24hrs: 5000,
+                    description: 'Iconic off-roader.',
+                    category: 'luxury'
+                },
+                {
+                    id: 'car11',
+                    name: 'Fortuner',
+                    image: 'img/fortuner.jpg',
+                    priceHourly: 500,
+                    price12hrs: 8000,
+                    price24hrs: 12000,
+                    description: 'Full-size luxury SUV.',
+                    withDriver: true,
+                    category: 'luxury'
+                },
+                {
+                    id: 'car12',
+                    name: 'XUV700',
+                    image: 'img/xuv700.jpg',
+                    priceHourly: 270,
+                    price12hrs: 4500,
+                    price24hrs: 6500,
+                    description: 'Premium SUV with advanced features.',
+                    withDriver: true,
+                    category: 'luxury'
+                }
+            ];
+
+            // Initialize Bootstrap modal
+            const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            let selectedCar = null;
+
+            // UI Elements
+            const dateFilterButtons = document.querySelectorAll('.date-filter-btn');
+            const customDateInput = document.getElementById('customDateFilter');
+            const applyCustomDateBtn = document.getElementById('applyCustomDate');
+            const carContainers = {
+                economy: document.getElementById('economyCars'),
+                premium: document.getElementById('premiumCars'),
+                luxury: document.getElementById('luxuryCars')
+            };
+
+            // Check auth state
+            auth.onAuthStateChanged(user => {
+                const loginLink = document.getElementById('loginLink');
+                if (user) {
+                    loginLink.textContent = 'Logout';
+                    loginLink.href = '#';
+                    loginLink.onclick = () => {
+                        auth.signOut().then(() => window.location.href = 'index.html');
+                    };
+                } else {
+                    loginLink.textContent = 'Login';
+                    loginLink.href = 'login.html';
+                    loginLink.onclick = null;
+                }
+                
+                // Default: show cars available today
+                filterAvailableCars('today');
+            });
+
+            // Date filter event listeners
+            dateFilterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter');
+                    filterAvailableCars(filterType);
+                });
+            });
+
+            applyCustomDateBtn?.addEventListener('click', function() {
+                if (customDateInput.value) {
+                    filterAvailableCars('custom', customDateInput.value);
+                } else {
+                    alert('Please select a date');
+                }
+            });
+
+            // Main filtering function
+            async function filterAvailableCars(filterType, customDate = null) {
+                // Calculate date range based on filter type
+                let startDate, endDate;
+                
+                const now = new Date();
+                now.setHours(0, 0, 0, 0);
+                
+                switch(filterType) {
+                    case 'today':
+                        startDate = new Date(now);
+                        endDate = new Date(now);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    case 'tomorrow':
+                        startDate = new Date(now);
+                        startDate.setDate(startDate.getDate() + 1);
+                        endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    case 'custom':
+                        startDate = new Date(customDate);
+                        startDate.setHours(0, 0, 0, 0);
+                        endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    default:
+                        startDate = new Date(now);
+                        endDate = new Date(now);
+                        endDate.setDate(endDate.getDate() + 1);
+                }
+
+                // Format dates for display
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const dateDisplay = startDate.toLocaleDateString('en-US', options);
+                document.getElementById('availabilityHeader').textContent = `Available Cars for ${dateDisplay}`;
+
+                // Get all bookings that overlap with our date range
+                let bookedCarIds = [];
+                try {
+                    const bookingsSnapshot = await db.collection('bookings')
+                        .where('status', 'in', ['confirmed', 'active', 'pending_payment'])
+                        .get();
+
+                    bookingsSnapshot.forEach(doc => {
+                        const booking = doc.data();
+                        const bookingStart = booking.startDateTime.toDate();
+                        const bookingEnd = booking.endDateTime.toDate();
+
+                        // Check if booking overlaps with our filter date range
+                        if ((bookingStart < endDate) && (bookingEnd > startDate)) {
+                            bookedCarIds.push(booking.carId);
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error fetching bookings:", error);
+                }
+
+                // Filter cars to only show available ones
+                const availableCars = {
+                    economy: cars.filter(car => car.category === 'economy' && !bookedCarIds.includes(car.id)),
+                    premium: cars.filter(car => car.category === 'premium' && !bookedCarIds.includes(car.id)),
+                    luxury: cars.filter(car => car.category === 'luxury' && !bookedCarIds.includes(car.id))
+                };
+
+                // Render available cars
+                renderCarCategory(availableCars.economy, carContainers.economy);
+                renderCarCategory(availableCars.premium, carContainers.premium);
+                renderCarCategory(availableCars.luxury, carContainers.luxury);
+
+                // Update active filter button UI
+                dateFilterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-filter') === filterType) {
+                        btn.classList.add('active');
+                    }
+                });
             }
-          }
-          
-          document.getElementById('estimatedTotal').textContent = totalPrice;
-          document.getElementById('billingNote').textContent = billingNote;
-        }
-      }
 
-      // Function to check car availability
-      async function isCarAvailable(carId, startDateTime, endDateTime) {
-        try {
-          const bookingsRef = db.collection('bookings');
-          const snapshot = await bookingsRef
-            .where('carId', '==', carId)
-            .where('status', 'in', ['pending_payment', 'confirmed', 'active'])
-            .get();
+            // Render function
+            function renderCarCategory(carList, container) {
+                if (!container) return;
+                
+                container.innerHTML = '';
 
-          const newStart = new Date(startDateTime);
-          const newEnd = new Date(endDateTime);
+                if (!carList || carList.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 no-cars-available">
+                            <div class="alert alert-info w-100 text-center">
+                                No cars available in this category for selected date
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
 
-          for (const doc of snapshot.docs) {
-            const booking = doc.data();
-            const existingStart = booking.startDateTime.toDate();
-            const existingEnd = booking.endDateTime.toDate();
+                carList.forEach((car) => {
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 mb-4';
+                    card.innerHTML = `
+                        <div class="card car-card h-100">
+                            <img src="${car.image}" class="card-img-top car-img" alt="${car.name}" 
+                                onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Car+Image'">
+                            <div class="card-body">
+                                <h5 class="card-title">${car.name}</h5>
+                                <p class="card-text text-muted">${car.description}</p>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <span class="fw-bold">₹${car.price12hrs}</span>/12h
+                                        <span class="mx-2">•</span>
+                                        <span class="fw-bold">₹${car.price24hrs}</span>/24h
+                                    </div>
+                                    <span class="badge bg-${getCategoryColor(car.category)}">${car.category}</span>
+                                </div>
+                                ${car.sunroof ? '<span class="badge bg-info me-1">Sunroof</span>' : ''}
+                                ${car.withDriver ? '<span class="badge bg-warning">With Driver</span>' : ''}
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <button class="btn btn-primary w-100 book-btn" data-car-id="${car.id}">Book Now</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
 
-            // Check for overlap
-            if ((newStart >= existingStart && newStart < existingEnd) ||
-                (newEnd > existingStart && newEnd <= existingEnd) ||
-                (newStart <= existingStart && newEnd >= existingEnd)) {
-              return false; // Car is not available
+                // Reattach event listeners to book buttons
+                container.querySelectorAll('.book-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const carId = this.getAttribute('data-car-id');
+                        const car = cars.find(c => c.id === carId);
+                        if (car) showBookingModal(car);
+                    });
+                });
             }
-          }
-          return true; // Car is available
-        } catch (error) {
-          console.error('Error checking availability:', error);
-          return false; // Assume not available if there's an error
-        }
-      }
 
-      // Initialize date time pickers when modal shows
-      bookingModal._element.addEventListener('shown.bs.modal', function() {
-        // Set default start time to now (rounded to nearest hour)
-        const now = new Date();
-        now.setMinutes(0, 0, 0);
-        const startDateTime = now.toISOString().slice(0, 16);
-        document.getElementById('startDateTime').value = startDateTime;
-        
-        // Set default end time to same time next day
-        const nextDay = new Date(now);
-        nextDay.setDate(nextDay.getDate() + 1);
-        const endDateTime = nextDay.toISOString().slice(0, 16);
-        document.getElementById('endDateTime').value = endDateTime;
-        
-        // Trigger calculation
-        updateEstimatedTotal();
-      });
+            // Helper function
+            function getCategoryColor(category) {
+                switch(category) {
+                    case 'economy': return 'success';
+                    case 'premium': return 'primary';
+                    case 'luxury': return 'danger';
+                    default: return 'secondary';
+                }
+            }
 
-      // Event listeners for the new fields
-      document.getElementById('startDateTime')?.addEventListener('change', function() {
-        const startDate = new Date(this.value);
-        if (isNaN(startDate.getTime())) return;
-        
-        // Set minimum end date time to 1 hour after start
-        const minEndDate = new Date(startDate);
-        minEndDate.setHours(minEndDate.getHours() + 1);
-        document.getElementById('endDateTime').min = minEndDate.toISOString().slice(0, 16);
-        
-        updateEstimatedTotal();
-      });
+            function showBookingModal(car) {
+                selectedCar = car;
+                document.getElementById('modalCarName').textContent = car.name;
+                document.getElementById('price12hrs').textContent = car.price12hrs;
+                document.getElementById('price24hrs').textContent = car.price24hrs;
+                
+                const user = auth.currentUser;
+                if (user) {
+                    document.getElementById('loginRequired').style.display = 'none';
+                    document.getElementById('bookingForm').style.display = 'block';
+                    document.getElementById('confirmBookingBtn').style.display = 'block';
+                } else {
+                    document.getElementById('loginRequired').style.display = 'block';
+                    document.getElementById('bookingForm').style.display = 'none';
+                    document.getElementById('confirmBookingBtn').style.display = 'none';
+                }
+                
+                updateEstimatedTotal();
+                bookingModal.show();
+            }
 
-      document.getElementById('endDateTime')?.addEventListener('change', updateEstimatedTotal);
-      document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
-      
-      // Phone number validation
-      document.getElementById('phoneNumber')?.addEventListener('input', function() {
-        this.value = this.value.replace(/\D/g, '').slice(0, 10);
-      });
+            function updateEstimatedTotal() {
+                if (!selectedCar) return;
+                
+                const option = document.getElementById('rentalOption').value;
+                const startDateTime = document.getElementById('startDateTime').value;
+                const endDateTime = document.getElementById('endDateTime').value;
+                
+                if (!startDateTime) return;
+                
+                const startDate = new Date(startDateTime);
+                const endDate = new Date(endDateTime);
+                
+                if (isNaN(startDate.getTime())) return;
+                
+                if (isNaN(endDate.getTime())) {
+                    // Single day booking
+                    const price = option === '12hrs' ? selectedCar.price12hrs : selectedCar.price24hrs;
+                    document.getElementById('estimatedTotal').textContent = price;
+                    document.getElementById('billingNote').textContent = '';
+                } else {
+                    // Calculate total hours
+                    const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                    
+                    // Calculate total days (rounded up)
+                    const totalDays = Math.ceil(totalHours / 24);
+                    
+                    let totalPrice = 0;
+                    let billingNote = '';
+                    
+                    if (totalDays >= 2) {
+                        // For rentals of 2 or more days, automatically use 24-hour pricing
+                        totalPrice = totalDays * selectedCar.price24hrs;
+                        billingNote = `For ${totalDays} days rental, 24-hour rate (₹${selectedCar.price24hrs}/day) is applied automatically.`;
+                    } else {
+                        // For less than 2 days, use selected option
+                        if (option === '12hrs') {
+                            // Calculate in 12-hour blocks (minimum 1)
+                            const blocks = Math.max(1, Math.ceil(totalHours / 12));
+                            totalPrice = blocks * selectedCar.price12hrs;
+                        } else {
+                            // 24-hour option
+                            totalPrice = selectedCar.price24hrs;
+                        }
+                    }
+                    
+                    document.getElementById('estimatedTotal').textContent = totalPrice;
+                    document.getElementById('billingNote').textContent = billingNote;
+                }
+            }
 
-      // Confirm booking
-      document.getElementById('confirmBookingBtn')?.addEventListener('click', async () => {
-        const user = auth.currentUser;
-        if (!user) {
-          alert('Please login to complete booking');
-          return;
-        }
+            // Initialize date time pickers when modal shows
+            bookingModal._element.addEventListener('shown.bs.modal', function() {
+                // Set default start time to now (rounded to nearest hour)
+                const now = new Date();
+                now.setMinutes(0, 0, 0);
+                const startDateTime = now.toISOString().slice(0, 16);
+                document.getElementById('startDateTime').value = startDateTime;
+                
+                // Set default end time to same time next day
+                const nextDay = new Date(now);
+                nextDay.setDate(nextDay.getDate() + 1);
+                const endDateTime = nextDay.toISOString().slice(0, 16);
+                document.getElementById('endDateTime').value = endDateTime;
+                
+                // Trigger calculation
+                updateEstimatedTotal();
+            });
 
-        const phoneNumber = document.getElementById('phoneNumber').value;
-        const startDateTime = document.getElementById('startDateTime').value;
-        const endDateTime = document.getElementById('endDateTime').value;
-        const option = document.getElementById('rentalOption').value;
-        
-        if (!phoneNumber || !startDateTime || !endDateTime) {
-          alert('Please fill all required fields');
-          return;
-        }
+            // Event listeners for the new fields
+            document.getElementById('startDateTime')?.addEventListener('change', function() {
+                const startDate = new Date(this.value);
+                if (isNaN(startDate.getTime())) return;
+                
+                // Set minimum end date time to 1 hour after start
+                const minEndDate = new Date(startDate);
+                minEndDate.setHours(minEndDate.getHours() + 1);
+                document.getElementById('endDateTime').min = minEndDate.toISOString().slice(0, 16);
+                
+                updateEstimatedTotal();
+            });
 
-        // Validate phone number
-        if (!/^[0-9]{10}$/.test(phoneNumber)) {
-          alert('Please enter a valid 10-digit phone number');
-          return;
-        }
+            document.getElementById('endDateTime')?.addEventListener('change', updateEstimatedTotal);
+            document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
+            
+            // Phone number validation
+            document.getElementById('phoneNumber')?.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            });
 
-        const startDate = new Date(startDateTime);
-        const endDate = new Date(endDateTime);
-        
-        // Validate end date is after start date
-        if (endDate <= startDate) {
-          alert('End date/time must be after start date/time');
-          return;
-        }
+            // Confirm booking
+            document.getElementById('confirmBookingBtn')?.addEventListener('click', async () => {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('Please login to complete booking');
+                    return;
+                }
 
-        // Check if car is available
-        const isAvailable = await isCarAvailable(selectedCar.id, startDateTime, endDateTime);
-        if (!isAvailable) {
-          alert('This car is already booked for the selected time period. Please choose different dates/times.');
-          return;
-        }
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                const startDateTime = document.getElementById('startDateTime').value;
+                const endDateTime = document.getElementById('endDateTime').value;
+                const option = document.getElementById('rentalOption').value;
+                
+                if (!phoneNumber || !startDateTime || !endDateTime) {
+                    alert('Please fill all required fields');
+                    return;
+                }
 
-        const totalHours = (endDate - startDate) / (1000 * 60 * 60);
-        const totalDays = Math.ceil(totalHours / 24);
-        
-        let pricePerUnit, finalPrice, billingType;
-        
-        if (totalDays >= 2) {
-          // For 2+ days, use 24-hour pricing
-          pricePerUnit = selectedCar.price24hrs;
-          finalPrice = totalDays * pricePerUnit;
-          billingType = '24hr_auto';
-        } else {
-          // For less than 2 days, use selected option
-          if (option === '12hrs') {
-            pricePerUnit = selectedCar.price12hrs;
-            const blocks = Math.max(1, Math.ceil(totalHours / 12));
-            finalPrice = blocks * pricePerUnit;
-            billingType = '12hr';
-          } else {
-            pricePerUnit = selectedCar.price24hrs;
-            finalPrice = pricePerUnit;
-            billingType = '24hr';
-          }
-        }
+                // Validate phone number
+                if (!/^[0-9]{10}$/.test(phoneNumber)) {
+                    alert('Please enter a valid 10-digit phone number');
+                    return;
+                }
 
-        const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+                const startDate = new Date(startDateTime);
+                const endDate = new Date(endDateTime);
+                
+                // Validate end date is after start date
+                if (endDate <= startDate) {
+                    alert('End date/time must be after start date/time');
+                    return;
+                }
 
-        db.collection('bookings').doc(bookingId).set({
-          userId: user.uid,
-          userEmail: user.email,
-          userPhone: phoneNumber,
-          carId: selectedCar.id,
-          carName: selectedCar.name,
-          carImage: selectedCar.image,
-          startDateTime: firebase.firestore.Timestamp.fromDate(new Date(startDateTime)),
-          endDateTime: firebase.firestore.Timestamp.fromDate(new Date(endDateTime)),
-          rentalOption: option,
-          originalPrice: pricePerUnit,
-          finalPrice: finalPrice,
-          status: 'pending_payment',
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          bookingId: bookingId,
-          billingType: billingType,
-          totalDays: totalDays,
-          totalHours: totalHours
-        }).then(() => {
-          bookingModal.hide();
-          window.location.href = `pay.html?bookingId=${bookingId}`;
-        }).catch(error => {
-          console.error('Booking error:', error);
-          alert('Error submitting booking: ' + error.message);
+                // Check if car is available
+                const isAvailable = await isCarAvailable(selectedCar.id, startDateTime, endDateTime);
+                if (!isAvailable) {
+                    alert('This car is already booked for the selected time period. Please choose different dates/times.');
+                    return;
+                }
+
+                const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                const totalDays = Math.ceil(totalHours / 24);
+                
+                let pricePerUnit, finalPrice, billingType;
+                
+                if (totalDays >= 2) {
+                    // For 2+ days, use 24-hour pricing
+                    pricePerUnit = selectedCar.price24hrs;
+                    finalPrice = totalDays * pricePerUnit;
+                    billingType = '24hr_auto';
+                } else {
+                    // For less than 2 days, use selected option
+                    if (option === '12hrs') {
+                        pricePerUnit = selectedCar.price12hrs;
+                        const blocks = Math.max(1, Math.ceil(totalHours / 12));
+                        finalPrice = blocks * pricePerUnit;
+                        billingType = '12hr';
+                    } else {
+                        pricePerUnit = selectedCar.price24hrs;
+                        finalPrice = pricePerUnit;
+                        billingType = '24hr';
+                    }
+                }
+
+                const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+                db.collection('bookings').doc(bookingId).set({
+                    userId: user.uid,
+                    userEmail: user.email,
+                    userPhone: phoneNumber,
+                    carId: selectedCar.id,
+                    carName: selectedCar.name,
+                    carImage: selectedCar.image,
+                    startDateTime: firebase.firestore.Timestamp.fromDate(new Date(startDateTime)),
+                    endDateTime: firebase.firestore.Timestamp.fromDate(new Date(endDateTime)),
+                    rentalOption: option,
+                    originalPrice: pricePerUnit,
+                    finalPrice: finalPrice,
+                    status: 'pending_payment',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    bookingId: bookingId,
+                    billingType: billingType,
+                    totalDays: totalDays,
+                    totalHours: totalHours
+                }).then(() => {
+                    bookingModal.hide();
+                    window.location.href = `pay.html?bookingId=${bookingId}`;
+                }).catch(error => {
+                    console.error('Booking error:', error);
+                    alert('Error submitting booking: ' + error.message);
+                });
+            });
+
+            // Function to check car availability
+            async function isCarAvailable(carId, startDateTime, endDateTime) {
+                try {
+                    const bookingsRef = db.collection('bookings');
+                    const snapshot = await bookingsRef
+                        .where('carId', '==', carId)
+                        .where('status', 'in', ['pending_payment', 'confirmed', 'active'])
+                        .get();
+
+                    const newStart = new Date(startDateTime);
+                    const newEnd = new Date(endDateTime);
+
+                    for (const doc of snapshot.docs) {
+                        const booking = doc.data();
+                        const existingStart = booking.startDateTime.toDate();
+                        const existingEnd = booking.endDateTime.toDate();
+
+                        // Check for overlap
+                        if ((newStart >= existingStart && newStart < existingEnd) ||
+                            (newEnd > existingStart && newEnd <= existingEnd) ||
+                            (newStart <= existingStart && newEnd >= existingEnd)) {
+                            return false; // Car is not available
+                        }
+                    }
+                    return true; // Car is available
+                } catch (error) {
+                    console.error('Error checking availability:', error);
+                    return false; // Assume not available if there's an error
+                }
+            }
         });
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
