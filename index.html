@@ -242,131 +242,275 @@
 
             // Car data
             const cars = [
-                {
-                    id: 'car1',
-                    name: 'Swift',
-                    image: 'https://via.placeholder.com/600x400?text=Swift',
-                    priceHourly: 100,
-                    price12hrs: 1200,
-                    price24hrs: 2000,
-                    description: 'Compact hatchback with great fuel efficiency.',
-                    category: 'economy'
-                },
-                {
-                    id: 'car2',
-                    name: 'Etios',
-                    image: 'https://via.placeholder.com/600x400?text=Etios',
-                    priceHourly: 100,
-                    price12hrs: 1200,
-                    price24hrs: 2000,
-                    description: 'Reliable sedan with spacious interior.',
-                    category: 'economy'
-                },
-                {
-                    id: 'car3',
-                    name: 'I10 Nios',
-                    image: 'https://via.placeholder.com/600x400?text=I10+Nios',
-                    priceHourly: 125,
-                    price12hrs: 1500,
-                    price24hrs: 2300,
-                    description: 'Premium hatchback with modern features.',
-                    category: 'economy'
-                },
-                {
-                    id: 'car4',
-                    name: 'Swift Dzire',
-                    image: 'https://via.placeholder.com/600x400?text=Swift+Dzire',
-                    priceHourly: 125,
-                    price12hrs: 1500,
-                    price24hrs: 2300,
-                    description: 'Popular compact sedan.',
-                    category: 'economy'
-                },
-                {
-                    id: 'car5',
-                    name: 'Hyundai Aura',
-                    image: 'https://via.placeholder.com/600x400?text=Hyundai+Aura',
-                    priceHourly: 125,
-                    price12hrs: 1500,
-                    price24hrs: 2500,
-                    description: 'Stylish compact sedan.',
-                    category: 'premium'
-                },
-                {
-                    id: 'car6',
-                    name: 'Tata Punch',
-                    image: 'https://via.placeholder.com/600x400?text=Tata+Punch',
-                    priceHourly: 125,
-                    price12hrs: 1500,
-                    price24hrs: 2500,
-                    description: 'Compact SUV with rugged design.',
-                    category: 'premium'
-                },
-                {
-                    id: 'car7',
-                    name: 'Hyundai i20',
-                    image: 'https://via.placeholder.com/600x400?text=Hyundai+i20',
-                    priceHourly: 125,
-                    price12hrs: 1500,
-                    price24hrs: 2500,
-                    description: 'Premium hatchback with sunroof.',
-                    sunroof: true,
-                    category: 'premium'
-                },
-                {
-                    id: 'car8',
-                    name: 'Creta',
-                    image: 'https://via.placeholder.com/600x400?text=Creta',
-                    priceHourly: 166,
-                    price12hrs: 2000,
-                    price24hrs: 3000,
-                    description: 'Premium SUV with spacious cabin.',
-                    category: 'premium'
-                },
-                {
-                    id: 'car9',
-                    name: 'Grand Vitara',
-                    image: 'https://via.placeholder.com/600x400?text=Grand+Vitara',
-                    priceHourly: 166,
-                    price12hrs: 2000,
-                    price24hrs: 3000,
-                    description: 'Hybrid SUV with elegant design.',
-                    category: 'premium'
-                },
-                {
-                    id: 'car10',
-                    name: 'Mahindra Thar',
-                    image: 'https://via.placeholder.com/600x400?text=Mahindra+Thar',
-                    priceHourly: 291,
-                    price12hrs: 3500,
-                    price24hrs: 5000,
-                    description: 'Iconic off-roader.',
-                    category: 'luxury'
-                },
-                {
-                    id: 'car11',
-                    name: 'Fortuner',
-                    image: 'https://via.placeholder.com/600x400?text=Fortuner',
-                    priceHourly: 666,
-                    price12hrs: 8000,
-                    price24hrs: 12000,
-                    description: 'Full-size luxury SUV.',
-                    withDriver: true,
-                    category: 'luxury'
-                },
-                {
-                    id: 'car12',
-                    name: 'XUV700',
-                    image: 'https://via.placeholder.com/600x400?text=XUV700',
-                    priceHourly: 375,
-                    price12hrs: 4500,
-                    price24hrs: 6500,
-                    description: 'Premium SUV with advanced features.',
-                    withDriver: true,
-                    category: 'luxury'
-                }
-            ];
-
+    {
+        id: 'car1',
+        name: 'Swift',
+        image: 'img/swift.jpg',
+        priceHourly: 100,
+        price12hrs: 1200,
+        price24hrs: 2000,
+        description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.',
+        category: 'economy'
+    },
+    {
+        id: 'car2',
+        name: 'Etios',
+        image: 'img/etios.jpg',
+        priceHourly: 100,
+        price12hrs: 1200,
+        price24hrs: 2000,
+        description: 'Reliable sedan with spacious interior and good mileage.',
+        category: 'economy'
+    },
+    {
+        id: 'car3',
+        name: 'I10 Nios',
+        image: 'img/i10nios.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2300,
+        description: 'Premium hatchback with modern features and stylish design.',
+        category: 'economy'
+    },
+    {
+        id: 'car4',
+        name: 'Swift Dzire',
+        image: 'img/swiftdzire.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2300,
+        description: 'Popular compact sedan with excellent ride quality.',
+        category: 'economy'
+    },
+    {
+        id: 'car5',
+        name: 'Hyundai Aura',
+        image: 'img/aura.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Stylish compact sedan with premium features.',
+        category: 'premium'
+    },
+    {
+        id: 'car6',
+        name: 'Tata Punch',
+        image: 'img/punch.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Compact SUV with rugged design and modern features.',
+        category: 'premium'
+    },
+    {
+        id: 'car7',
+        name: 'Hyundai i20',
+        image: 'img/i20.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Premium hatchback with sporty looks and advanced features.',
+        sunroof: true,
+        category: 'premium'
+    },
+    {
+        id: 'car8',
+        name: 'Creta',
+        image: 'img/creta.jpg',
+        priceHourly: 166,
+        price12hrs: 2000,
+        price24hrs: 3000,
+        description: 'Premium SUV with luxurious features and spacious cabin.',
+        category: 'premium'
+    },
+    {
+        id: 'car9',
+        name: 'Grand Vitara',
+        image: 'img/grandvitara.jpg',
+        priceHourly: 166,
+        price12hrs: 2000,
+        price24hrs: 3000,
+        description: 'Premium SUV with hybrid technology and elegant design.',
+        category: 'premium'
+    },
+    {
+        id: 'car10',
+        name: 'Mahindra Thar',
+        image: 'img/thar.jpg',
+        priceHourly: 291,
+        price12hrs: 3500,
+        price24hrs: 5000,
+        description: 'Iconic off-roader with convertible top and powerful engine.',
+        category: 'luxury'
+    },
+    {
+        id: 'car11',
+        name: 'Fortuner',
+        image: 'img/fortuner.jpg',
+        priceHourly: 666,
+        price12hrs: 8000,
+        price24hrs: 12000,
+        description: 'Premium full-size SUV with powerful engine and luxury features.',
+        withDriver: true,
+        category: 'luxury'
+    },
+    {
+        id: 'car12',
+        name: 'XUV700',
+        image: 'img/xuv700.jpg',
+        priceHourly: 375,
+        price12hrs: 4500,
+        price24hrs: 6500,
+        description: 'Premium SUV with advanced features and powerful performance.',
+        withDriver: true,
+        category: 'luxury'
+    },
+    {
+        id: 'car13',
+        name: 'Renault Kiger',
+        image: 'img/kiger.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Compact SUV with bold styling and spacious interior.',
+        category: 'premium'
+    },
+    {
+        id: 'car14',
+        name: 'Urban Cruiser',
+        image: 'img/urban-cruiser.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Compact SUV with Toyota reliability and comfort.',
+        category: 'premium'
+    },
+    {
+        id: 'car15',
+        name: 'Brezza',
+        image: 'img/brezza.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Popular compact SUV with excellent build quality.',
+        category: 'premium'
+    },
+    {
+        id: 'car16',
+        name: 'Nexa Fronx',
+        image: 'img/fronx.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Stylish crossover with premium features.',
+        sunroof: true,
+        category: 'premium'
+    },
+    {
+        id: 'car17',
+        name: 'Ertiga',
+        image: 'img/ertiga.jpg',
+        priceHourly: 166,
+        price12hrs: 2000,
+        price24hrs: 3500,
+        description: '7-seater MPV with comfortable seating and good mileage.',
+        category: 'premium'
+    },
+    {
+        id: 'car18',
+        name: 'Bolero Neo',
+        image: 'img/bolero-neo.jpg',
+        priceHourly: 166,
+        price12hrs: 2000,
+        price24hrs: 3500,
+        description: 'Rugged SUV with excellent off-road capabilities.',
+        category: 'premium'
+    },
+    {
+        id: 'car19',
+        name: 'Innova Crysta',
+        image: 'img/innova.jpg',
+        priceHourly: 291,
+        price12hrs: 3500,
+        price24hrs: 5000,
+        description: 'Premium 7-seater MPV with luxurious comfort.',
+        category: 'luxury'
+    },
+    {
+        id: 'car20',
+        name: 'Brezza Sunroof',
+        image: 'img/brezza-sunroof.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Compact SUV with panoramic sunroof for open-air experience.',
+        sunroof: true,
+        category: 'premium'
+    },
+    {
+        id: 'car21',
+        name: 'Hyundai Venue',
+        image: 'img/venue.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Compact SUV with bold styling and connected car tech.',
+        category: 'premium'
+    },
+    {
+        id: 'car22',
+        name: 'Baleno',
+        image: 'img/baleno.jpg',
+        priceHourly: 125,
+        price12hrs: 1500,
+        price24hrs: 2500,
+        description: 'Mid variant hatchback with comfort, style, and great fuel efficiency.',
+        category: 'premium'
+    },
+    {
+        id: 'car23',
+        name: 'Tata Nexon Sunroof',
+        image: 'img/nexon-sunroof.jpg',
+        priceHourly: 150,
+        price12hrs: 1800,
+        price24hrs: 2800,
+        description: 'Safe and stylish compact SUV with panoramic sunroof.',
+        sunroof: true,
+        category: 'premium'
+    },
+    {
+        id: 'car24',
+        name: 'Tata Altroz Sunroof',
+        image: 'img/altroz-sunroof.jpg',
+        priceHourly: 133,
+        price12hrs: 1600,
+        price24hrs: 2500,
+        description: 'Premium hatchback with sunroof and premium interiors.',
+        sunroof: true,
+        category: 'premium'
+    },
+    {
+        id: 'car25',
+        name: 'XUV 300 Sunroof',
+        image: 'img/xuv300-sunroof.jpg',
+        priceHourly: 150,
+        price12hrs: 1800,
+        price24hrs: 2800,
+        description: 'Feature-packed compact SUV with sunroof option.',
+        sunroof: true,
+        category: 'premium'
+    },
+    {
+        id: 'car26',
+        name: 'Kia Seltos',
+        image: 'img/kia-selto.jpg',
+        priceHourly: 150,
+        price12hrs: 1800,
+        price24hrs: 2800,
+        description: 'Stylish SUV with premium features and spacious cabin.',
+        category: 'premium'
+    }
+];
             // Helper functions
             function showLoading() {
                 loadingSpinner.style.display = 'block';
