@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoPanda Self Drive Cars in Guntur - Premium Car Rental Service</title>
+    <meta name="description" content="GoPanda offers premium self-drive car rentals in Guntur. Book economy, premium & luxury cars at best prices with 10% discount on all rentals.">
+    <meta name="keywords" content="car rental Guntur, self drive cars Guntur, rent a car Guntur, GoPanda cars, luxury car rental, premium cars Guntur">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- GLightbox -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <style>
+        /* Logo Animation */
+        @keyframes logoBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-22px); }
+        }
+        
+        .logo-animation {
+            animation: logoBounce 3s ease-in-out infinite;
+        }
+        
+        /* Discount Banner */
+        .discount-banner {
+            background: linear-gradient(90deg, #ff4d4d, #f9cb28);
+            color: white;
+            padding: 10px 0;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .discount-scroll {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollBanner 20s linear infinite;
+        }
+        
+        @keyframes scrollBanner {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* General Styles */
+        .car-card {
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .car-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .badge {
+            font-size: 0.8rem;
+        }
+        .date-filter-btn.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        #availabilityHeader {
+            font-weight: 600;
+        }
+        .no-cars-available {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-spinner {
+            display: none;
+            width: 3rem;
+            height: 3rem;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        .price-badge {
+            font-size: 0.75rem;
+            margin-right: 3px;
+        }
+        
+        /* Gallery Styles */
+        .gallery .swiper-slide {
+            height: 300px;
+            overflow: hidden;
+        }
+        
+        .gallery .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Contact Section */
+        .contact .info-item {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            height: 100%;
+        }
+        
+        .contact .info-item i {
+            font-size: 24px;
+            margin-right: 20px;
+            color: #0d6efd;
+        }
+        
+        /* Footer */
+        .footer .icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #0d6efd;
+        }
+        
+        .footer .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .footer .social-links a:hover {
+            background: #0d6efd;
+        }
+        
+        /* Theme Colors */
+        .bg-primary {
+            background-color: #0d6efd !important;
+        }
+        
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        
+        .navbar-dark {
+            background-color: #0d6efd !important;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-text {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Discount Banner -->
+    <div class="discount-banner">
+        <div class="discount-scroll">
+            <span class="fw-bold"><i class="fas fa-tag me-2"></i> SPECIAL OFFER: 10% DISCOUNT ON ALL SELF-DRIVE CARS | USE CODE: GOPANDA10 | LIMITED TIME OFFER</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="https://via.placeholder.com/40x40" alt="GoPanda Logo" class="logo-animation me-2">
+                <span>GoPanda Cars</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="fas fa-user me-1"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about"><i class="fas fa-info-circle me-1"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pay"><i class="fas fa-credit-card me-1"></i> Pay</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="help"><i class="fas fa-question-circle me-1"></i> Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-primary text-white py-5">
+        <div class="container text-center">
+            <h1 class="display-4 hero-text"><i class="fas fa-car me-2"></i> GoPanda Self Drive Cars in Guntur</h1>
+            <p class="lead">Premium car rental service at affordable prices</p>
+            <div class="mt-4">
+                <a href="#economyCars" class="btn btn-light btn-lg me-2"><i class="fas fa-car me-1"></i> Book Now</a>
+                <a href="#contact" class="btn btn-outline-light btn-lg"><i class="fas fa-phone-alt me-1"></i> Contact Us</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Date Filters -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h3 id="availabilityHeader"><i class="fas fa-calendar-check me-2"></i> Available Cars</h3>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary date-filter-btn active" data-filter="today"><i class="fas fa-calendar-day me-1"></i> Today</button>
+                        <button type="button" class="btn btn-outline-primary date-filter-btn" data-filter="tomorrow"><i class="fas fa-calendar-alt me-1"></i> Tomorrow</button>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="customDateFilter">
+                            <button class="btn btn-primary" type="button" id="applyCustomDate"><i class="fas fa-check"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-primary loading-spinner" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div id="errorMessage" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cars Section -->
+    <section class="py-5">
+        <div class="container">
+            <!-- Economy Cars -->
+            <h4 class="mb-4"><i class="fas fa-car me-2"></i> Economy Cars</h4>
+            <div class="row" id="economyCars">
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        <i class="fas fa-spinner fa-spin me-2"></i> Loading economy cars...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Premium Cars -->
+            <h4 class="mb-4 mt-5"><i class="fas fa-car-side me-2"></i> Premium Cars</h4>
+            <div class="row" id="premiumCars">
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        <i class="fas fa-spinner fa-spin me-2"></i> Loading premium cars...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Luxury Cars -->
+            <h4 class="mb-4 mt-5"><i class="fas fa-gem me-2"></i> Luxury Cars</h4>
+            <div class="row" id="luxuryCars">
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        <i class="fas fa-spinner fa-spin me-2"></i> Loading luxury cars...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery section py-5 bg-light">
+        <div class="container">
+            <!-- Section Title -->
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2><i class="fas fa-images me-2"></i> Gallery</h2>
+                <p class="lead">Check out our premium fleet</p>
+            </div>
+
+            <div class="swiper gallerySwiper" data-aos="fade-up" data-aos-delay="100">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a class="glightbox" data-gallery="gallery1" href="https://via.placeholder.com/800x600?text=Car+1">
+                            <img src="https://via.placeholder.com/400x300?text=Car+1" class="img-fluid rounded" alt="Car 1">
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="glightbox" data-gallery="gallery1" href="https://via.placeholder.com/800x600?text=Car+2">
+                            <img src="https://via.placeholder.com/400x300?text=Car+2" class="img-fluid rounded" alt="Car 2">
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="glightbox" data-gallery="gallery1" href="https://via.placeholder.com/800x600?text=Car+3">
+                            <img src="https://via.placeholder.com/400x300?text=Car+3" class="img-fluid rounded" alt="Car 3">
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="glightbox" data-gallery="gallery1" href="https://via.placeholder.com/800x600?text=Car+4">
+                            <img src="https://via.placeholder.com/400x300?text=Car+4" class="img-fluid rounded" alt="Car 4">
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a class="glightbox" data-gallery="gallery1" href="https://via.placeholder.com/800x600?text=Car+5">
+                            <img src="https://via.placeholder.com/400x300?text=Car+5" class="img-fluid rounded" alt="Car 5">
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact py-5">
+        <div class="container">
+            <!-- Section Title -->
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2><i class="fas fa-phone-alt me-2"></i> Contact Us</h2>
+                <p class="lead">Need help? Get in touch with our team</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-100">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d490882.84700774145!2d80.07906971221986!3d16.012357610181883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4a0be58a4cd3cd%3A0x7c5eb18eed4de38!2sGo%20Panda%20Cars!5e0!3m2!1sen!2sin!4v1728323715773!5m2!1sen!2sin" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="row gy-4">
+                        <div class="col-md-6">
+                            <div class="info-item d-flex align-items-center p-3 bg-light rounded h-100">
+                                <i class="fas fa-map-marker-alt fa-2x text-primary me-3"></i>
+                                <div>
+                                    <h5>Address</h5>
+                                    <p class="mb-0">Beside Andhra Muslim collage, ponnur Road, Guntur 522001</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item d-flex align-items-center p-3 bg-light rounded h-100">
+                                <i class="fas fa-phone-alt fa-2x text-primary me-3"></i>
+                                <div>
+                                    <h5>Call Us</h5>
+                                    <p class="mb-0">
+                                        <a href="tel:9052017979">9052017979</a><br>
+                                        <a href="tel:9052027979">9052027979</a><br>
+                                        <a href="tel:9052037979">9052037979</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item d-flex align-items-center p-3 bg-light rounded h-100">
+                                <i class="fas fa-envelope fa-2x text-primary me-3"></i>
+                                <div>
+                                    <h5>Email Us</h5>
+                                    <p class="mb-0">
+                                        <a href="mailto:gopandaindia@gmail.com">gopandaindia@gmail.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item d-flex align-items-center p-3 bg-light rounded h-100">
+                                <i class="fas fa-clock fa-2x text-primary me-3"></i>
+                                <div>
+                                    <h5>Opening Hours</h5>
+                                    <p class="mb-0">
+                                        <strong>Mon-Sat:</strong> 6AM - 11PM<br>
+                                        <strong>Sunday:</strong> 6AM - 11PM
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item d-flex align-items-center p-3 bg-light rounded h-100">
+                                <i class="fab fa-whatsapp fa-2x text-primary me-3"></i>
+                                <div>
+                                    <h5>WhatsApp</h5>
+                                    <p class="mb-0">
+                                        <a href="https://wa.me/9052017979" target="_blank">9052017979</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item d-flex align-items-center p-3 bg-light rounded h-100">
+                                <i class="fas fa-headset fa-2x text-primary me-3"></i>
+                                <div>
+                                    <h5>Customer Support</h5>
+                                    <p class="mb-0">24/7 support available</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-car me-2"></i> Book <span id="modalCarName"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="loginRequired" class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> Please <a href="login.html">login</a> to book this car.
+                    </div>
+                    
+                    <div id="bookingForm">
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-clock me-1"></i> Rental Option</label>
+                            <select class="form-select" id="rentalOption">
+                                <option value="hourly">Hourly (₹<span id="priceHourly"></span>/hr)</option>
+                                <option value="12hrs">12 Hours (₹<span id="price12hrs"></span>)</option>
+                                <option value="24hrs">24 Hours (₹<span id="price24hrs"></span>)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-calendar-plus me-1"></i> Start Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="startDateTime">
+                                <div id="startDateError" class="error-message"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-calendar-minus me-1"></i> End Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="endDateTime">
+                                <div id="endDateError" class="error-message"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-phone me-1"></i> Phone Number</label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="10 digit mobile number">
+                            <div id="phoneError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="alert alert-secondary">
+                            <strong><i class="fas fa-rupee-sign me-1"></i> Estimated Total: ₹<span id="estimatedTotal">0</span></strong>
+                            <p class="mb-0 small" id="billingNote"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i> Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmBookingBtn"><i class="fas fa-check me-1"></i> Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-map-marker-alt fa-lg mt-1 me-3"></i>
+                        <div>
+                            <h5>Address</h5>
+                            <p>Guntur ponnur Road beside Muslim collage, Guntur 522001</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-phone-alt fa-lg mt-1 me-3"></i>
+                        <div>
+                            <h5>Contact</h5>
+                            <p class="mb-1"><strong>Phone:</strong> 9052017979, 9052027979, 9052037979</p>
+                            <p class="mb-0"><strong>Email:</strong> gopandaindia@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-clock fa-lg mt-1 me-3"></i>
+                        <div>
+                            <h5>Opening Hours</h5>
+                            <p class="mb-1"><strong>Mon-Sat:</strong> 6AM - 11PM</p>
+                            <p class="mb-0"><strong>Sunday:</strong> 6AM - 11PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/gopanda_cars?igsh=MWxsbjI1MDBtcnllcw==" class="text-white me-2"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="https://www.instagram.com/gopanda_cars?igsh=MWxsbjI1MDBtcnllcw==" class="text-white me-2"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="https://wa.me/9052017979" class="text-white me-2"><i class="fab fa-whatsapp fa-lg"></i></a>
+                        <a href="mailto:gopandaindia@gmail.com" class="text-white"><i class="fas fa-envelope fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 GoPanda Cars. All rights reserved.</p>
+                <p class="small mb-0">Developed by <a href="https://gantasolutions.com" class="text-white">GANTA</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <!-- GLightbox -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS animation
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Initialize GLightbox
+        const lightbox = GLightbox({
+            selector: '.glightbox'
+        });
+
+        // Initialize Swiper
+        const gallerySwiper = new Swiper('.gallerySwiper', {
+            loop: true,
+            speed: 600,
+            autoplay: {
+                delay: 5000,
+            },
+            slidesPerView: 'auto',
+            centeredSlides: true,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+                clickable: true
+            },
+            breakpoints: {
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 10
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                },
+                1200: {
+                    slidesPerView: 3,
+                    spaceBetween: 30
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+                authDomain: "gopandacars-7085f.firebaseapp.com",
+                projectId: "gopandacars-7085f",
+                storageBucket: "gopandacars-7085f.appspot.com",
+                messagingSenderId: "486383420605"
+            };
+            
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            // UI Elements
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const errorMessage = document.getElementById('errorMessage');
+            const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            let selectedCar = null;
+
+            // Car data with hourly pricing
+            const cars = [
+                {
+                    id: 'car1',
+                    name: 'Swift',
+                    image: 'img/swift.jpg',
+                    priceHourly: 150,
+                    price12hrs: 1200,
+                    price24hrs: 2000,
+                    minHours: 4,
+                    description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car2',
+                    name: 'Etios',
+                    image: 'img/etios.jpg',
+                    priceHourly: 150,
+                    price12hrs: 1200,
+                    price24hrs: 2000,
+                    minHours: 4,
+                    description: 'Reliable sedan with spacious interior and good mileage.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car3',
+                    name: 'I10 Nios',
+                    image: 'img/i10nios.jpg',
+                    priceHourly: 175,
+                    price12hrs: 1500,
+                    price24hrs: 2300,
+                    minHours: 4,
+                    description: 'Premium hatchback with modern features and stylish design.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car4',
+                    name: 'Swift Dzire',
+                    image: 'img/swiftdzire.jpg',
+                    priceHourly: 175,
+                    price12hrs: 1500,
+                    price24hrs: 2300,
+                    minHours: 4,
+                    description: 'Popular compact sedan with excellent ride quality.',
+                    category: 'economy'
+                },
+                {
+                    id: 'car5',
+                    name: 'Hyundai Aura',
+                    image: 'img/aura.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Stylish compact sedan with premium features.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car6',
+                    name: 'Tata Punch',
+                    image: 'img/punch.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Compact SUV with rugged design and modern features.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car7',
+                    name: 'Hyundai i20',
+                    image: 'img/i20.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Premium hatchback with sporty looks and advanced features.',
+                    sunroof: true,
+                    category: 'premium'
+                },
+                {
+                    id: 'car8',
+                    name: 'Creta',
+                    image: 'img/creta.jpg',
+                    priceHourly: 250,
+                    price12hrs: 2000,
+                    price24hrs: 3000,
+                    minHours: 4,
+                    description: 'Premium SUV with luxurious features and spacious cabin.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car9',
+                    name: 'Grand Vitara',
+                    image: 'img/grandvitara.jpg',
+                    priceHourly: 250,
+                    price12hrs: 2000,
+                    price24hrs: 3000,
+                    minHours: 4,
+                    description: 'Premium SUV with hybrid technology and elegant design.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car10',
+                    name: 'Mahindra Thar',
+                    image: 'img/thar.jpg',
+                    priceHourly: 400,
+                    price12hrs: 3500,
+                    price24hrs: 5000,
+                    minHours: 4,
+                    description: 'Iconic off-roader with convertible top and powerful engine.',
+                    category: 'luxury'
+                },
+                {
+                    id: 'car11',
+                    name: 'Fortuner',
+                    image: 'img/fortuner.jpg',
+                    priceHourly: 800,
+                    price12hrs: 8000,
+                    price24hrs: 12000,
+                    minHours: 4,
+                    description: 'Premium full-size SUV with powerful engine and luxury features.',
+                    withDriver: true,
+                    category: 'luxury'
+                },
+                {
+                    id: 'car12',
+                    name: 'XUV700',
+                    image: 'img/xuv700.jpg',
+                    priceHourly: 500,
+                    price12hrs: 4500,
+                    price24hrs: 6500,
+                    minHours: 4,
+                    description: 'Premium SUV with advanced features and powerful performance.',
+                    withDriver: true,
+                    category: 'luxury'
+                },
+                {
+                    id: 'car13',
+                    name: 'Renault Kiger',
+                    image: 'img/kiger.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Compact SUV with bold styling and spacious interior.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car14',
+                    name: 'Urban Cruiser',
+                    image: 'img/urban-cruiser.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Compact SUV with Toyota reliability and comfort.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car15',
+                    name: 'Brezza',
+                    image: 'img/brezza.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Popular compact SUV with excellent build quality.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car16',
+                    name: 'Nexa Fronx',
+                    image: 'img/fronx.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Stylish crossover with premium features.',
+                    sunroof: true,
+                    category: 'premium'
+                },
+                {
+                    id: 'car17',
+                    name: 'Ertiga',
+                    image: 'img/ertiga.jpg',
+                    priceHourly: 250,
+                    price12hrs: 2000,
+                    price24hrs: 3500,
+                    minHours: 4,
+                    description: '7-seater MPV with comfortable seating and good mileage.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car18',
+                    name: 'Bolero Neo',
+                    image: 'img/bolero-neo.jpg',
+                    priceHourly: 250,
+                    price12hrs: 2000,
+                    price24hrs: 3500,
+                    minHours: 4,
+                    description: 'Rugged SUV with excellent off-road capabilities.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car19',
+                    name: 'Innova Crysta',
+                    image: 'img/innova.jpg',
+                    priceHourly: 400,
+                    price12hrs: 3500,
+                    price24hrs: 5000,
+                    minHours: 4,
+                    description: 'Premium 7-seater MPV with luxurious comfort.',
+                    category: 'luxury'
+                },
+                {
+                    id: 'car20',
+                    name: 'Brezza Sunroof',
+                    image: 'img/brezza-sunroof.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Compact SUV with panoramic sunroof for open-air experience.',
+                    sunroof: true,
+                    category: 'premium'
+                },
+                {
+                    id: 'car21',
+                    name: 'Hyundai Venue',
+                    image: 'img/venue.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Compact SUV with bold styling and connected car tech.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car22',
+                    name: 'Baleno',
+                    image: 'img/baleno.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Mid variant hatchback with comfort, style, and great fuel efficiency.',
+                    category: 'premium'
+                },
+                {
+                    id: 'car23',
+                    name: 'Tata Nexon Sunroof',
+                    image: 'img/nexon-sunroof.jpg',
+                    priceHourly: 225,
+                    price12hrs: 1800,
+                    price24hrs: 2800,
+                    minHours: 4,
+                    description: 'Safe and stylish compact SUV with panoramic sunroof.',
+                    sunroof: true,
+                    category: 'premium'
+                },
+                {
+                    id: 'car24',
+                    name: 'Tata Altroz Sunroof',
+                    image: 'img/altroz-sunroof.jpg',
+                    priceHourly: 200,
+                    price12hrs: 1600,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Premium hatchback with sunroof and premium interiors.',
+                    sunroof: true,
+                    category: 'premium'
+                },
+                {
+                    id: 'car25',
+                    name: 'XUV 300 Sunroof',
+                    image: 'img/xuv300-sunroof.jpg',
+                    priceHourly: 225,
+                    price12hrs: 1800,
+                    price24hrs: 2800,
+                    minHours: 4,
+                    description: 'Feature-packed compact SUV with sunroof option.',
+                    sunroof: true,
+                    category: 'premium'
+                },
+                {
+                    id: 'car26',
+                    name: 'Kia Seltos',
+                    image: 'img/kia-selto.jpg',
+                    priceHourly: 225,
+                    price12hrs: 1800,
+                    price24hrs: 2800,
+                    minHours: 4,
+                    description: 'Stylish SUV with premium features and spacious cabin.',
+                    category: 'premium'
+                }
+            ];
+
+            // Helper functions
+            function showLoading() {
+                loadingSpinner.style.display = 'block';
+                errorMessage.textContent = '';
+            }
+            
+            function hideLoading() {
+                loadingSpinner.style.display = 'none';
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+            }
+
+            function getCategoryColor(category) {
+                switch(category) {
+                    case 'economy': return 'success';
+                    case 'premium': return 'primary';
+                    case 'luxury': return 'danger';
+                    default: return 'secondary';
+                }
+            }
+
+            // Safe timestamp conversion helper
+            function getDateFromFirestore(timestamp) {
+                try {
+                    // If it's a Firestore Timestamp
+                    if (timestamp && typeof timestamp.toDate === 'function') {
+                        return timestamp.toDate();
+                    }
+                    // If it's a raw timestamp object with seconds
+                    if (timestamp && timestamp.seconds) {
+                        return new Date(timestamp.seconds * 1000);
+                    }
+                    // If it's already a Date object
+                    if (timestamp instanceof Date) {
+                        return timestamp;
+                    }
+                    // If it's a string that can be parsed as a date
+                    if (typeof timestamp === 'string') {
+                        const date = new Date(timestamp);
+                        if (!isNaN(date.getTime())) return date;
+                    }
+                    return null;
+                } catch (e) {
+                    console.error('Error converting timestamp:', e);
+                    return null;
+                }
+            }
+
+            // Initialize UI
+            const dateFilterButtons = document.querySelectorAll('.date-filter-btn');
+            const customDateInput = document.getElementById('customDateFilter');
+            const applyCustomDateBtn = document.getElementById('applyCustomDate');
+            const carContainers = {
+                economy: document.getElementById('economyCars'),
+                premium: document.getElementById('premiumCars'),
+                luxury: document.getElementById('luxuryCars')
+            };
+
+            // Set default date for custom filter
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            customDateInput.valueAsDate = today;
+            customDateInput.min = today.toISOString().split('T')[0];
+
+            // Check auth state
+            auth.onAuthStateChanged(user => {
+                const loginLink = document.getElementById('loginLink');
+                if (user) {
+                    loginLink.textContent = 'Logout';
+                    loginLink.href = '#';
+                    loginLink.onclick = () => {
+                        auth.signOut().then(() => window.location.reload());
+                    };
+                } else {
+                    loginLink.textContent = 'Login';
+                    loginLink.href = 'login.html';
+                    loginLink.onclick = null;
+                }
+                
+                // Default: show cars available today
+                filterAvailableCars('today');
+            });
+
+            // Date filter event listeners
+            dateFilterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter');
+                    filterAvailableCars(filterType);
+                });
+            });
+
+            applyCustomDateBtn?.addEventListener('click', function() {
+                if (customDateInput.value) {
+                    filterAvailableCars('custom', customDateInput.value);
+                } else {
+                    showError('Please select a date');
+                }
+            });
+
+            // Main filtering function
+            async function filterAvailableCars(filterType, customDate = null) {
+                showLoading();
+                
+                // Calculate date range based on filter type
+                let startDate, endDate;
+                
+                const now = new Date();
+                now.setHours(0, 0, 0, 0);
+                
+                switch(filterType) {
+                    case 'today':
+                        startDate = new Date(now);
+                        endDate = new Date(now);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    case 'tomorrow':
+                        startDate = new Date(now);
+                        startDate.setDate(startDate.getDate() + 1);
+                        endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    case 'custom':
+                        startDate = new Date(customDate);
+                        startDate.setHours(0, 0, 0, 0);
+                        endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    default:
+                        startDate = new Date(now);
+                        endDate = new Date(now);
+                        endDate.setDate(endDate.getDate() + 1);
+                }
+
+                // Format dates for display
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const dateDisplay = startDate.toLocaleDateString('en-US', options);
+                document.getElementById('availabilityHeader').textContent = `Available Cars for ${dateDisplay}`;
+
+                // Get all bookings that overlap with our date range
+                let bookedCarIds = [];
+                try {
+                    const bookingsSnapshot = await db.collection('bookings')
+                        .where('status', 'in', ['confirmed', 'active', 'pending_payment'])
+                        .get();
+
+                    bookingsSnapshot.forEach(doc => {
+                        const booking = doc.data();
+                        
+                        // Safely get start and end dates
+                        const bookingStart = getDateFromFirestore(booking.startDateTime);
+                        const bookingEnd = getDateFromFirestore(booking.endDateTime);
+                        
+                        if (!bookingStart || !bookingEnd) {
+                            console.warn('Invalid booking dates - skipping', booking);
+                            return;
+                        }
+
+                        // Check if booking overlaps with our filter date range
+                        if ((bookingStart < endDate) && (bookingEnd > startDate)) {
+                            bookedCarIds.push(booking.carId);
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error fetching bookings:", error);
+                    showError("Error checking availability. Please try again.");
+                } finally {
+                    hideLoading();
+                }
+
+                // Filter cars to only show available ones
+                const availableCars = {
+                    economy: cars.filter(car => car.category === 'economy' && !bookedCarIds.includes(car.id)),
+                    premium: cars.filter(car => car.category === 'premium' && !bookedCarIds.includes(car.id)),
+                    luxury: cars.filter(car => car.category === 'luxury' && !bookedCarIds.includes(car.id))
+                };
+
+                // Render available cars
+                renderCarCategory(availableCars.economy, carContainers.economy);
+                renderCarCategory(availableCars.premium, carContainers.premium);
+                renderCarCategory(availableCars.luxury, carContainers.luxury);
+
+                // Update active filter button UI
+                dateFilterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-filter') === filterType) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            // Render function
+            function renderCarCategory(carList, container) {
+                if (!container) return;
+                
+                container.innerHTML = '';
+
+                if (!carList || carList.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 no-cars-available">
+                            <div class="alert alert-info w-100 text-center">
+                                <i class="fas fa-info-circle me-2"></i> No cars available in this category for selected date
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                carList.forEach((car) => {
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 mb-4';
+                    card.innerHTML = `
+                        <div class="card car-card h-100">
+                            <img src="${car.image}" class="card-img-top car-img" alt="${car.name}" 
+                                onerror="this.onerror=null;this.src='https://via.placeholder.com/600x400?text=Car+Image'">
+                            <div class="card-body">
+                                <h5 class="card-title">${car.name}</h5>
+                                <p class="card-text text-muted">${car.description}</p>
+                                <div class="d-flex flex-wrap mb-2">
+                                    <span class="price-badge badge bg-secondary"><i class="fas fa-clock me-1"></i> ₹${car.priceHourly}/hr</span>
+                                    <span class="price-badge badge bg-primary"><i class="fas fa-clock me-1"></i> ₹${car.price12hrs}/12h</span>
+                                    <span class="price-badge badge bg-success"><i class="fas fa-clock me-1"></i> ₹${car.price24hrs}/24h</span>
+                                    <span class="badge bg-${getCategoryColor(car.category)} ms-auto">${car.category}</span>
+                                </div>
+                                ${car.sunroof ? '<span class="badge bg-info me-1"><i class="fas fa-sun me-1"></i> Sunroof</span>' : ''}
+                                ${car.withDriver ? '<span class="badge bg-warning"><i class="fas fa-user-tie me-1"></i> With Driver</span>' : ''}
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <button class="btn btn-primary w-100 book-btn" data-car-id="${car.id}"><i class="fas fa-calendar-check me-1"></i> Book Now</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+                // Reattach event listeners to book buttons
+                container.querySelectorAll('.book-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const carId = this.getAttribute('data-car-id');
+                        const car = cars.find(c => c.id === carId);
+                        if (car) showBookingModal(car);
+                    });
+                });
+            }
+
+            function showBookingModal(car) {
+                selectedCar = car;
+                document.getElementById('modalCarName').textContent = car.name;
+                document.getElementById('priceHourly').textContent = car.priceHourly;
+                document.getElementById('price12hrs').textContent = car.price12hrs;
+                document.getElementById('price24hrs').textContent = car.price24hrs;
+                
+                const user = auth.currentUser;
+                if (user) {
+                    document.getElementById('loginRequired').style.display = 'none';
+                    document.getElementById('bookingForm').style.display = 'block';
+                    document.getElementById('confirmBookingBtn').style.display = 'block';
+                } else {
+                    document.getElementById('loginRequired').style.display = 'block';
+                    document.getElementById('bookingForm').style.display = 'none';
+                    document.getElementById('confirmBookingBtn').style.display = 'none';
+                }
+                
+                // Clear previous errors
+                document.getElementById('startDateError').textContent = '';
+                document.getElementById('endDateError').textContent = '';
+                document.getElementById('phoneError').textContent = '';
+                
+                updateEstimatedTotal();
+                bookingModal.show();
+            }
+
+            function updateEstimatedTotal() {
+                if (!selectedCar) return;
+                
+                const option = document.getElementById('rentalOption').value;
+                const startDateTime = document.getElementById('startDateTime').value;
+                const endDateTime = document.getElementById('endDateTime').value;
+                
+                if (!startDateTime) return;
+                
+                const startDate = new Date(startDateTime);
+                const endDate = new Date(endDateTime);
+                
+                if (isNaN(startDate.getTime())) return;
+                
+                if (isNaN(endDate.getTime())) {
+                    // Single hour booking (minimum charge)
+                    const price = option === 'hourly' ? selectedCar.priceHourly : 
+                                 option === '12hrs' ? selectedCar.price12hrs : 
+                                 selectedCar.price24hrs;
+                    document.getElementById('estimatedTotal').textContent = price;
+                    document.getElementById('billingNote').textContent = option === 'hourly' ? 
+                        `Minimum ${selectedCar.minHours} hours booking required` : '';
+                    return;
+                }
+                
+                // Calculate total hours
+                const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                
+                // Calculate total days (rounded up)
+                const totalDays = Math.ceil(totalHours / 24);
+                
+                let totalPrice = 0;
+                let billingNote = '';
+                
+                if (totalDays >= 2) {
+                    // For rentals of 2 or more days, automatically use 24-hour pricing
+                    totalPrice = totalDays * selectedCar.price24hrs;
+                    billingNote = `For ${totalDays} days rental, 24-hour rate (₹${selectedCar.price24hrs}/day) is applied automatically.`;
+                } else {
+                    // For less than 2 days, use selected option
+                    if (option === 'hourly') {
+                        // Hourly pricing with minimum hours
+                        const billableHours = Math.max(selectedCar.minHours, Math.ceil(totalHours));
+                        totalPrice = billableHours * selectedCar.priceHourly;
+                        billingNote = `Charged for ${billableHours} hours (minimum ${selectedCar.minHours} hours)`;
+                    } else if (option === '12hrs') {
+                        // Calculate in 12-hour blocks (minimum 1)
+                        const blocks = Math.max(1, Math.ceil(totalHours / 12));
+                        totalPrice = blocks * selectedCar.price12hrs;
+                        billingNote = `Charged in 12-hour blocks (${blocks} blocks)`;
+                    } else {
+                        // 24-hour option
+                        totalPrice = selectedCar.price24hrs;
+                    }
+                }
+                
+                document.getElementById('estimatedTotal').textContent = totalPrice;
+                document.getElementById('billingNote').textContent = billingNote;
+            }
+
+            // Initialize date time pickers when modal shows
+            bookingModal._element.addEventListener('shown.bs.modal', function() {
+                // Set default start time to now (rounded to nearest hour)
+                const now = new Date();
+                now.setMinutes(0, 0, 0);
+                const startDateTime = now.toISOString().slice(0, 16);
+                document.getElementById('startDateTime').value = startDateTime;
+                
+                // Set default end time to minimum booking duration (4 hours)
+                const minEndDate = new Date(now);
+                minEndDate.setHours(minEndDate.getHours() + selectedCar.minHours);
+                const endDateTime = minEndDate.toISOString().slice(0, 16);
+                document.getElementById('endDateTime').value = endDateTime;
+                
+                // Trigger calculation
+                updateEstimatedTotal();
+            });
+
+            // Event listeners for the new fields
+            document.getElementById('startDateTime')?.addEventListener('change', function() {
+                const startDate = new Date(this.value);
+                if (isNaN(startDate.getTime())) {
+                    document.getElementById('startDateError').textContent = 'Invalid start date/time';
+                    return;
+                }
+                document.getElementById('startDateError').textContent = '';
+                
+                // Set minimum end date time to minimum booking duration after start
+                const minEndDate = new Date(startDate);
+                minEndDate.setHours(minEndDate.getHours() + selectedCar.minHours);
+                document.getElementById('endDateTime').min = minEndDate.toISOString().slice(0, 16);
+                
+                updateEstimatedTotal();
+            });
+
+            document.getElementById('endDateTime')?.addEventListener('change', function() {
+                const endDate = new Date(this.value);
+                if (isNaN(endDate.getTime())) {
+                    document.getElementById('endDateError').textContent = 'Invalid end date/time';
+                    return;
+                }
+                document.getElementById('endDateError').textContent = '';
+                updateEstimatedTotal();
+            });
+
+            document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
+            
+            // Phone number validation
+            document.getElementById('phoneNumber')?.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+                if (this.value.length !== 10) {
+                    document.getElementById('phoneError').textContent = 'Please enter a 10-digit number';
+                } else {
+                    document.getElementById('phoneError').textContent = '';
+                }
+            });
+
+            // Confirm booking
+            document.getElementById('confirmBookingBtn')?.addEventListener('click', async () => {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('Please login to complete booking');
+                    return;
+                }
+
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                const startDateTime = document.getElementById('startDateTime').value;
+                const endDateTime = document.getElementById('endDateTime').value;
+                const option = document.getElementById('rentalOption').value;
+                
+                // Validate inputs
+                let isValid = true;
+                
+                if (!phoneNumber || phoneNumber.length !== 10) {
+                    document.getElementById('phoneError').textContent = 'Please enter a valid 10-digit phone number';
+                    isValid = false;
+                }
+                
+                const startDate = new Date(startDateTime);
+                if (isNaN(startDate.getTime())) {
+                    document.getElementById('startDateError').textContent = 'Please select a valid start date/time';
+                    isValid = false;
+                }
+                
+                const endDate = new Date(endDateTime);
+                if (isNaN(endDate.getTime())) {
+                    document.getElementById('endDateError').textContent = 'Please select a valid end date/time';
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                // Validate end date is after start date
+                if (endDate <= startDate) {
+                    document.getElementById('endDateError').textContent = 'End date/time must be after start date/time';
+                    return;
+                }
+
+                // Check minimum booking duration for hourly rentals
+                if (option === 'hourly') {
+                    const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                    if (totalHours < selectedCar.minHours) {
+                        document.getElementById('endDateError').textContent = `Minimum booking duration is ${selectedCar.minHours} hours for hourly rentals`;
+                        return;
+                    }
+                }
+
+                // Check if car is available
+                try {
+                    const isAvailable = await isCarAvailable(selectedCar.id, startDateTime, endDateTime);
+                    if (!isAvailable) {
+                        alert('This car is already booked for the selected time period. Please choose different dates/times.');
+                        return;
+                    }
+
+                    const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                    const totalDays = Math.ceil(totalHours / 24);
+                    
+                    let pricePerUnit, finalPrice, billingType;
+                    
+                    if (totalDays >= 2) {
+                        // For 2+ days, use 24-hour pricing
+                        pricePerUnit = selectedCar.price24hrs;
+                        finalPrice = totalDays * pricePerUnit;
+                        billingType = '24hr_auto';
+                    } else {
+                        // For less than 2 days, use selected option
+                        if (option === 'hourly') {
+                            pricePerUnit = selectedCar.priceHourly;
+                            const billableHours = Math.max(selectedCar.minHours, Math.ceil(totalHours));
+                            finalPrice = billableHours * pricePerUnit;
+                            billingType = 'hourly';
+                        } else if (option === '12hrs') {
+                            pricePerUnit = selectedCar.price12hrs;
+                            const blocks = Math.max(1, Math.ceil(totalHours / 12));
+                            finalPrice = blocks * pricePerUnit;
+                            billingType = '12hr';
+                        } else {
+                            pricePerUnit = selectedCar.price24hrs;
+                            finalPrice = pricePerUnit;
+                            billingType = '24hr';
+                        }
+                    }
+
+                    const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+                    await db.collection('bookings').doc(bookingId).set({
+                        userId: user.uid,
+                        userEmail: user.email,
+                        userPhone: phoneNumber,
+                        carId: selectedCar.id,
+                        carName: selectedCar.name,
+                        carImage: selectedCar.image,
+                        startDateTime: firebase.firestore.Timestamp.fromDate(new Date(startDateTime)),
+                        endDateTime: firebase.firestore.Timestamp.fromDate(new Date(endDateTime)),
+                        rentalOption: option,
+                        originalPrice: pricePerUnit,
+                        finalPrice: finalPrice,
+                        status: 'pending_payment',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        bookingId: bookingId,
+                        billingType: billingType,
+                        totalDays: totalDays,
+                        totalHours: totalHours,
+                        minHours: selectedCar.minHours
+                    });
+                    
+                    bookingModal.hide();
+                    alert(`Booking successful! Your booking ID is ${bookingId}`);
+                    window.location.href = `pay.html?bookingId=${bookingId}`;
+                } catch (error) {
+                    console.error('Booking error:', error);
+                    alert('Error submitting booking: ' + error.message);
+                }
+            });
+
+            // Function to check car availability
+            async function isCarAvailable(carId, startDateTime, endDateTime) {
+                try {
+                    const bookingsRef = db.collection('bookings');
+                    const snapshot = await bookingsRef
+                        .where('carId', '==', carId)
+                        .where('status', 'in', ['pending_payment', 'confirmed', 'active'])
+                        .get();
+
+                    const newStart = new Date(startDateTime);
+                    const newEnd = new Date(endDateTime);
+
+                    for (const doc of snapshot.docs) {
+                        const booking = doc.data();
+                        
+                        // Use the safe date conversion helper
+                        const existingStart = getDateFromFirestore(booking.startDateTime);
+                        const existingEnd = getDateFromFirestore(booking.endDateTime);
+                        
+                        if (!existingStart || !existingEnd) {
+                            console.warn('Invalid booking dates - skipping', booking);
+                            continue;
+                        }
+
+                        // Check for overlap
+                        if ((newStart >= existingStart && newStart < existingEnd) ||
+                            (newEnd > existingStart && newEnd <= existingEnd) ||
+                            (newStart <= existingStart && newEnd >= existingEnd)) {
+                            return false; // Car is not available
+                        }
+                    }
+                    return true; // Car is available
+                } catch (error) {
+                    console.error('Error checking availability:', error);
+                    return false; // Assume not available if there's an error
+                }
+            }
+        });
+    </script>
+</body>
+</html>
