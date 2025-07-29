@@ -710,175 +710,331 @@
       messagingSenderId: "486383420605"
     };
 
-    // Initialize Firebase
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-
-    // DOM elements
-    const logoutBtn = document.getElementById('logoutBtn');
-    const dashboardSection = document.getElementById('dashboardSection');
-    const bookingsSection = document.getElementById('bookingsSection');
-    const usersSection = document.getElementById('usersSection');
-    const offersSection = document.getElementById('offersSection');
-    const carsSection = document.getElementById('carsSection');
-    const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-    const userModal = new bootstrap.Modal(document.getElementById('userModal'));
-    const addOfferModal = new bootstrap.Modal(document.getElementById('addOfferModal'));
-    const addCarModal = new bootstrap.Modal(document.getElementById('addCarModal'));
-    const verifyPaymentModal = new bootstrap.Modal(document.getElementById('verifyPaymentModal'));
-    const notificationBadge = document.getElementById('notificationBadge');
-    const notificationsList = document.getElementById('notificationsList');
-    const notificationsDropdown = document.getElementById('notificationsDropdown');
-    const notificationsBtn = document.getElementById('notificationsBtn');
-    const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
-    const viewAllBookings = document.getElementById('viewAllBookings');
-    const currentDateElement = document.getElementById('currentDate');
     
-    // Global variables
-    let currentBookingId = null;
-    let currentUserId = null;
-    let lastBookingTimestamp = null;
-    let unreadNotifications = 0;
-    let bookingsChart = null;
-    let revenueChart = null;
-    
-    // Current date display
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    currentDateElement.textContent = new Date().toLocaleDateString('en-US', options);
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+const messaging = firebase.messaging();
 
-    // Check auth state
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        // Check if user is admin (you might want to implement proper admin check)
-        if (user.email === 'admin@gopandacars.in') {
-          // Admin user
-          loadDashboard();
-          setupEventListeners();
-          setupNotifications();
-        } else {
-          // Not admin
-          window.location.href = 'profile.html';
+// DOM elements
+const logoutBtn = document.getElementById('logoutBtn');
+const dashboardSection = document.getElementById('dashboardSection');
+const bookingsSection = document.getElementById('bookingsSection');
+const usersSection = document.getElementById('usersSection');
+const offersSection = document.getElementById('offersSection');
+const carsSection = document.getElementById('carsSection');
+const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+const userModal = new bootstrap.Modal(document.getElementById('userModal'));
+const addOfferModal = new bootstrap.Modal(document.getElementById('addOfferModal'));
+const addCarModal = new bootstrap.Modal(document.getElementById('addCarModal'));
+const verifyPaymentModal = new bootstrap.Modal(document.getElementById('verifyPaymentModal'));
+const notificationBadge = document.getElementById('notificationBadge');
+const notificationsList = document.getElementById('notificationsList');
+const notificationsDropdown = document.getElementById('notificationsDropdown');
+const notificationsBtn = document.getElementById('notificationsBtn');
+const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
+const viewAllBookings = document.getElementById('viewAllBookings');
+const currentDateElement = document.getElementById('currentDate');
+
+// Global variables
+let currentBookingId = null;
+let currentUserId = null;
+let lastBookingTimestamp = null;
+let unreadNotifications = 0;
+let bookingsChart = null;
+let revenueChart = null;
+let fcmToken = null;
+
+// Current date display
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+currentDateElement.textContent = new Date().toLocaleDateString('en-US', options);
+
+// Check auth state
+auth.onAuthStateChanged(async user => {
+  if (user) {
+    // Check if user is admin
+    if (user.email === 'admin@gopandacars.in') {
+      // Admin user
+      loadDashboard();
+      setupEventListeners();
+      setupNotifications();
+      
+      // Request notification permission and get FCM token
+      try {
+        await requestNotificationPermission();
+        fcmToken = await getFCMToken();
+        if (fcmToken) {
+          await saveTokenToDatabase(fcmToken, user.uid);
         }
+      } catch (error) {
+        console.error("Error setting up notifications:", error);
+      }
+    } else {
+      // Not admin
+      window.location.href = 'profile.html';
+    }
+  } else {
+    // No user signed in
+    window.location.href = 'login.html';
+  }
+});
+
+// Request notification permission
+function requestNotificationPermission() {
+  return new Promise((resolve, reject) => {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+        resolve();
       } else {
-        // No user signed in
-        window.location.href = 'login.html';
+        console.log('Unable to get permission to notify.');
+        reject(new Error('Permission not granted'));
       }
     });
+  });
+}
 
-    // Setup notifications system
-    function setupNotifications() {
-      // Load last booking timestamp from localStorage
-      const lastTimestamp = localStorage.getItem('lastBookingTimestamp');
-      if (lastTimestamp) {
-        lastBookingTimestamp = new Date(parseInt(lastTimestamp));
-      }
-      
-      // Set up real-time listener for new bookings
-      db.collection('bookings').orderBy('createdAt', 'desc').limit(1)
-        .onSnapshot(snapshot => {
-          snapshot.docChanges().forEach(change => {
-            if (change.type === 'added') {
-              const booking = change.doc.data();
-              const bookingTime = booking.createdAt.toDate();
+// Get FCM token
+function getFCMToken() {
+  return messaging.getToken({ vapidKey: 'YOUR_VAPID_KEY' }).then((currentToken) => {
+    if (currentToken) {
+      console.log('FCM Token:', currentToken);
+      return currentToken;
+    } else {
+      console.log('No registration token available. Request permission to generate one.');
+      return null;
+    }
+  }).catch((err) => {
+    console.log('An error occurred while retrieving token. ', err);
+    throw err;
+  });
+}
+
+// Save token to database
+function saveTokenToDatabase(token, userId) {
+  return db.collection('admin_tokens').doc(userId).set({
+    token: token,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+// Setup foreground message handler
+function onMessage() {
+  messaging.onMessage((payload) => {
+    console.log('Message received. ', payload);
+    
+    // Update notification badge
+    unreadNotifications++;
+    updateNotificationBadge();
+    
+    // Show notification
+    showNotification(payload.notification.title, payload.notification.body, payload.data);
+    
+    // Add to notifications list
+    addNotificationToList(payload.notification.title, payload.notification.body, payload.data);
+  });
+}
+
+// Show browser notification
+function showNotification(title, body, data) {
+  const notificationOptions = {
+    body: body,
+    icon: '/images/logo.png', // Path to your notification icon
+    data: data
+  };
+  
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.showNotification(title, notificationOptions);
+    });
+  } else {
+    new Notification(title, notificationOptions);
+  }
+}
+
+// Add notification to the dropdown list
+function addNotificationToList(title, body, data) {
+  const notificationItem = document.createElement('div');
+  notificationItem.className = 'notification-item unread';
+  
+  const now = new Date();
+  const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  
+  notificationItem.innerHTML = `
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <strong>${title}</strong>
+        <p class="mb-1">${body}</p>
+        <p class="mb-0 notification-time">${timeString}</p>
+      </div>
+      ${data.bookingId ? `
+        <a href="#" class="btn btn-sm btn-outline-primary view-notification" data-booking-id="${data.bookingId}">View</a>
+      ` : ''}
+    </div>
+  `;
+  
+  // Add to top of list
+  if (notificationsList.firstChild) {
+    notificationsList.insertBefore(notificationItem, notificationsList.firstChild);
+  } else {
+    notificationsList.appendChild(notificationItem);
+  }
+  
+  // Add click handler for view button if it exists
+  const viewBtn = notificationItem.querySelector('.view-notification');
+  if (viewBtn) {
+    viewBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      viewBookingDetails(data.bookingId);
+      notificationsDropdown.style.display = 'none';
+    });
+  }
+}
+
+// Setup notifications system
+function setupNotifications() {
+  // Load last booking timestamp from localStorage
+  const lastTimestamp = localStorage.getItem('lastBookingTimestamp');
+  if (lastTimestamp) {
+    lastBookingTimestamp = new Date(parseInt(lastTimestamp));
+  }
+  
+  // Set up real-time listener for new bookings
+  db.collection('bookings').orderBy('createdAt', 'desc').limit(1)
+    .onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          const booking = change.doc.data();
+          const bookingTime = booking.createdAt.toDate();
+          
+          // Check if this is a new booking since last check
+          if (!lastBookingTimestamp || bookingTime > lastBookingTimestamp) {
+            lastBookingTimestamp = bookingTime;
+            localStorage.setItem('lastBookingTimestamp', bookingTime.getTime().toString());
+            
+            // Only show notification if not initial load
+            if (lastBookingTimestamp) {
+              addNewBookingNotification(change.doc.id, booking);
               
-              // Check if this is a new booking since last check
-              if (!lastBookingTimestamp || bookingTime > lastBookingTimestamp) {
-                lastBookingTimestamp = bookingTime;
-                localStorage.setItem('lastBookingTimestamp', bookingTime.getTime().toString());
-                
-                // Only show notification if not initial load
-                if (lastBookingTimestamp) {
-                  addNewBookingNotification(change.doc.id, booking);
-                }
-              }
+              // Send push notification
+              sendPushNotification(
+                'New Booking Received',
+                `${booking.carName || 'A car'} booked by ${booking.userEmail || 'a customer'}`,
+                { bookingId: change.doc.id }
+              );
             }
-          });
-        });
-        
-      // Load existing notifications
-      loadNotifications();
-      
-      // Notification button click handler
-      notificationsBtn.addEventListener('click', () => {
-        notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block';
-        markNotificationsAsRead();
-      });
-      
-      // Clear notifications button
-      clearNotificationsBtn.addEventListener('click', clearNotifications);
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!notificationsBtn.contains(e.target) && !notificationsDropdown.contains(e.target)) {
-          notificationsDropdown.style.display = 'none';
+          }
         }
       });
+    });
+    
+  // Load existing notifications
+  loadNotifications();
+  
+  // Setup foreground message handler
+  onMessage();
+  
+  // Notification button click handler
+  notificationsBtn.addEventListener('click', () => {
+    notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block';
+    markNotificationsAsRead();
+  });
+  
+  // Clear notifications button
+  clearNotificationsBtn.addEventListener('click', clearNotifications);
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!notificationsBtn.contains(e.target) && !notificationsDropdown.contains(e.target)) {
+      notificationsDropdown.style.display = 'none';
     }
+  });
+}
 
-    function addNewBookingNotification(bookingId, booking) {
-      unreadNotifications++;
-      updateNotificationBadge();
-      
-      const notificationItem = document.createElement('div');
-      notificationItem.className = 'notification-item unread';
-      notificationItem.innerHTML = `
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <strong>New Booking</strong>
-            <p class="mb-1">${booking.carName || 'Unknown car'} booked by ${booking.userEmail || 'unknown user'}</p>
-            <p class="mb-0 notification-time">${new Date().toLocaleTimeString()}</p>
-          </div>
-          <a href="#" class="btn btn-sm btn-outline-primary view-notification" data-booking-id="${bookingId}">View</a>
-        </div>
-      `;
-      
-      // Add to top of list
-      if (notificationsList.firstChild) {
-        notificationsList.insertBefore(notificationItem, notificationsList.firstChild);
-      } else {
-        notificationsList.appendChild(notificationItem);
-      }
-      
-      // Add click handler for view button
-      notificationItem.querySelector('.view-notification').addEventListener('click', (e) => {
-        e.preventDefault();
-        viewBookingDetails(bookingId);
-        notificationsDropdown.style.display = 'none';
+// Send push notification
+function sendPushNotification(title, body, data = {}) {
+  // In a real app, you would send this from your server
+  // This is just for demonstration
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(registration => {
+      registration.showNotification(title, {
+        body: body,
+        icon: '/images/logo.png',
+        data: data
       });
-    }
+    });
+  } else {
+    new Notification(title, {
+      body: body,
+      data: data
+    });
+  }
+}
 
-    function updateNotificationBadge() {
-      if (unreadNotifications > 0) {
-        notificationBadge.style.display = 'block';
-        notificationBadge.textContent = unreadNotifications;
-      } else {
-        notificationBadge.style.display = 'none';
-      }
-    }
+function addNewBookingNotification(bookingId, booking) {
+  unreadNotifications++;
+  updateNotificationBadge();
+  
+  const notificationItem = document.createElement('div');
+  notificationItem.className = 'notification-item unread';
+  notificationItem.innerHTML = `
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <strong>New Booking</strong>
+        <p class="mb-1">${booking.carName || 'Unknown car'} booked by ${booking.userEmail || 'unknown user'}</p>
+        <p class="mb-0 notification-time">${new Date().toLocaleTimeString()}</p>
+      </div>
+      <a href="#" class="btn btn-sm btn-outline-primary view-notification" data-booking-id="${bookingId}">View</a>
+    </div>
+  `;
+  
+  // Add to top of list
+  if (notificationsList.firstChild) {
+    notificationsList.insertBefore(notificationItem, notificationsList.firstChild);
+  } else {
+    notificationsList.appendChild(notificationItem);
+  }
+  
+  // Add click handler for view button
+  notificationItem.querySelector('.view-notification').addEventListener('click', (e) => {
+    e.preventDefault();
+    viewBookingDetails(bookingId);
+    notificationsDropdown.style.display = 'none';
+  });
+}
 
-    function markNotificationsAsRead() {
-      unreadNotifications = 0;
-      updateNotificationBadge();
-      
-      // Remove unread styling
-      document.querySelectorAll('.notification-item.unread').forEach(item => {
-        item.classList.remove('unread');
-      });
-    }
+function updateNotificationBadge() {
+  if (unreadNotifications > 0) {
+    notificationBadge.style.display = 'block';
+    notificationBadge.textContent = unreadNotifications;
+  } else {
+    notificationBadge.style.display = 'none';
+  }
+}
 
-    function clearNotifications() {
-      notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
-      markNotificationsAsRead();
-    }
+function markNotificationsAsRead() {
+  unreadNotifications = 0;
+  updateNotificationBadge();
+  
+  // Remove unread styling
+  document.querySelectorAll('.notification-item.unread').forEach(item => {
+    item.classList.remove('unread');
+  });
+}
 
-    function loadNotifications() {
-      // In a real app, you might load persisted notifications from a database
-      notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
-    }
+function clearNotifications() {
+  notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
+  markNotificationsAsRead();
+}
+
+function loadNotifications() {
+  // In a real app, you might load persisted notifications from a database
+  notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No notifications</div>';
+}
 
     // Load dashboard data
     function loadDashboard() {
