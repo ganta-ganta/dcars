@@ -1,482 +1,1992 @@
-<!DOCTYPE html>
+[⚠️ Suspicious Content] <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoPanda Self-Drive Cars – Guntur</title>
-<meta name="description" content="GoPanda offers premium self-drive car rentals in Guntur. Book economy, premium & luxury cars at best prices. 10 % discount on all rentals.">
-<meta name="keywords" content="car rental Guntur, self drive cars Guntur, GoPanda cars, luxury rental, premium cars">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoPanda Self Drive Cars in Guntur - Premium Car Rental Service</title>
+    <meta name="description" content="GoPanda offers premium self-drive car rentals in Guntur. Book economy, premium & luxury cars at best prices with 10% discount on all rentals.">
+    <meta name="keywords" content="car rental Guntur, self drive cars Guntur, rent a car Guntur, GoPanda cars, luxury car rental, premium cars Guntur">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- GLightbox -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Root Variables */
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #0dcaf0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --shadow-light: 0 2px 10px rgba(0,0,0,0.1);
+            --shadow-medium: 0 5px 20px rgba(0,0,0,0.15);
+            --shadow-heavy: 0 10px 40px rgba(0,0,0,0.2);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-<!-- Bootstrap 5 -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Font Awesome 6 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- AOS -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<!-- GLightbox -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-<!-- Swiper -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-/* ---------------------------------------------
-   GLOBAL / THEME
---------------------------------------------- */
-:root{
-    --gp-primary:#0d6efd;
-    --gp-economy:#198754;
-    --gp-premium:#0d6efd;
-    --gp-luxury:#dc3545;
-    --gp-bg-light:#f8f9fa;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
 
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--gp-bg-light);}
+        /* Enhanced Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
 
-/* ---------------------------------------------
-   LOGO & HERO
---------------------------------------------- */
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
-.logo-animation{height:240px;animation:float 3s ease-in-out infinite;}
-.hero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;background:var(--gp-bg-light);}
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
 
-/* ---------------------------------------------
-   DISCOUNT / FESTIVAL BANNER
---------------------------------------------- */
-.banner-container{width:100%;height:90px;position:relative;overflow:hidden;background:linear-gradient(45deg,#ff6b6b,#4ecdc4);border-radius:8px;margin-top:1rem;}
-.festival-banner{display:flex;align-items:center;position:absolute;height:70%;animation:scrollBanner 20s linear infinite;}
-.banner-item{display:flex;align-items:center;justify-content:center;height:100%;padding:0 25px;flex-shrink:0;}
-.festival-decoration{color:#fff;font-weight:700;text-shadow:1px 1px 3px rgba(0,0,0,.5);white-space:nowrap;font-size:1.1rem;}
-.car-image{height:100px;width:auto;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.2);}
-@keyframes scrollBanner{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.confetti{position:absolute;width:10px;height:10px;opacity:.7;animation:fall 5s linear infinite;}
-@keyframes fall{to{transform:translateY(150px) rotate(360deg);opacity:0}}
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 100%, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
 
-/* ---------------------------------------------
-   CAR CARDS
---------------------------------------------- */
-.car-card{transition:transform .3s;margin-bottom:1.25rem;}
-.car-card:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);}
-.car-img{height:200px;object-fit:cover;width:100%;}
-.price-badge{font-size:.75rem;margin-right:.25rem;}
-.badge-category-economy{background:var(--gp-economy);}
-.badge-category-premium{background:var(--gp-premium);}
-.badge-category-luxury{background:var(--gp-luxury);}
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translate3d(100%, 0, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
 
-/* ---------------------------------------------
-   CONTACT / FOOTER
---------------------------------------------- */
-.contact .info-item{padding:20px;background:#fff;border-radius:10px;height:100%;}
-.contact .info-item i{font-size:24px;color:var(--gp-primary);margin-right:1rem;}
-.footer .icon{font-size:24px;margin-right:15px;color:var(--gp-primary);}
-.footer .social-links a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;margin-right:10px;transition:.3s;}
-.footer .social-links a:hover{background:var(--gp-primary);}
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale3d(0.3, 0.3, 0.3);
+            }
+            50% {
+                opacity: 1;
+            }
+        }
 
-/* ---------------------------------------------
-   RESPONSIVE TWEAKS
---------------------------------------------- */
-@media (max-width:768px){.hero-text{font-size:2rem}}
-</style>
+        /* Discount Banner */
+        .discount-banner {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 12px 0;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .discount-scroll {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollBanner 25s linear infinite;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        @keyframes scrollBanner {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            background: var(--gradient-primary) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-medium);
+            transition: var(--transition);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            font-size: 2rem;
+            color: #ffd700;
+            animation: pulse 2s infinite;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="1000,100 1000,0 0,100"/></svg>');
+            background-size: cover;
+        }
+        
+        .logo-animation {
+            height: 200px;
+            width: 200px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+            border-radius: 50%;
+            box-shadow: var(--shadow-heavy);
+            background: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-animation i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            animation: pulse 2s infinite;
+        }
+        
+        /* Festival Banner */
+        .banner-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            background: var(--gradient-success);
+            border-radius: var(--border-radius);
+            margin-top: 30px;
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            opacity: 0.8;
+            animation: fall 6s linear infinite;
+            border-radius: 50%;
+        }
+        
+        @keyframes fall {
+            to { 
+                transform: translateY(150px) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        .festival-banner {
+            display: flex;
+            position: absolute;
+            height: 100%;
+            align-items: center;
+            animation: scrollBanner 25s linear infinite;
+        }
+        
+        .banner-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 0 30px;
+            flex-shrink: 0;
+        }
+        
+        .car-image {
+            height: 80px;
+            width: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            background: white;
+            padding: 10px;
+        }
+        
+        .festival-decoration {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Header Section */
+        .hero-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="1000,100 1000,0 0,100"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-text {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .lead {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+
+        .btn-enhanced {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .btn-enhanced:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-enhanced i {
+            font-size: 1.2rem;
+        }
+
+        /* Date Filters Section */
+        .date-filters {
+            background: var(--light-color);
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .date-filter-btn {
+            border-radius: var(--border-radius);
+            padding: 12px 20px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .date-filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-light);
+        }
+
+        .custom-date-group {
+            display: flex;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+        }
+
+        .custom-date-group input {
+            border-radius: 0;
+            border-right: none;
+        }
+
+        .custom-date-group button {
+            border-radius: 0;
+            padding: 12px 20px;
+        }
+
+        /* Loading and Error Styles */
+        .loading-spinner {
+            width: 4rem;
+            height: 4rem;
+            color: var(--primary-color);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 1rem;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Enhanced Car Cards */
+        .car-card {
+            border: none;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-light);
+            background: white;
+        }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .car-img {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .car-card:hover .car-img {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .price-badge {
+            font-size: 0.85rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .feature-badge {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 15px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .book-btn {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+            background: var(--gradient-secondary);
+        }
+
+        /* Section Headers */
+        .section-header {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header i {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        /* No Cars Available */
+        .no-cars-available {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            font-size: 1.1rem;
+            color: #1565c0;
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--light-color);
+            padding: 80px 0;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .contact-header h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .contact-header .lead {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .info-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            height: 100%;
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .info-item i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .info-item h5 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .info-item p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .info-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .info-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Google Maps */
+        .map-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            height: 500px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Enhanced Modal */
+        .modal-content {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .modal-header {
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            padding: 20px 30px;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            transition: var(--transition);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .alert-secondary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer h5 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+            background: var(--gradient-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-text {
+                font-size: 2.5rem;
+            }
+            
+            .logo-animation {
+                height: 150px;
+                width: 150px;
+            }
+            
+            .banner-container {
+                height: 100px;
+            }
+            
+            .festival-decoration {
+                font-size: 1.1rem;
+            }
+            
+            .section-header {
+                font-size: 1.6rem;
+            }
+            
+            .info-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .date-filter-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-text {
+                font-size: 2rem;
+            }
+            
+            .btn-enhanced {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0a58ca;
+        }
+    </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <i class="fa-solid fa-paw fa-lg me-2"></i><span>GoPanda Cars</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-home me-1"></i>Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user me-1"></i>Profile</a></li>
-        <li class="nav-item"><a class="nav-link" href="about"><i class="fas fa-info-circle me-1"></i>About</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact"><i class="fas fa-envelope me-1"></i>Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="pay"><i class="fas fa-credit-card me-1"></i>Pay</a></li>
-        <li class="nav-item"><a class="nav-link" href="help"><i class="fas fa-question-circle me-1"></i>Help</a></li>
-        <li class="nav-item"><a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt me-1"></i>Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <img src="img/logo.png" alt="GoPanda logo" class="logo-animation">
-  <div class="banner-container">
-    <!-- Confetti -->
-    <div class="confetti" style="left:10%;background:#ff0;"></div>
-    <div class="confetti" style="left:30%;background:#f0f;animation-delay:1s"></div>
-    <div class="confetti" style="left:70%;background:#0ff;animation-delay:2s"></div>
-
-    <!-- Scrolling banner -->
-    <div class="festival-banner">
-      <div class="banner-item festival-decoration">🎉 SPECIAL OFFER 🎉</div>
-      <div class="banner-item"><img src="img/logo.png" alt="Car" class="car-image"></div>
-      <div class="banner-item festival-decoration">UP TO ₹500 OFF</div>
-      <div class="banner-item"><img src="img/logo.png" alt="Car" class="car-image"></div>
-      <div class="banner-item festival-decoration">🚗 THIS FESTIVAL 🚗</div>
-      <div class="banner-item"><img src="img/logo.png" alt="Car" class="car-image"></div>
-
-      <!-- loop duplicate for seamless scroll -->
-      <div class="banner-item festival-decoration">🎉 SPECIAL OFFER 🎉</div>
-      <div class="banner-item"><img src="img/logo.png" alt="Car" class="car-image"></div>
-    </div>
-  </div>
-</section>
-
-<header class="bg-primary text-white py-5 text-center">
-  <h1 class="display-5 hero-text"><i class="fa-solid fa-car-side me-2"></i>GoPanda Self-Drive Cars in Guntur</h1>
-  <p class="lead mb-4">Premium car rental service at affordable prices</p>
-  <a href="#economyCars" class="btn btn-light btn-lg me-2"><i class="fas fa-car me-1"></i>Book Now</a>
-  <a href="#contact" class="btn btn-outline-light btn-lg"><i class="fas fa-phone-alt me-1"></i>Contact Us</a>
-</header>
-
-<!-- DATE FILTERS -->
-<section class="py-4 bg-light">
-  <div class="container">
-    <div class="row mb-4">
-      <div class="col-md-8"><h3 id="availabilityHeader" class="fw-semibold"><i class="fas fa-calendar-check me-2"></i>Available Cars</h3></div>
-      <div class="col-md-4 text-md-end">
-        <div class="btn-group flex-wrap" role="group">
-          <button type="button" class="btn btn-outline-primary date-filter-btn active" data-filter="today"><i class="fas fa-calendar-day me-1"></i>Today</button>
-          <button type="button" class="btn btn-outline-primary date-filter-btn" data-filter="tomorrow"><i class="fas fa-calendar-alt me-1"></i>Tomorrow</button>
-          <div class="input-group mt-2 mt-md-0">
-            <input type="date" class="form-control" id="customDateFilter">
-            <button class="btn btn-primary" type="button" id="applyCustomDate"><i class="fas fa-check"></i></button>
-          </div>
+    <!-- Discount Banner -->
+    <div class="discount-banner">
+        <div class="discount-scroll">
+            <i class="fas fa-gift me-2"></i>
+            <span class="fw-bold">SPECIAL OFFER: 10% DISCOUNT ON ALL SELF-DRIVE CARS | USE CODE: GOPANDA10 | LIMITED TIME OFFER</span>
+            <i class="fas fa-star ms-3 me-2"></i>
+            <span>BOOK NOW AND SAVE BIG!</span>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 text-center">
-        <div class="spinner-border text-primary loading-spinner" role="status"><span class="visually-hidden">Loading...</span></div>
-        <div id="errorMessage" class="text-danger small"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CAR LISTS -->
-<section class="py-5">
-  <div class="container">
-    <h4 class="mb-4"><i class="fas fa-car me-2 text-success"></i>Economy Cars</h4>
-    <div class="row" id="economyCars">
-      <div class="col-12 no-cars-available">
-        <div class="alert alert-info w-100 text-center"><i class="fas fa-spinner fa-spin me-2"></i>Loading economy cars...</div>
-      </div>
     </div>
 
-    <h4 class="mb-4 mt-5"><i class="fas fa-car-side me-2 text-primary"></i>Premium Cars</h4>
-    <div class="row" id="premiumCars">
-      <div class="col-12 no-cars-available">
-        <div class="alert alert-info w-100 text-center"><i class="fas fa-spinner fa-spin me-2"></i>Loading premium cars...</div>
-      </div>
-    </div>
-
-    <h4 class="mb-4 mt-5"><i class="fas fa-gem me-2 text-danger"></i>Luxury Cars</h4>
-    <div class="row" id="luxuryCars">
-      <div class="col-12 no-cars-available">
-        <div class="alert alert-info w-100 text-center"><i class="fas fa-spinner fa-spin me-2"></i>Loading luxury cars...</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="contact py-5">
-  <div class="container">
-    <div class="text-center mb-5" data-aos="fade-up">
-      <h2><i class="fas fa-phone-alt me-2"></i>Contact Us</h2>
-      <p class="lead">Need help? Get in touch with our team</p>
-    </div>
-
-    <div class="row g-4">
-      <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18..." width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-      </div>
-
-      <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
-        <div class="row gy-4">
-          <div class="col-md-6">
-            <div class="info-item d-flex"><i class="fas fa-map-marker-alt"></i>
-              <div><h5>Address</h5><p class="mb-0">Beside Andhra Muslim College, Ponnur Rd, Guntur 522001</p></div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-paw"></i>
+                <span>GoPanda Cars</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pay"><i class="fas fa-credit-card"></i> Pay</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="help"><i class="fas fa-question-circle"></i> Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    </li>
+                </ul>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="info-item d-flex"><i class="fas fa-phone-alt"></i>
-              <div><h5>Call Us</h5><p class="mb-0"><a href="tel:9052017979">9052017979</a><br><a href="tel:9052027979">9052027979</a><br><a href="tel:9052037979">9052037979</a></p></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="info-item d-flex"><i class="fas fa-envelope"></i>
-              <div><h5>Email Us</h5><p class="mb-0"><a href="mailto:gopandaindia@gmail.com">gopandaindia@gmail.com</a></p></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="info-item d-flex"><i class="fas fa-clock"></i>
-              <div><h5>Opening Hours</h5><p class="mb-0"><strong>Daily:</strong> 6 AM – 11 PM</p></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="info-item d-flex"><i class="fab fa-whatsapp"></i>
-              <div><h5>WhatsApp</h5><p class="mb-0"><a href="https://wa.me/9052017979">9052017979</a></p></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="info-item d-flex"><i class="fas fa-headset"></i>
-              <div><h5>Customer Support</h5><p class="mb-0">24/7 support available</p></div>
-            </div>
-          </div>
         </div>
-      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-animation">
+            <i class="fas fa-car"></i>
+        </div>
+        <div class="banner-container">
+            <!-- Confetti effects -->
+            <div class="confetti" style="left:10%; animation-delay:0s; background:#ff6b6b;"></div>
+            <div class="confetti" style="left:20%; animation-delay:0.5s; background:#4ecdc4;"></div>
+            <div class="confetti" style="left:30%; animation-delay:1s; background:#45b7d1;"></div>
+            <div class="confetti" style="left:40%; animation-delay:1.5s; background:#f39c12;"></div>
+            <div class="confetti" style="left:50%; animation-delay:2s; background:#e74c3c;"></div>
+            <div class="confetti" style="left:60%; animation-delay:2.5s; background:#9b59b6;"></div>
+            <div class="confetti" style="left:70%; animation-delay:3s; background:#1dd1a1;"></div>
+            <div class="confetti" style="left:80%; animation-delay:3.5s; background:#feca57;"></div>
+            <div class="confetti" style="left:90%; animation-delay:4s; background:#ff9ff3;"></div>
+            
+            <div class="festival-banner">
+                <div class="banner-item festival-decoration">
+                    <i class="fas fa-gift"></i>
+                    🎉 SPECIAL OFFER 🎉
+                </div>
+                
+                <div class="banner-item">
+                    <i class="fas fa-car car-image"></i>
+                </div>
+                
+                <div class="banner-item festival-decoration">
+                    <i class="fas fa-tags"></i>
+                    UP TO ₹500 OFF
+                </div>
+                
+                <div class="banner-item">
+                    <i class="fas fa-car-side car-image"></i>
+                </div>
+                
+                <div class="banner-item festival-decoration">
+                    <i class="fas fa-star"></i>
+                    🚗 THIS FESTIVAL 🚗
+                </div>
+                
+                <div class="banner-item">
+                    <i class="fas fa-truck car-image"></i>
+                </div>
+                
+                <!-- Repeat for seamless loop -->
+                <div class="banner-item festival-decoration">
+                    <i class="fas fa-gift"></i>
+                    🎉 SPECIAL OFFER 🎉
+                </div>
+                
+                <div class="banner-item">
+                    <i class="fas fa-car car-image"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Header Section -->
+    <header class="hero-header">
+        <div class="container text-center">
+            <h1 class="hero-text">
+                <i class="fas fa-car me-3"></i>
+                GoPanda Self Drive Cars in Guntur
+            </h1>
+            <p class="lead">Premium car rental service at affordable prices with 24/7 support</p>
+            <div class="mt-4">
+                <a href="#economyCars" class="btn btn-light btn-enhanced me-3">
+                    <i class="fas fa-car"></i>
+                    Book Now
+                </a>
+                <a href="#contact" class="btn btn-outline-light btn-enhanced">
+                    <i class="fas fa-phone-alt"></i>
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Date Filters -->
+    <section class="date-filters">
+        <div class="container">
+            <div class="row align-items-center mb-4">
+                <div class="col-md-6">
+                    <h3 id="availabilityHeader" class="section-header">
+                        <i class="fas fa-calendar-check"></i>
+                        Available Cars
+                    </h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex gap-2 justify-content-md-end flex-wrap">
+                        <button type="button" class="btn btn-outline-primary date-filter-btn active" data-filter="today">
+                            <i class="fas fa-calendar-day"></i>
+                            Today
+                        </button>
+                        <button type="button" class="btn btn-outline-primary date-filter-btn" data-filter="tomorrow">
+                            <i class="fas fa-calendar-alt"></i>
+                            Tomorrow
+                        </button>
+                        <div class="custom-date-group">
+                            <input type="date" class="form-control" id="customDateFilter">
+                            <button class="btn btn-primary" type="button" id="applyCustomDate">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-primary loading-spinner" role="status" style="display: none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div id="errorMessage" class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cars Section -->
+    <section class="py-5">
+        <div class="container">
+            <!-- Economy Cars -->
+            <h4 class="section-header">
+                <i class="fas fa-car"></i>
+                Economy Cars
+            </h4>
+            <div class="row" id="economyCars">
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        Loading economy cars...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Premium Cars -->
+            <h4 class="section-header mt-5">
+                <i class="fas fa-car-side"></i>
+                Premium Cars
+            </h4>
+            <div class="row" id="premiumCars">
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        Loading premium cars...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Luxury Cars -->
+            <h4 class="section-header mt-5">
+                <i class="fas fa-gem"></i>
+                Luxury Cars
+            </h4>
+            <div class="row" id="luxuryCars">
+                <div class="col-12 no-cars-available">
+                    <div class="alert alert-info w-100 text-center">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        Loading luxury cars...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-header" data-aos="fade-up">
+                <h2>
+                    <i class="fas fa-phone-alt me-3"></i>
+                    Contact Us
+                </h2>
+                <p class="lead">Need help? Get in touch with our team - We're here 24/7!</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d490882.84700774145!2d80.07906971221986!3d16.012357610181883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4a0be58a4cd3cd%3A0x7c5eb18eed4de38!2sGo%20Panda%20Cars!5e0!3m2!1sen!2sin!4v1728323715773!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="row gy-4">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h5>Address</h5>
+                                    <p>Beside Andhra Muslim College, Ponnur Road, Guntur 522001</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fas fa-phone-alt"></i>
+                                <div>
+                                    <h5>Call Us</h5>
+                                    <p>
+                                        <a href="tel:9052017979">9052017979</a><br>
+                                        <a href="tel:9052027979">9052027979</a><br>
+                                        <a href="tel:9052037979">9052037979</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h5>Email Us</h5>
+                                    <p>
+                                        <a href="mailto:gopandaindia@gmail.com">gopandaindia@gmail.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h5>Opening Hours</h5>
+                                    <p>
+                                        <strong>Mon-Sat:</strong> 6AM - 11PM<br>
+                                        <strong>Sunday:</strong> 6AM - 11PM
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fab fa-whatsapp"></i>
+                                <div>
+                                    <h5>WhatsApp</h5>
+                                    <p>
+                                        <a href="https://wa.me/9052017979" target="_blank">9052017979</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fas fa-headset"></i>
+                                <div>
+                                    <h5>Customer Support</h5>
+                                    <p>24/7 support available</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-car"></i>
+                        Book <span id="modalCarName"></span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="loginRequired" class="alert alert-info" style="display: none;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Please <a href="login.html">login</a> to book this car.
+                    </div>
+                    
+                    <div id="bookingForm">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-clock"></i>
+                                Rental Option
+                            </label>
+                            <select class="form-select" id="rentalOption">
+                                <option value="hourly">Hourly (₹<span id="priceHourly"></span>/hr)</option>
+                                <option value="12hrs">12 Hours (₹<span id="price12hrs"></span>)</option>
+                                <option value="24hrs">24 Hours (₹<span id="price24hrs"></span>)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    Start Date & Time
+                                </label>
+                                <input type="datetime-local" class="form-control" id="startDateTime">
+                                <div id="startDateError" class="error-message"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar-minus"></i>
+                                    End Date & Time
+                                </label>
+                                <input type="datetime-local" class="form-control" id="endDateTime">
+                                <div id="endDateError" class="error-message"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i>
+                                Phone Number
+                            </label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="10 digit mobile number">
+                            <div id="phoneError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="alert alert-secondary">
+                            <h6>
+                                <i class="fas fa-rupee-sign me-2"></i>
+                                Estimated Total: ₹<span id="estimatedTotal">0</span>
+                            </h6>
+                            <p class="mb-0 small" id="billingNote"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Close
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmBookingBtn">
+                        <i class="fas fa-check me-1"></i>
+                        Confirm Booking
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer class="bg-dark text-white py-4">
-  <div class="container">
-    <div class="row gy-4">
-      <div class="col-lg-3 col-md-6">
-        <div class="d-flex"><i class="fas fa-map-marker-alt icon mt-1"></i>
-          <div><h5>Address</h5><p>Guntur Ponnur Rd, beside Muslim College, Guntur 522001</p></div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="d-flex"><i class="fas fa-phone-alt icon mt-1"></i>
-          <div><h5>Contact</h5><p class="mb-1"><strong>Phone:</strong> 9052017979, 9052027979, 9052037979</p><p class="mb-0"><strong>Email:</strong> gopandaindia@gmail.com</p></div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="d-flex"><i class="fas fa-clock icon mt-1"></i>
-          <div><h5>Opening Hours</h5><p class="mb-1"><strong>Daily:</strong> 6 AM – 11 PM</p></div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <h5>Follow Us</h5>
-        <div class="social-links">
-          <a href="https://www.facebook.com" class="text-white"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://www.instagram.com/gopanda_cars" class="text-white"><i class="fab fa-instagram"></i></a>
-          <a href="https://wa.me/9052017979" class="text-white"><i class="fab fa-whatsapp"></i></a>
-          <a href="mailto:gopandaindia@gmail.com" class="text-white"><i class="fas fa-envelope"></i></a>
-        </div>
-      </div>
-    </div>
-    <hr class="my-4 border-light">
-    <div class="text-center small">&copy; 2025 GoPanda Cars. All rights reserved. Developed by <a href="https://gantasolutions.com" class="text-white">GANTA</a></div>
-  </div>
-</footer>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt fa-2x mb-3" style="color: var(--primary-color);"></i>
+                        <h5>Address</h5>
+                        <p>Guntur Ponnur Road beside Muslim College, Guntur 522001</p>
+                    </div>
+                </div>
 
-<!-- MODALS, SCRIPTS & APP LOGIC -->
-<!-- Booking Modal -->
-<div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"><i class="fas fa-car me-2"></i>Book <span id="modalCarName"></span></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div id="loginRequired" class="alert alert-info"><i class="fas fa-info-circle me-1"></i>Please <a href="login.html">login</a> to book this car.</div>
-        <div id="bookingForm">
-          <div class="mb-3">
-            <label class="form-label"><i class="fas fa-clock me-1"></i>Rental Option</label>
-            <select class="form-select" id="rentalOption">
-              <option value="hourly">Hourly (₹<span id="priceHourly"></span>/hr)</option>
-              <option value="12hrs">12 Hours (₹<span id="price12hrs"></span>)</option>
-              <option value="24hrs">24 Hours (₹<span id="price24hrs"></span>)</option>
-            </select>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label"><i class="fas fa-calendar-plus me-1"></i>Start Date & Time</label>
-              <input type="datetime-local" class="form-control" id="startDateTime">
-              <div id="startDateError" class="text-danger small"></div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div>
+                        <i class="fas fa-phone-alt fa-2x mb-3" style="color: var(--primary-color);"></i>
+                        <h5>Contact</h5>
+                        <p class="mb-1"><strong>Phone:</strong></p>
+                        <p>9052017979, 9052027979, 9052037979</p>
+                        <p class="mb-0"><strong>Email:</strong> gopandaindia@gmail.com</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div>
+                        <i class="fas fa-clock fa-2x mb-3" style="color: var(--primary-color);"></i>
+                        <h5>Opening Hours</h5>
+                        <p class="mb-1"><strong>Mon-Sat:</strong> 6AM - 11PM</p>
+                        <p class="mb-0"><strong>Sunday:</strong> 6AM - 11PM</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div>
+                        <i class="fas fa-share-alt fa-2x mb-3" style="color: var(--primary-color);"></i>
+                        <h5>Follow Us</h5>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/gopanda_cars?igsh=MWxsbjI1MDBtcnllcw==" title="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.instagram.com/gopanda_cars?igsh=MWxsbjI1MDBtcnllcw==" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://wa.me/9052017979" title="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="mailto:gopandaindia@gmail.com" title="Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label"><i class="fas fa-calendar-minus me-1"></i>End Date & Time</label>
-              <input type="datetime-local" class="form-control" id="endDateTime">
-              <div id="endDateError" class="text-danger small"></div>
+
+            <hr class="my-4" style="border-color: #495057;">
+
+            <div class="text-center">
+                <p class="mb-2">&copy; 2023 GoPanda Cars. All rights reserved.</p>
+                <p class="small mb-0">
+                    Developed with <i class="fas fa-heart text-danger"></i> by 
+                    <a href="https://gantasolutions.com" class="text-decoration-none" style="color: var(--primary-color);">GANTA Solutions</a>
+                </p>
             </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label"><i class="fas fa-phone me-1"></i>Phone Number</label>
-            <input type="tel" class="form-control" id="phoneNumber" placeholder="10-digit mobile number">
-            <div id="phoneError" class="text-danger small"></div>
-          </div>
-          <div class="alert alert-secondary">
-            <strong><i class="fas fa-rupee-sign me-1"></i>Estimated Total: ₹<span id="estimatedTotal">0</span></strong>
-            <p class="mb-0 small" id="billingNote"></p>
-          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i>Close</button>
-        <button class="btn btn-primary" id="confirmBookingBtn"><i class="fas fa-check me-1"></i>Confirm Booking</button>
-      </div>
-    </div>
-  </div>
-</div>
+    </footer>
 
-<!-- Vendor JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <!-- GLightbox -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS animation
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out-cubic',
+            once: true,
+            offset: 100
+        });
 
-<script>
-/* ---------------------------------------------
-   INITIALISATION
---------------------------------------------- */
-AOS.init({duration:800,easing:'ease-in-out',once:true});
-const lightbox=GLightbox({selector:'.glightbox'});
-const gallerySwiper=new Swiper('.gallerySwiper',{loop:true,speed:600,autoplay:{delay:5e3},slidesPerView:'auto',centeredSlides:true,pagination:{el:'.swiper-pagination',type:'bullets',clickable:true},breakpoints:{320:{slidesPerView:1,spaceBetween:10},768:{slidesPerView:2,spaceBetween:20},1200:{slidesPerView:3,spaceBetween:30}}});
+        // Initialize GLightbox
+        const lightbox = GLightbox({
+            selector: '.glightbox'
+        });
 
-/* ---------------------------------------------
-   FIREBASE CONFIG
---------------------------------------------- */
-const firebaseConfig={apiKey:"AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",authDomain:"gopandacars-7085f.firebaseapp.com",projectId:"gopandacars-7085f",storageBucket:"gopandacars-7085f.appspot.com",messagingSenderId:"486383420605"};
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.firestore();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+                authDomain: "gopandacars-7085f.firebaseapp.com",
+                projectId: "gopandacars-7085f",
+                storageBucket: "gopandacars-7085f.appspot.com",
+                messagingSenderId: "486383420605"
+            };
+            
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
 
-/* ---------------------------------------------
-   CAR DATA
---------------------------------------------- */
-const cars=[ /* --- same array from original file (trimmed here for brevity) --- */ ];
+            // UI Elements
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const errorMessage = document.getElementById('errorMessage');
+            const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            let selectedCar = null;
 
-/* ---------------------------------------------
-   UTILITY FUNCTIONS
---------------------------------------------- */
-const loadingSpinner=document.querySelector('.loading-spinner');
-const errorMessage=document.getElementById('errorMessage');
-const dateFilterButtons=document.querySelectorAll('.date-filter-btn');
-const customDateInput=document.getElementById('customDateFilter');
-const applyCustomDateBtn=document.getElementById('applyCustomDate');
-const carContainers={economy:document.getElementById('economyCars'),premium:document.getElementById('premiumCars'),luxury:document.getElementById('luxuryCars')};
+            // Enhanced car data with better images and features
+            const cars = [
+                {
+                    id: 'car1',
+                    name: 'Maruti Swift',
+                    image: 'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg',
+                    priceHourly: 150,
+                    price12hrs: 1200,
+                    price24hrs: 2000,
+                    minHours: 4,
+                    description: 'Compact hatchback with great fuel efficiency and comfortable seating for 5.',
+                    category: 'economy',
+                    features: ['AC', 'Music System', 'Power Steering']
+                },
+                {
+                    id: 'car2',
+                    name: 'Toyota Etios',
+                    image: 'https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg',
+                    priceHourly: 150,
+                    price12hrs: 1200,
+                    price24hrs: 2000,
+                    minHours: 4,
+                    description: 'Reliable sedan with spacious interior and good mileage.',
+                    category: 'economy',
+                    features: ['AC', 'Power Windows', 'Central Locking']
+                },
+                {
+                    id: 'car3',
+                    name: 'Hyundai Grand i10 Nios',
+                    image: 'https://images.pexels.com/photos/2491273/pexels-photo-2491273.jpeg',
+                    priceHourly: 175,
+                    price12hrs: 1500,
+                    price24hrs: 2300,
+                    minHours: 4,
+                    description: 'Premium hatchback with modern features and stylish design.',
+                    category: 'economy',
+                    features: ['AC', 'Touchscreen', 'Reverse Camera']
+                },
+                {
+                    id: 'car4',
+                    name: 'Maruti Swift Dzire',
+                    image: 'https://images.pexels.com/photos/1231622/pexels-photo-1231622.jpeg',
+                    priceHourly: 175,
+                    price12hrs: 1500,
+                    price24hrs: 2300,
+                    minHours: 4,
+                    description: 'Popular compact sedan with excellent ride quality.',
+                    category: 'economy',
+                    features: ['AC', 'ABS', 'Airbags']
+                },
+                {
+                    id: 'car5',
+                    name: 'Hyundai Aura',
+                    image: 'https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Stylish compact sedan with premium features.',
+                    category: 'premium',
+                    features: ['AC', 'Touchscreen', 'Wireless Charging']
+                },
+                {
+                    id: 'car6',
+                    name: 'Tata Punch',
+                    image: 'https://images.pexels.com/photos/3874337/pexels-photo-3874337.jpeg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Compact SUV with rugged design and modern features.',
+                    category: 'premium',
+                    features: ['AC', 'Touchscreen', 'Ground Clearance']
+                },
+                {
+                    id: 'car7',
+                    name: 'Hyundai i20',
+                    image: 'https://images.pexels.com/photos/1077785/pexels-photo-1077785.jpeg',
+                    priceHourly: 200,
+                    price12hrs: 1500,
+                    price24hrs: 2500,
+                    minHours: 4,
+                    description: 'Premium hatchback with sporty looks and advanced features.',
+                    sunroof: true,
+                    category: 'premium',
+                    features: ['AC', 'Sunroof', 'Touchscreen', 'Cruise Control']
+                },
+                {
+                    id: 'car8',
+                    name: 'Hyundai Creta',
+                    image: 'https://images.pexels.com/photos/3972755/pexels-photo-3972755.jpeg',
+                    priceHourly: 250,
+                    price12hrs: 2000,
+                    price24hrs: 3000,
+                    minHours: 4,
+                    description: 'Premium SUV with luxurious features and spacious cabin.',
+                    category: 'premium',
+                    features: ['AC', 'Leather Seats', 'Panoramic Sunroof']
+                },
+                {
+                    id: 'car9',
+                    name: 'Maruti Grand Vitara',
+                    image: 'https://images.pexels.com/photos/3802267/pexels-photo-3802267.jpeg',
+                    priceHourly: 250,
+                    price12hrs: 2000,
+                    price24hrs: 3000,
+                    minHours: 4,
+                    description: 'Premium SUV with hybrid technology and elegant design.',
+                    category: 'premium',
+                    features: ['AC', 'Hybrid Engine', 'AWD', 'Premium Interior']
+                },
+                {
+                    id: 'car10',
+                    name: 'Mahindra Thar',
+                    image: 'https://images.pexels.com/photos/1756957/pexels-photo-1756957.jpeg',
+                    priceHourly: 400,
+                    price12hrs: 3500,
+                    price24hrs: 5000,
+                    minHours: 4,
+                    description: 'Iconic off-roader with convertible top and powerful engine.',
+                    category: 'luxury',
+                    features: ['4WD', 'Convertible Top', 'Off-road Tires']
+                },
+                {
+                    id: 'car11',
+                    name: 'Toyota Fortuner',
+                    image: 'https://images.pexels.com/photos/3764984/pexels-photo-3764984.jpeg',
+                    priceHourly: 800,
+                    price12hrs: 8000,
+                    price24hrs: 12000,
+                    minHours: 4,
+                    description: 'Premium full-size SUV with powerful engine and luxury features.',
+                    withDriver: true,
+                    category: 'luxury',
+                    features: ['Leather Seats', '4WD', 'Premium Sound', 'Driver Included']
+                },
+                {
+                    id: 'car12',
+                    name: 'Mahindra XUV700',
+                    image: 'https://images.pexels.com/photos/3849816/pexels-photo-3849816.jpeg',
+                    priceHourly: 500,
+                    price12hrs: 4500,
+                    price24hrs: 6500,
+                    minHours: 4,
+                    description: 'Premium SUV with advanced features and powerful performance.',
+                    withDriver: true,
+                    category: 'luxury',
+                    features: ['ADAS', 'Panoramic Sunroof', 'Premium Audio', 'Driver Included']
+                }
+            ];
 
-function showLoading(){loadingSpinner.style.display='block';errorMessage.textContent='';}
-function hideLoading(){loadingSpinner.style.display='none';}
-function showError(msg){errorMessage.textContent=msg;}
-function badgeColor(cat){return cat==='economy'?'badge-category-economy':cat==='premium'?'badge-category-premium':'badge-category-luxury';}
-function firestoreDate(ts){return ts&&typeof ts.toDate==='function'?ts.toDate():ts&&ts.seconds?new Date(ts.seconds*1e3):ts instanceof Date?ts:new Date(ts);}
+            // Helper functions
+            function showLoading() {
+                loadingSpinner.style.display = 'block';
+                errorMessage.textContent = '';
+            }
+            
+            function hideLoading() {
+                loadingSpinner.style.display = 'none';
+            }
+            
+            function showError(message) {
+                errorMessage.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            }
 
-/* ---------------------------------------------
-   AUTH STATE
---------------------------------------------- */
-auth.onAuthStateChanged(user=>{
-  const loginLink=document.getElementById('loginLink');
-  if(user){
-    loginLink.innerHTML='<i class="fas fa-sign-out-alt me-1"></i>Logout';
-    loginLink.href='#';
-    loginLink.onclick=()=>auth.signOut().then(()=>location.reload());
-  }
-  filterAvailableCars('today');
-});
+            function getCategoryColor(category) {
+                switch(category) {
+                    case 'economy': return 'success';
+                    case 'premium': return 'primary';
+                    case 'luxury': return 'danger';
+                    default: return 'secondary';
+                }
+            }
 
-/* ---------------------------------------------
-   DATE FILTER EVENTS
---------------------------------------------- */
-dateFilterButtons.forEach(btn=>btn.addEventListener('click',()=>filterAvailableCars(btn.dataset.filter)));
-applyCustomDateBtn.addEventListener('click',()=>customDateInput.value?filterAvailableCars('custom',customDateInput.value):showError('Please select a date'));
+            function getCategoryIcon(category) {
+                switch(category) {
+                    case 'economy': return 'fas fa-leaf';
+                    case 'premium': return 'fas fa-star';
+                    case 'luxury': return 'fas fa-crown';
+                    default: return 'fas fa-car';
+                }
+            }
 
-/* ---------------------------------------------
-   MAIN FILTER
---------------------------------------------- */
-async function filterAvailableCars(filterType,customDate=null){
-  showLoading();
-  const now=new Date();now.setHours(0,0,0,0);
-  let startDate,endDate;
-  switch(filterType){
-    case 'tomorrow':startDate=new Date(now);startDate.setDate(startDate.getDate()+1);endDate=new Date(startDate);endDate.setDate(endDate.getDate()+1);break;
-    case 'custom':startDate=new Date(customDate);startDate.setHours(0,0,0,0);endDate=new Date(startDate);endDate.setDate(endDate.getDate()+1);break;
-    default:startDate=new Date(now);endDate=new Date(now);endDate.setDate(endDate.getDate()+1);
-  }
-  document.getElementById('availabilityHeader').textContent='Available Cars for '+startDate.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  let booked=[];
-  try{
-    const snap=await db.collection('bookings').where('status','in',['confirmed','active','pending_payment']).get();
-    snap.forEach(doc=>{
-      const d=doc.data(),bStart=firestoreDate(d.startDateTime),bEnd=firestoreDate(d.endDateTime);
-      if((bStart<endDate)&&(bEnd>startDate))booked.push(d.carId);
-    });
-  }catch(e){showError('Error checking availability');}finally{hideLoading();}
-  renderCars(cars.filter(c=>c.category==='economy'&&!booked.includes(c.id)),carContainers.economy);
-  renderCars(cars.filter(c=>c.category==='premium'&&!booked.includes(c.id)),carContainers.premium);
-  renderCars(cars.filter(c=>c.category==='luxury'&&!booked.includes(c.id)),carContainers.luxury);
-  dateFilterButtons.forEach(btn=>btn.classList.toggle('active',btn.dataset.filter===filterType));
-}
+            // Safe timestamp conversion helper
+            function getDateFromFirestore(timestamp) {
+                try {
+                    if (timestamp && typeof timestamp.toDate === 'function') {
+                        return timestamp.toDate();
+                    }
+                    if (timestamp && timestamp.seconds) {
+                        return new Date(timestamp.seconds * 1000);
+                    }
+                    if (timestamp instanceof Date) {
+                        return timestamp;
+                    }
+                    if (typeof timestamp === 'string') {
+                        const date = new Date(timestamp);
+                        if (!isNaN(date.getTime())) return date;
+                    }
+                    return null;
+                } catch (e) {
+                    console.error('Error converting timestamp:', e);
+                    return null;
+                }
+            }
 
-/* ---------------------------------------------
-   RENDER CAR CARDS
---------------------------------------------- */
-function renderCars(list,container){
-  container.innerHTML='';
-  if(!list.length){container.innerHTML=`<div class="col-12"><div class="alert alert-info w-100 text-center"><i class="fas fa-info-circle me-1"></i>No cars available</div></div>`;return;}
-  list.forEach(car=>{
-    const col=document.createElement('div');col.className='col-md-4 mb-4';
-    col.innerHTML=`
-      <div class="card car-card h-100">
-        <img src="${car.image}" class="card-img-top car-img" alt="${car.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/600x400?text=Car+Image'">
-        <div class="card-body">
-          <h5 class="card-title">${car.name}</h5>
-          <p class="text-muted">${car.description}</p>
-          <div class="d-flex flex-wrap mb-2">
-            <span class="price-badge badge bg-secondary"><i class="fas fa-clock me-1"></i>₹${car.priceHourly}/hr</span>
-            <span class="price-badge badge bg-primary"><i class="fas fa-clock me-1"></i>₹${car.price12hrs}/12h</span>
-            <span class="price-badge badge bg-success"><i class="fas fa-clock me-1"></i>₹${car.price24hrs}/24h</span>
-            <span class="badge ${badgeColor(car.category)} ms-auto text-capitalize">${car.category}</span>
-          </div>
-          ${car.sunroof?'<span class="badge bg-info me-1"><i class="fas fa-sun me-1"></i>Sunroof</span>':''}
-          ${car.withDriver?'<span class="badge bg-warning"><i class="fas fa-user-tie me-1"></i>With Driver</span>':''}
-        </div>
-        <div class="card-footer bg-transparent">
-          <button class="btn btn-primary w-100 book-btn" data-car-id="${car.id}"><i class="fas fa-calendar-check me-1"></i>Book Now</button>
-        </div>
-      </div>`;
-    container.appendChild(col);
-  });
-  container.querySelectorAll('.book-btn').forEach(btn=>btn.addEventListener('click',()=>showBookingModal(cars.find(c=>c.id===btn.dataset.carId))));
-}
+            // Initialize UI
+            const dateFilterButtons = document.querySelectorAll('.date-filter-btn');
+            const customDateInput = document.getElementById('customDateFilter');
+            const applyCustomDateBtn = document.getElementById('applyCustomDate');
+            const carContainers = {
+                economy: document.getElementById('economyCars'),
+                premium: document.getElementById('premiumCars'),
+                luxury: document.getElementById('luxuryCars')
+            };
 
-/* ---------------------------------------------
-   BOOKING MODAL LOGIC
---------------------------------------------- */
-const bookingModal=new bootstrap.Modal(document.getElementById('bookingModal'));
-let selectedCar=null;
+            // Set default date for custom filter
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            customDateInput.valueAsDate = today;
+            customDateInput.min = today.toISOString().split('T')[0];
 
-function showBookingModal(car){
-  selectedCar=car;
-  document.getElementById('modalCarName').textContent=car.name;
-  document.getElementById('priceHourly').textContent=car.priceHourly;
-  document.getElementById('price12hrs').textContent=car.price12hrs;
-  document.getElementById('price24hrs').textContent=car.price24hrs;
-  const user=auth.currentUser;
-  document.getElementById('loginRequired').style.display=user?'none':'block';
-  document.getElementById('bookingForm').style.display=user?'block':'none';
-  document.getElementById('confirmBookingBtn').style.display=user?'inline-block':'none';
-  document.getElementById('startDateError').textContent='';
-  document.getElementById('endDateError').textContent='';
-  document.getElementById('phoneError').textContent='';
-  setDefaultDateTimes();
-  updateEstimatedTotal();
-  bookingModal.show();
-}
-function setDefaultDateTimes(){
-  const now=new Date();now.setMinutes(0,0,0);
-  document.getElementById('startDateTime').value=now.toISOString().slice(0,16);
-  const end=new Date(now);end.setHours(end.getHours()+selectedCar.minHours);
-  document.getElementById('endDateTime').value=end.toISOString().slice(0,16);
-  document.getElementById('endDateTime').min=end.toISOString().slice(0,16);
-}
-/* … Remaining booking JS identical to original (validation, price calc, Firestore write) … */
-</script>
+            // Check auth state
+            auth.onAuthStateChanged(user => {
+                const loginLink = document.getElementById('loginLink');
+                if (user) {
+                    loginLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+                    loginLink.href = '#';
+                    loginLink.onclick = () => {
+                        auth.signOut().then(() => window.location.reload());
+                    };
+                } else {
+                    loginLink.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                    loginLink.href = 'login.html';
+                    loginLink.onclick = null;
+                }
+                
+                // Default: show cars available today
+                filterAvailableCars('today');
+            });
+
+            // Date filter event listeners
+            dateFilterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter');
+                    filterAvailableCars(filterType);
+                });
+            });
+
+            applyCustomDateBtn?.addEventListener('click', function() {
+                if (customDateInput.value) {
+                    filterAvailableCars('custom', customDateInput.value);
+                } else {
+                    showError('Please select a date');
+                }
+            });
+
+            // Main filtering function
+            async function filterAvailableCars(filterType, customDate = null) {
+                showLoading();
+                
+                let startDate, endDate;
+                const now = new Date();
+                now.setHours(0, 0, 0, 0);
+                
+                switch(filterType) {
+                    case 'today':
+                        startDate = new Date(now);
+                        endDate = new Date(now);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    case 'tomorrow':
+                        startDate = new Date(now);
+                        startDate.setDate(startDate.getDate() + 1);
+                        endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    case 'custom':
+                        startDate = new Date(customDate);
+                        startDate.setHours(0, 0, 0, 0);
+                        endDate = new Date(startDate);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+                    default:
+                        startDate = new Date(now);
+                        endDate = new Date(now);
+                        endDate.setDate(endDate.getDate() + 1);
+                }
+
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const dateDisplay = startDate.toLocaleDateString('en-US', options);
+                document.getElementById('availabilityHeader').innerHTML = `
+                    <i class="fas fa-calendar-check"></i>
+                    Available Cars for ${dateDisplay}
+                `;
+
+                let bookedCarIds = [];
+                try {
+                    const bookingsSnapshot = await db.collection('bookings')
+                        .where('status', 'in', ['confirmed', 'active', 'pending_payment'])
+                        .get();
+
+                    bookingsSnapshot.forEach(doc => {
+                        const booking = doc.data();
+                        const bookingStart = getDateFromFirestore(booking.startDateTime);
+                        const bookingEnd = getDateFromFirestore(booking.endDateTime);
+                        
+                        if (!bookingStart || !bookingEnd) {
+                            console.warn('Invalid booking dates - skipping', booking);
+                            return;
+                        }
+
+                        if ((bookingStart < endDate) && (bookingEnd > startDate)) {
+                            bookedCarIds.push(booking.carId);
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error fetching bookings:", error);
+                    showError("Error checking availability. Please try again.");
+                } finally {
+                    hideLoading();
+                }
+
+                const availableCars = {
+                    economy: cars.filter(car => car.category === 'economy' && !bookedCarIds.includes(car.id)),
+                    premium: cars.filter(car => car.category === 'premium' && !bookedCarIds.includes(car.id)),
+                    luxury: cars.filter(car => car.category === 'luxury' && !bookedCarIds.includes(car.id))
+                };
+
+                renderCarCategory(availableCars.economy, carContainers.economy);
+                renderCarCategory(availableCars.premium, carContainers.premium);
+                renderCarCategory(availableCars.luxury, carContainers.luxury);
+
+                dateFilterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-filter') === filterType) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            // Enhanced render function
+            function renderCarCategory(carList, container) {
+                if (!container) return;
+                
+                container.innerHTML = '';
+
+                if (!carList || carList.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 no-cars-available">
+                            <div class="alert alert-info w-100 text-center">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No cars available in this category for selected date
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                carList.forEach((car) => {
+                    const featuresHtml = car.features ? car.features.map(feature => 
+                        `<span class="feature-badge badge bg-light text-dark">
+                            <i class="fas fa-check-circle me-1"></i>${feature}
+                        </span>`
+                    ).join('') : '';
+
+                    const card = document.createElement('div');
+                    card.className = 'col-lg-4 col-md-6 mb-4';
+                    card.innerHTML = `
+                        <div class="card car-card h-100">
+                            <div class="position-relative">
+                                <img src="${car.image}" class="card-img-top car-img" alt="${car.name}" 
+                                    onerror="this.onerror=null;this.src='https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg'">
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    <span class="badge bg-${getCategoryColor(car.category)} fs-6">
+                                        <i class="${getCategoryIcon(car.category)} me-1"></i>
+                                        ${car.category}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${car.name}</h5>
+                                <p class="card-text text-muted mb-3">${car.description}</p>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex flex-wrap gap-1 mb-2">
+                                        <span class="price-badge badge bg-secondary">
+                                            <i class="fas fa-clock"></i> ₹${car.priceHourly}/hr
+                                        </span>
+                                        <span class="price-badge badge bg-primary">
+                                            <i class="fas fa-clock"></i> ₹${car.price12hrs}/12h
+                                        </span>
+                                        <span class="price-badge badge bg-success">
+                                            <i class="fas fa-clock"></i> ₹${car.price24hrs}/24h
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    ${featuresHtml}
+                                    ${car.sunroof ? '<span class="feature-badge badge bg-info"><i class="fas fa-sun"></i> Sunroof</span>' : ''}
+                                    ${car.withDriver ? '<span class="feature-badge badge bg-warning"><i class="fas fa-user-tie"></i> With Driver</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent p-3">
+                                <button class="btn book-btn w-100" data-car-id="${car.id}">
+                                    <i class="fas fa-calendar-check"></i>
+                                    Book Now
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+                // Reattach event listeners to book buttons
+                container.querySelectorAll('.book-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const carId = this.getAttribute('data-car-id');
+                        const car = cars.find(c => c.id === carId);
+                        if (car) showBookingModal(car);
+                    });
+                });
+            }
+
+            function showBookingModal(car) {
+                selectedCar = car;
+                document.getElementById('modalCarName').textContent = car.name;
+                document.getElementById('priceHourly').textContent = car.priceHourly;
+                document.getElementById('price12hrs').textContent = car.price12hrs;
+                document.getElementById('price24hrs').textContent = car.price24hrs;
+                
+                const user = auth.currentUser;
+                if (user) {
+                    document.getElementById('loginRequired').style.display = 'none';
+                    document.getElementById('bookingForm').style.display = 'block';
+                    document.getElementById('confirmBookingBtn').style.display = 'block';
+                } else {
+                    document.getElementById('loginRequired').style.display = 'block';
+                    document.getElementById('bookingForm').style.display = 'none';
+                    document.getElementById('confirmBookingBtn').style.display = 'none';
+                }
+                
+                // Clear previous errors
+                document.getElementById('startDateError').innerHTML = '';
+                document.getElementById('endDateError').innerHTML = '';
+                document.getElementById('phoneError').innerHTML = '';
+                
+                updateEstimatedTotal();
+                bookingModal.show();
+            }
+
+            function updateEstimatedTotal() {
+                if (!selectedCar) return;
+                
+                const option = document.getElementById('rentalOption').value;
+                const startDateTime = document.getElementById('startDateTime').value;
+                const endDateTime = document.getElementById('endDateTime').value;
+                
+                if (!startDateTime) return;
+                
+                const startDate = new Date(startDateTime);
+                const endDate = new Date(endDateTime);
+                
+                if (isNaN(startDate.getTime())) return;
+                
+                if (isNaN(endDate.getTime())) {
+                    const price = option === 'hourly' ? selectedCar.priceHourly : 
+                                 option === '12hrs' ? selectedCar.price12hrs : 
+                                 selectedCar.price24hrs;
+                    document.getElementById('estimatedTotal').textContent = price;
+                    document.getElementById('billingNote').textContent = option === 'hourly' ? 
+                        `Minimum ${selectedCar.minHours} hours booking required` : '';
+                    return;
+                }
+                
+                const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                const totalDays = Math.ceil(totalHours / 24);
+                
+                let totalPrice = 0;
+                let billingNote = '';
+                
+                if (totalDays >= 2) {
+                    totalPrice = totalDays * selectedCar.price24hrs;
+                    billingNote = `For ${totalDays} days rental, 24-hour rate (₹${selectedCar.price24hrs}/day) is applied automatically.`;
+                } else {
+                    if (option === 'hourly') {
+                        const billableHours = Math.max(selectedCar.minHours, Math.ceil(totalHours));
+                        totalPrice = billableHours * selectedCar.priceHourly;
+                        billingNote = `Charged for ${billableHours} hours (minimum ${selectedCar.minHours} hours)`;
+                    } else if (option === '12hrs') {
+                        const blocks = Math.max(1, Math.ceil(totalHours / 12));
+                        totalPrice = blocks * selectedCar.price12hrs;
+                        billingNote = `Charged in 12-hour blocks (${blocks} blocks)`;
+                    } else {
+                        totalPrice = selectedCar.price24hrs;
+                    }
+                }
+                
+                document.getElementById('estimatedTotal').textContent = totalPrice;
+                document.getElementById('billingNote').textContent = billingNote;
+            }
+
+            // Initialize date time pickers when modal shows
+            document.getElementById('bookingModal').addEventListener('shown.bs.modal', function() {
+                const now = new Date();
+                now.setMinutes(0, 0, 0);
+                const startDateTime = now.toISOString().slice(0, 16);
+                document.getElementById('startDateTime').value = startDateTime;
+                
+                const minEndDate = new Date(now);
+                minEndDate.setHours(minEndDate.getHours() + selectedCar.minHours);
+                const endDateTime = minEndDate.toISOString().slice(0, 16);
+                document.getElementById('endDateTime').value = endDateTime;
+                
+                updateEstimatedTotal();
+            });
+
+            // Event listeners
+            document.getElementById('startDateTime')?.addEventListener('change', function() {
+                const startDate = new Date(this.value);
+                if (isNaN(startDate.getTime())) {
+                    document.getElementById('startDateError').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Invalid start date/time';
+                    return;
+                }
+                document.getElementById('startDateError').innerHTML = '';
+                
+                const minEndDate = new Date(startDate);
+                minEndDate.setHours(minEndDate.getHours() + selectedCar.minHours);
+                document.getElementById('endDateTime').min = minEndDate.toISOString().slice(0, 16);
+                
+                updateEstimatedTotal();
+            });
+
+            document.getElementById('endDateTime')?.addEventListener('change', function() {
+                const endDate = new Date(this.value);
+                if (isNaN(endDate.getTime())) {
+                    document.getElementById('endDateError').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Invalid end date/time';
+                    return;
+                }
+                document.getElementById('endDateError').innerHTML = '';
+                updateEstimatedTotal();
+            });
+
+            document.getElementById('rentalOption')?.addEventListener('change', updateEstimatedTotal);
+            
+            document.getElementById('phoneNumber')?.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+                if (this.value.length !== 10) {
+                    document.getElementById('phoneError').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please enter a 10-digit number';
+                } else {
+                    document.getElementById('phoneError').innerHTML = '';
+                }
+            });
+
+            // Confirm booking
+            document.getElementById('confirmBookingBtn')?.addEventListener('click', async () => {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('Please login to complete booking');
+                    return;
+                }
+
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                const startDateTime = document.getElementById('startDateTime').value;
+                const endDateTime = document.getElementById('endDateTime').value;
+                const option = document.getElementById('rentalOption').value;
+                
+                let isValid = true;
+                
+                if (!phoneNumber || phoneNumber.length !== 10) {
+                    document.getElementById('phoneError').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please enter a valid 10-digit phone number';
+                    isValid = false;
+                }
+                
+                const startDate = new Date(startDateTime);
+                if (isNaN(startDate.getTime())) {
+                    document.getElementById('startDateError').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please select a valid start date/time';
+                    isValid = false;
+                }
+                
+                const endDate = new Date(endDateTime);
+                if (isNaN(endDate.getTime())) {
+                    document.getElementById('endDateError').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please select a valid end date/time';
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                if (endDate <= startDate) {
+                    document.getElementById('endDateError').innerHTML = '<i class="fas fa-exclamation-triangle"></i> End date/time must be after start date/time';
+                    return;
+                }
+
+                if (option === 'hourly') {
+                    const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                    if (totalHours < selectedCar.minHours) {
+                        document.getElementById('endDateError').innerHTML = `<i class="fas fa-exclamation-triangle"></i> Minimum booking duration is ${selectedCar.minHours} hours for hourly rentals`;
+                        return;
+                    }
+                }
+
+                try {
+                    const isAvailable = await isCarAvailable(selectedCar.id, startDateTime, endDateTime);
+                    if (!isAvailable) {
+                        alert('This car is already booked for the selected time period. Please choose different dates/times.');
+                        return;
+                    }
+
+                    const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+                    const totalDays = Math.ceil(totalHours / 24);
+                    
+                    let pricePerUnit, finalPrice, billingType;
+                    
+                    if (totalDays >= 2) {
+                        pricePerUnit = selectedCar.price24hrs;
+                        finalPrice = totalDays * pricePerUnit;
+                        billingType = '24hr_auto';
+                    } else {
+                        if (option === 'hourly') {
+                            pricePerUnit = selectedCar.priceHourly;
+                            const billableHours = Math.max(selectedCar.minHours, Math.ceil(totalHours));
+                            finalPrice = billableHours * pricePerUnit;
+                            billingType = 'hourly';
+                        } else if (option === '12hrs') {
+                            pricePerUnit = selectedCar.price12hrs;
+                            const blocks = Math.max(1, Math.ceil(totalHours / 12));
+                            finalPrice = blocks * pricePerUnit;
+                            billingType = '12hr';
+                        } else {
+                            pricePerUnit = selectedCar.price24hrs;
+                            finalPrice = pricePerUnit;
+                            billingType = '24hr';
+                        }
+                    }
+
+                    const bookingId = 'BOOK-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+                    await db.collection('bookings').doc(bookingId).set({
+                        userId: user.uid,
+                        userEmail: user.email,
+                        userPhone: phoneNumber,
+                        carId: selectedCar.id,
+                        carName: selectedCar.name,
+                        carImage: selectedCar.image,
+                        startDateTime: firebase.firestore.Timestamp.fromDate(new Date(startDateTime)),
+                        endDateTime: firebase.firestore.Timestamp.fromDate(new Date(endDateTime)),
+                        rentalOption: option,
+                        originalPrice: pricePerUnit,
+                        finalPrice: finalPrice,
+                        status: 'pending_payment',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        bookingId: bookingId,
+                        billingType: billingType,
+                        totalDays: totalDays,
+                        totalHours: totalHours,
+                        minHours: selectedCar.minHours
+                    });
+                    
+                    bookingModal.hide();
+                    alert(`Booking successful! Your booking ID is ${bookingId}`);
+                    window.location.href = `pay.html?bookingId=${bookingId}`;
+                } catch (error) {
+                    console.error('Booking error:', error);
+                    alert('Error submitting booking: ' + error.message);
+                }
+            });
+
+            async function isCarAvailable(carId, startDateTime, endDateTime) {
+                try {
+                    const bookingsRef = db.collection('bookings');
+                    const snapshot = await bookingsRef
+                        .where('carId', '==', carId)
+                        .where('status', 'in', ['pending_payment', 'confirmed', 'active'])
+                        .get();
+
+                    const newStart = new Date(startDateTime);
+                    const newEnd = new Date(endDateTime);
+
+                    for (const doc of snapshot.docs) {
+                        const booking = doc.data();
+                        const existingStart = getDateFromFirestore(booking.startDateTime);
+                        const existingEnd = getDateFromFirestore(booking.endDateTime);
+                        
+                        if (!existingStart || !existingEnd) {
+                            console.warn('Invalid booking dates - skipping', booking);
+                            continue;
+                        }
+
+                        if ((newStart >= existingStart && newStart < existingEnd) ||
+                            (newEnd > existingStart && newEnd <= existingEnd) ||
+                            (newStart <= existingStart && newEnd >= existingEnd)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                } catch (error) {
+                    console.error('Error checking availability:', error);
+                    return false;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
