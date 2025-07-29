@@ -162,33 +162,34 @@
                 font-size: 2rem;
             }
         }
-        /* Hero section styles */
+         /* Compact hero section */
         .hero {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Full viewport height */
-            background-color: #f8f9fa; /* Light background, change as needed */
-            overflow: hidden;
+            height: 60vh; /* Reduced height */
+            background-color: #f8f9fa;
+            padding: 20px 0; /* Small padding instead of margin */
         }
         
-        /* Logo animation */
+        /* Logo animation - more compact */
         .logo-animation {
-            animation: floatAnimation 3s ease-in-out infinite;
-            max-width: 200px; /* Adjust based on your logo size */
+            animation: floatAnimation 2.5s ease-in-out infinite;
+            width: 150px; /* Fixed smaller size */
             height: auto;
+            margin: 0; /* No margin around logo */
         }
         
-        /* Keyframes for the floating animation */
+        /* Smoother floating animation */
         @keyframes floatAnimation {
             0%, 100% {
-                transform: translateY(0); /* Center position */
+                transform: translateY(0);
             }
             50% {
-                transform: translateY(-22px); /* 22px up from center */
+                transform: translateY(-22px);
             }
             75% {
-                transform: translateY(22px); /* 22px down from center */
+                transform: translateY(22px);
             }
         }
     </style>
