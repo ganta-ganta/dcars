@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings | GoPanda Cars</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .profile-header {
+      background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+      color: white;
+      border-radius: 10px;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .nav-pills .nav-link.active {
+      background-color: #0d6efd;
+      font-weight: 500;
+    }
+    .nav-pills .nav-link {
+      color: #333;
+      font-weight: 500;
+    }
+    .booking-card {
+      transition: all 0.3s;
+      border-radius: 10px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+    .booking-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    .car-img {
+      height: 180px;
+      object-fit: cover;
+      width: 100%;
+    }
+    .status-badge {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+    .no-bookings {
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 40px;
+      right: 40px;
+      background-color: #25d366;
+      color: #FFF;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 3px #999;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s;
+      text-decoration: none;
+    }
+    .whatsapp-float:hover {
+      background-color: #128C7E;
+      transform: scale(1.05);
+    }
+    .account-details-card {
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+    .info-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      color: #0d6efd;
+    }
+    .detail-item {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+    }
+    .car-feature {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 12px;
+      margin-bottom: 8px;
+    }
+    .car-feature i {
+      margin-right: 4px;
+      color: #6c757d;
+    }
+    .price-highlight {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0d6efd;
+    }
+    .section-title {
+      position: relative;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background-color: #0d6efd;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-car me-2"></i>
+        <h1 class="m-0 d-inline">GoPanda Cars</h1>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="fas fa-home me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="profile.html">
+              <i class="fas fa-calendar-alt me-1"></i> My Bookings
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="logoutBtn">
+              <i class="fas fa-sign-out-alt me-1"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <!-- Profile Card -->
+        <div class="card account-details-card mb-4">
+          <div class="card-body text-center">
+            <div class="profile-header p-4 mb-4 rounded">
+              <img src="https://via.placeholder.com/120?text=User" id="userPhoto" class="profile-pic mb-3" alt="Profile Picture">
+              <h3 id="userName">Loading...</h3>
+              <p class="text-light mb-0" id="userEmail">user@example.com</p>
+            </div>
+            
+            <ul class="nav nav-pills flex-column mb-4" id="profileTabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="bookings-tab" data-bs-toggle="pill" href="#bookings" role="tab">
+                  <i class="fas fa-calendar-alt me-2"></i>My Bookings
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="account-tab" data-bs-toggle="pill" href="#account" role="tab">
+                  <i class="fas fa-user me-2"></i>Account Details
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="payment-tab" data-bs-toggle="pill" href="#payment" role="tab">
+                  <i class="fas fa-credit-card me-2"></i>Payment Methods
+                </a>
+              </li>
+            </ul>
+            
+            <div class="d-grid">
+              <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                <i class="fas fa-trash-alt me-1"></i> Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-8">
+        <div class="tab-content" id="profileTabsContent">
+          <!-- My Bookings Tab -->
+          <div class="tab-pane fade show active" id="bookings" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2 class="mb-0">
+                <i class="fas fa-calendar-alt me-2"></i>My Bookings
+              </h2>
+              <div class="btn-group">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  <i class="fas fa-filter me-1"></i> Filter
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item filter-booking active" data-status="all" href="#"><i class="fas fa-list me-2"></i>All Bookings</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item filter-booking" data-status="pending_payment" href="#"><i class="fas fa-clock me-2"></i>Pending Payment</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="confirmed" href="#"><i class="fas fa-check-circle me-2"></i>Confirmed</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="active" href="#"><i class="fas fa-car me-2"></i>Active</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="completed" href="#"><i class="fas fa-flag-checkered me-2"></i>Completed</a></li>
+                  <li><a class="dropdown-item filter-booking" data-status="cancelled" href="#"><i class="fas fa-times-circle me-2"></i>Cancelled</a></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div id="bookingsList">
+              <div class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Account Details Tab -->
+          <div class="tab-pane fade" id="account" role="tabpanel">
+            <div class="card account-details-card">
+              <div class="card-body">
+                <h2 class="mb-4">
+                  <i class="fas fa-user me-2"></i>Account Details
+                </h2>
+                
+                <form id="accountForm">
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label"><i class="fas fa-user me-1"></i> Full Name</label>
+                      <input type="text" class="form-control" id="nameInput" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label"><i class="fas fa-envelope me-1"></i> Email</label>
+                      <input type="email" class="form-control" id="emailInput" required disabled>
+                    </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label"><i class="fas fa-phone me-1"></i> Phone Number</label>
+                      <input type="tel" class="form-control" id="phoneInput" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label"><i class="fas fa-birthday-cake me-1"></i> Date of Birth</label>
+                      <input type="date" class="form-control" id="dobInput">
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-map-marker-alt me-1"></i> Address</label>
+                    <textarea class="form-control" id="addressInput" rows="3"></textarea>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-id-card me-1"></i> Driver License Number</label>
+                    <input type="text" class="form-control" id="licenseInput">
+                  </div>
+                  
+                  <div class="text-end">
+                    <button type="button" class="btn btn-primary" id="saveAccountBtn">
+                      <span class="submit-text"><i class="fas fa-save me-1"></i> Save Changes</span>
+                      <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Payment Methods Tab -->
+          <div class="tab-pane fade" id="payment" role="tabpanel">
+            <div class="card account-details-card">
+              <div class="card-body">
+                <h2 class="mb-4">
+                  <i class="fas fa-credit-card me-2"></i>Payment Methods
+                </h2>
+                
+                <div class="alert alert-info">
+                  <i class="fas fa-info-circle me-2"></i> Saved payment methods will appear here
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add New Payment Method</h5>
+                  <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">
+                    <i class="fas fa-plus me-1"></i> Add New
+                  </button>
+                </div>
+                
+                <div class="list-group" id="paymentMethodsList">
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="fab fa-cc-visa me-2 fa-lg text-primary"></i>
+                        <span class="fw-bold">VISA ending in 4242</span>
+                        <span class="text-muted ms-2">Expires 04/2025</span>
+                      </div>
+                      <button class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <i class="fab fa-cc-mastercard me-2 fa-lg text-warning"></i>
+                        <span class="fw-bold">Mastercard ending in 5555</span>
+                        <span class="text-muted ms-2">Expires 12/2024</span>
+                      </div>
+                      <button class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Details Modal -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-calendar-check me-2"></i>Booking Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="bookingModalBody">
+          <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading booking details...</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Close
+          </button>
+          <button type="button" class="btn btn-danger" id="cancelBookingBtn" style="display:none;">
+            <i class="fas fa-ban me-1"></i> Cancel Booking
+          </button>
+          <button type="button" class="btn btn-primary" id="payNowBtn" style="display:none;">
+            <i class="fas fa-credit-card me-1"></i> Pay Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Payment Method Modal -->
+  <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-credit-card me-2"></i>Add Payment Method</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="paymentForm">
+            <div class="mb-3">
+              <label class="form-label"><i class="far fa-credit-card me-1"></i> Card Number</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+                <span class="input-group-text"><i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard ms-1"></i> <i class="fab fa-cc-amex ms-1"></i></span>
+              </div>
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label"><i class="far fa-calendar me-1"></i> Expiration Date</label>
+                <input type="text" class="form-control" placeholder="MM/YY" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label"><i class="fas fa-lock me-1"></i> CVV</label>
+                <input type="text" class="form-control" placeholder="123" required>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label"><i class="far fa-user me-1"></i> Cardholder Name</label>
+              <input type="text" class="form-control" placeholder="Name on card" required>
+            </div>
+            
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="saveCard" checked>
+              <label class="form-check-label" for="saveCard">
+                <i class="fas fa-save me-1"></i> Save this card for future payments
+              </label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Cancel
+          </button>
+          <button type="button" class="btn btn-primary">
+            <i class="fas fa-check me-1"></i> Add Card
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Account Modal -->
+  <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Delete Account</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><i class="fas fa-info-circle me-2"></i> Are you sure you want to delete your account? This action cannot be undone.</p>
+          <p class="fw-bold"><i class="fas fa-exclamation me-2"></i> All your bookings and personal data will be permanently removed.</p>
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="confirmDelete">
+            <label class="form-check-label" for="confirmDelete">
+              <i class="fas fa-check-circle me-1"></i> I understand this action is irreversible
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Cancel
+          </button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn" disabled>
+            <span class="submit-text"><i class="fas fa-trash-alt me-1"></i> Delete Account</span>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp Float Button -->
+  <a href="https://wa.me/919052017979" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+      authDomain: "gopandacars-7085f.firebaseapp.com",
+      projectId: "gopandacars-7085f",
+      storageBucket: "gopandacars-7085f.appspot.com",
+      messagingSenderId: "486383420605"
+    };
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // DOM elements
+    const logoutBtn = document.getElementById('logoutBtn');
+    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const confirmDeleteCheckbox = document.getElementById('confirmDelete');
+    const saveAccountBtn = document.getElementById('saveAccountBtn');
+    const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+    const deleteAccountModal = new bootstrap.Modal(document.getElementById('deleteAccountModal'));
+    const addPaymentModal = new bootstrap.Modal(document.getElementById('addPaymentModal'));
+    
+    // Global variables
+    let currentUser = null;
+    let currentBookingId = null;
+    let currentFilter = 'all';
+
+    // Check auth state
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        currentUser = user;
+        loadUserProfile(user.uid);
+        loadUserBookings(user.uid);
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Load user profile
+    function loadUserProfile(userId) {
+      db.collection('users').doc(userId).get()
+        .then(doc => {
+          if (doc.exists) {
+            const userData = doc.data();
+            
+            // Update profile section
+            document.getElementById('userName').textContent = userData.name || 'User';
+            document.getElementById('userEmail').textContent = userData.email;
+            
+            if (userData.photoURL) {
+              document.getElementById('userPhoto').src = userData.photoURL;
+            }
+            
+            // Fill account form
+            document.getElementById('nameInput').value = userData.name || '';
+            document.getElementById('emailInput').value = userData.email || '';
+            document.getElementById('phoneInput').value = userData.phone || '';
+            document.getElementById('addressInput').value = userData.address || '';
+            document.getElementById('licenseInput').value = userData.driverLicense || '';
+            
+            if (userData.dob) {
+              const dobDate = userData.dob.toDate();
+              document.getElementById('dobInput').valueAsDate = dobDate;
+            }
+          }
+        })
+        .catch(error => {
+          console.error("Error loading user profile:", error);
+        });
+    }
+
+    // Load user bookings
+    function loadUserBookings(userId, filter = 'all') {
+      currentFilter = filter;
+      const bookingsList = document.getElementById('bookingsList');
+      bookingsList.innerHTML = '<div class="loading-spinner"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+      
+      let query = db.collection('bookings')
+        .where('userId', '==', userId)
+        .orderBy('createdAt', 'desc');
+      
+      if (filter !== 'all') {
+        query = query.where('status', '==', filter);
+      }
+      
+      query.get()
+        .then(snap => {
+          bookingsList.innerHTML = '';
+          
+          if (snap.empty) {
+            bookingsList.innerHTML = `
+              <div class="no-bookings text-center">
+                <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No bookings found</h4>
+                <p class="text-muted">You don't have any ${filter === 'all' ? '' : filter.replace('_', ' ')} bookings yet</p>
+                <a href="index.html" class="btn btn-primary mt-2">
+                  <i class="fas fa-car me-1"></i> Book a Car Now
+                </a>
+              </div>
+            `;
+            return;
+          }
+          
+          snap.forEach(doc => {
+            addBookingCard(doc.data(), doc.id);
+          });
+        })
+        .catch(error => {
+          console.error("Error loading bookings:", error);
+          bookingsList.innerHTML = `
+            <div class="alert alert-danger">
+              <i class="fas fa-exclamation-circle me-2"></i> Error loading bookings. Please try again.
+            </div>
+          `;
+        });
+    }
+
+    // Add booking card to the list
+    function addBookingCard(booking, bookingId) {
+      const bookingsList = document.getElementById('bookingsList');
+      const card = document.createElement('div');
+      card.className = 'card booking-card mb-3';
+      
+      // Format dates
+      const startDate = booking.startDateTime.toDate();
+      const endDate = booking.endDateTime.toDate();
+      const createdAt = booking.createdAt.toDate();
+      
+      card.innerHTML = `
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="${booking.carImage || 'https://via.placeholder.com/300x200?text=Car'}" class="car-img" alt="${booking.carName}">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">
+                  <i class="fas fa-car me-2 text-primary"></i>${booking.carName}
+                </h5>
+                <span class="status-badge ${getStatusBadgeClass(booking.status)}">
+                  <i class="${getStatusIcon(booking.status)} me-1"></i>${booking.status.replace('_', ' ')}
+                </span>
+              </div>
+              
+              <div class="row mb-2">
+                <div class="col-6">
+                  <p class="card-text text-muted mb-1"><small><i class="fas fa-arrow-circle-up me-1"></i>Pickup</small></p>
+                  <p class="card-text fw-bold">${startDate.toLocaleDateString()}</p>
+                  <p class="card-text"><i class="far fa-clock me-1"></i>${startDate.toLocaleTimeString()}</p>
+                </div>
+                <div class="col-6">
+                  <p class="card-text text-muted mb-1"><small><i class="fas fa-arrow-circle-down me-1"></i>Dropoff</small></p>
+                  <p class="card-text fw-bold">${endDate.toLocaleDateString()}</p>
+                  <p class="card-text"><i class="far fa-clock me-1"></i>${endDate.toLocaleTimeString()}</p>
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 price-highlight">
+                  <i class="fas fa-rupee-sign me-1"></i>${booking.finalPrice || booking.originalPrice || '0'}
+                </h5>
+                <button class="btn btn-outline-primary view-booking" data-booking-id="${bookingId}">
+                  <i class="fas fa-eye me-1"></i> View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      bookingsList.appendChild(card);
+    }
+
+    // View booking details
+    async function viewBookingDetails(bookingId) {
+      currentBookingId = bookingId;
+      
+      try {
+        const doc = await db.collection('bookings').doc(bookingId).get();
+        if (!doc.exists) {
+          alert('Booking not found');
+          return;
+        }
+        
+        const booking = doc.data();
+        const modalBody = document.getElementById('bookingModalBody');
+        
+        // Format dates
+        const startDate = booking.startDateTime.toDate();
+        const endDate = booking.endDateTime.toDate();
+        const createdAt = booking.createdAt.toDate();
+        
+        modalBody.innerHTML = `
+          <div class="row">
+            <div class="col-md-6">
+              <h6 class="section-title"><i class="fas fa-info-circle me-2"></i>Booking Information</h6>
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-hashtag"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Booking ID:</strong></p>
+                  <p class="mb-0 text-muted">${bookingId}</p>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-tag"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Status:</strong></p>
+                  <p class="mb-0"><span class="status-badge ${getStatusBadgeClass(booking.status)}">
+                    <i class="${getStatusIcon(booking.status)} me-1"></i>${booking.status.replace('_', ' ')}
+                  </span></p>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <span class="info-icon"><i class="far fa-calendar-plus"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Created At:</strong></p>
+                  <p class="mb-0 text-muted">${createdAt.toLocaleString()}</p>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-arrow-circle-up"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Pickup:</strong></p>
+                  <p class="mb-0 text-muted">${startDate.toLocaleString()}</p>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-arrow-circle-down"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Dropoff:</strong></p>
+                  <p class="mb-0 text-muted">${endDate.toLocaleString()}</p>
+                </div>
+              </div>
+              
+              ${booking.pickupLocation ? `
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-map-marker-alt"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Pickup Location:</strong></p>
+                  <p class="mb-0 text-muted">${booking.pickupLocation}</p>
+                </div>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div class="col-md-6">
+              <h6 class="section-title"><i class="fas fa-car me-2"></i>Car Information</h6>
+              <div class="d-flex mb-3">
+                <img src="${booking.carImage || 'https://via.placeholder.com/100?text=Car'}" 
+                     class="img-thumbnail me-3" style="width: 100px; height: auto;">
+                <div>
+                  <h5>${booking.carName}</h5>
+                  <p class="text-muted mb-1">${booking.carCategory ? booking.carCategory.toUpperCase() : ''}</p>
+                  <div>
+                    ${booking.carWithDriver ? '<span class="badge bg-warning me-1"><i class="fas fa-user-tie me-1"></i>With Driver</span>' : ''}
+                    ${booking.carAC ? '<span class="badge bg-info me-1"><i class="fas fa-snowflake me-1"></i>AC</span>' : ''}
+                    ${booking.carAutomatic ? '<span class="badge bg-success me-1"><i class="fas fa-cog me-1"></i>Automatic</span>' : ''}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-tag"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Original Price:</strong></p>
+                  <p class="mb-0 text-muted"><i class="fas fa-rupee-sign me-1"></i>${booking.originalPrice || '0'}</p>
+                </div>
+              </div>
+              
+              ${booking.discountApplied ? `
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-percentage"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Discount Applied:</strong></p>
+                  <p class="mb-0 text-muted">${booking.discountCode || ''} (<i class="fas fa-rupee-sign me-1"></i>${booking.discountAmount || '0'})</p>
+                </div>
+              </div>
+              ` : ''}
+              
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-money-bill-wave"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Final Price:</strong></p>
+                  <p class="mb-0 price-highlight"><i class="fas fa-rupee-sign me-1"></i>${booking.finalPrice || booking.originalPrice || '0'}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <h6 class="section-title"><i class="fas fa-credit-card me-2"></i>Payment Information</h6>
+              <div class="detail-item">
+                <span class="info-icon"><i class="far fa-credit-card"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Payment Method:</strong></p>
+                  <p class="mb-0 text-muted">${booking.paymentMethod || 'Not specified'}</p>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-check-circle"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Payment Status:</strong></p>
+                  <p class="mb-0 text-muted">${booking.paymentStatus || 'Pending'}</p>
+                </div>
+              </div>
+              
+              ${booking.transactionId ? `
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-receipt"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Transaction ID:</strong></p>
+                  <p class="mb-0 text-muted">${booking.transactionId}</p>
+                </div>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div class="col-md-6">
+              <h6 class="section-title"><i class="fas fa-clipboard-list me-2"></i>Additional Information</h6>
+              ${booking.specialRequests ? `
+              <div class="detail-item">
+                <span class="info-icon"><i class="fas fa-comment-alt"></i></span>
+                <div>
+                  <p class="mb-0"><strong>Special Requests:</strong></p>
+                  <p class="mb-0 text-muted">${booking.specialRequests}</p>
+                </div>
+              </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+        
+        // Show appropriate action buttons
+        document.getElementById('cancelBookingBtn').style.display = 'none';
+        document.getElementById('payNowBtn').style.display = 'none';
+        
+        if (booking.status === 'pending_payment') {
+          document.getElementById('cancelBookingBtn').style.display = 'inline-block';
+          document.getElementById('payNowBtn').style.display = 'inline-block';
+        } else if (booking.status === 'confirmed') {
+          document.getElementById('cancelBookingBtn').style.display = 'inline-block';
+        }
+        
+        bookingModal.show();
+      } catch (error) {
+        console.error("Error loading booking details:", error);
+        document.getElementById('bookingModalBody').innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i> Error loading booking details
+          </div>
+        `;
+      }
+    }
+
+    // Cancel booking
+    function cancelBooking(bookingId) {
+      if (!confirm('Are you sure you want to cancel this booking?')) return;
+      
+      const btn = document.getElementById('cancelBookingBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+      btn.disabled = true;
+      
+      db.collection('bookings').doc(bookingId).update({
+        status: 'cancelled',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        alert('Booking cancelled successfully');
+        bookingModal.hide();
+        loadUserBookings(currentUser.uid, currentFilter);
+      })
+      .catch(error => {
+        console.error("Error cancelling booking:", error);
+        alert('Failed to cancel booking');
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      });
+    }
+
+    // Save account changes
+    saveAccountBtn.addEventListener('click', () => {
+      const name = document.getElementById('nameInput').value.trim();
+      const phone = document.getElementById('phoneInput').value.trim();
+      const address = document.getElementById('addressInput').value.trim();
+      const license = document.getElementById('licenseInput').value.trim();
+      const dob = document.getElementById('dobInput').value;
+      
+      if (!name || !phone) {
+        alert('Please fill all required fields');
+        return;
+      }
+      
+      const btn = saveAccountBtn;
+      const submitText = btn.querySelector('.submit-text');
+      const spinner = btn.querySelector('.spinner-border');
+      
+      // Set loading state
+      submitText.textContent = 'Saving...';
+      spinner.classList.remove('d-none');
+      btn.disabled = true;
+      
+      const updateData = {
+        name,
+        phone,
+        address,
+        driverLicense: license,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      if (dob) {
+        updateData.dob = new Date(dob);
+      }
+      
+      db.collection('users').doc(currentUser.uid).update(updateData)
+        .then(() => {
+          alert('Account updated successfully');
+          loadUserProfile(currentUser.uid);
+        })
+        .catch(error => {
+          console.error("Error updating account:", error);
+          alert('Failed to update account');
+        })
+        .finally(() => {
+          submitText.textContent = 'Save Changes';
+          spinner.classList.add('d-none');
+          btn.disabled = false;
+        });
+    });
+
+    // Delete account
+    deleteAccountBtn.addEventListener('click', () => {
+      deleteAccountModal.show();
+    });
+    
+    confirmDeleteCheckbox.addEventListener('change', () => {
+      confirmDeleteBtn.disabled = !confirmDeleteCheckbox.checked;
+    });
+    
+    confirmDeleteBtn.addEventListener('click', () => {
+      if (!confirmDeleteCheckbox.checked) return;
+      
+      const btn = confirmDeleteBtn;
+      const submitText = btn.querySelector('.submit-text');
+      const spinner = btn.querySelector('.spinner-border');
+      
+      // Set loading state
+      submitText.textContent = 'Deleting...';
+      spinner.classList.remove('d-none');
+      btn.disabled = true;
+      
+      // In a real app, you would also delete all user data and handle any subscriptions
+      currentUser.delete()
+        .then(() => {
+          alert('Account deleted successfully');
+          window.location.href = 'index.html';
+        })
+        .catch(error => {
+          console.error("Error deleting account:", error);
+          alert('Failed to delete account');
+        })
+        .finally(() => {
+          submitText.textContent = 'Delete Account';
+          spinner.classList.add('d-none');
+          btn.disabled = false;
+          deleteAccountModal.hide();
+        });
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => {
+        window.location.href = 'index.html';
+      });
+    });
+
+    // Pay now button
+    document.getElementById('payNowBtn').addEventListener('click', () => {
+      bookingModal.hide();
+      window.location.href = `pay.html?bookingId=${currentBookingId}`;
+    });
+
+    // Booking filters
+    document.querySelectorAll('.filter-booking').forEach(filter => {
+      filter.addEventListener('click', (e) => {
+        e.preventDefault();
+        const status = filter.getAttribute('data-status');
+        
+        // Update active filter
+        document.querySelectorAll('.filter-booking').forEach(f => {
+          f.classList.remove('active');
+        });
+        filter.classList.add('active');
+        
+        loadUserBookings(currentUser.uid, status);
+      });
+    });
+
+    // View booking details
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.view-booking')) {
+        const bookingId = e.target.closest('.view-booking').getAttribute('data-booking-id');
+        viewBookingDetails(bookingId);
+      }
+      
+      if (e.target.closest('#cancelBookingBtn')) {
+        cancelBooking(currentBookingId);
+      }
+    });
+
+    // Helper function to get status badge class
+    function getStatusBadgeClass(status) {
+      switch(status) {
+        case 'confirmed':
+        case 'active':
+        case 'completed':
+          return 'bg-success';
+        case 'pending_payment':
+          return 'bg-warning text-dark';
+        case 'awaiting_verification':
+          return 'bg-info';
+        case 'cancelled':
+          return 'bg-danger';
+        default:
+          return 'bg-secondary';
+      }
+    }
+    
+    // Helper function to get status icon
+    function getStatusIcon(status) {
+      switch(status) {
+        case 'confirmed':
+          return 'fas fa-check-circle';
+        case 'active':
+          return 'fas fa-car';
+        case 'completed':
+          return 'fas fa-flag-checkered';
+        case 'pending_payment':
+          return 'fas fa-clock';
+        case 'awaiting_verification':
+          return 'fas fa-hourglass-half';
+        case 'cancelled':
+          return 'fas fa-ban';
+        default:
+          return 'fas fa-info-circle';
+      }
+    }
+  </script>
+</body>
+</html>
