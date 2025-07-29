@@ -774,6 +774,42 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #0a58ca;
         }
+        img.logo-animation {
+    /* Size and Appearance */
+    width: auto;
+    height: 120px; /* Adjust based on your logo size */
+    max-width: 100%;
+    
+    /* Animation */
+    animation: logoFloat 3s ease-in-out infinite;
+    
+    /* Positioning */
+    display: block;
+    margin: 0 auto 30px;
+    
+    /* Effects */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: all 0.3s ease;
+}
+
+/* Keyframes for floating animation */
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-22px) rotate(2deg); /* 22px upward float */
+    }
+    75% {
+        transform: translateY(22px) rotate(-1deg); /* 22px downward float */
+    }
+}
+
+/* Optional hover effect */
+img.logo-animation:hover {
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+    animation-play-state: paused;
+}
     </style>
 </head>
 <body>
@@ -815,9 +851,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="pay"><i class="fas fa-credit-card"></i> Pay</a>
                     </li>
-                    <li class="nav-item">
+                    <!--<li class="nav-item">
                         <a class="nav-link" href="help"><i class="fas fa-question-circle"></i> Help</a>
-                    </li>
+                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
                     </li>
