@@ -162,6 +162,35 @@
                 font-size: 2rem;
             }
         }
+        /* Hero section styles */
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            background-color: #f8f9fa; /* Light background, change as needed */
+            overflow: hidden;
+        }
+        
+        /* Logo animation */
+        .logo-animation {
+            animation: floatAnimation 3s ease-in-out infinite;
+            max-width: 200px; /* Adjust based on your logo size */
+            height: auto;
+        }
+        
+        /* Keyframes for the floating animation */
+        @keyframes floatAnimation {
+            0%, 100% {
+                transform: translateY(0); /* Center position */
+            }
+            50% {
+                transform: translateY(-22px); /* 22px up from center */
+            }
+            75% {
+                transform: translateY(22px); /* 22px down from center */
+            }
+        }
     </style>
 </head>
 <body>
@@ -211,12 +240,12 @@
     </nav>
 
     <!-- Hero Section -->
+    <section class="hero">
+        <img src="img/logo.png" alt="Go Panda self drive cars guntur" class="logo-animation">
+    </section>
     <header class="bg-primary text-white py-5">
         <div class="container text-center">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-               <img src="img/logo.png" alt="Go Panda self drive cars guntur" class="logo-animation me-2">
-                <span>GoPanda Cars</span>
-            </a>
+            
             <h1 class="display-4 hero-text"><i class="fas fa-car me-2"></i> GoPanda Self Drive Cars in Guntur</h1>
             <p class="lead">Premium car rental service at affordable prices</p>
             <div class="mt-4">
