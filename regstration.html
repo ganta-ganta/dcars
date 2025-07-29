@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | GoPandaCars</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .register-container {
+      max-width: 600px;
+      margin: 0 auto;
+      margin-top: 50px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .register-header {
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .password-strength {
+      height: 5px;
+      margin-top: 5px;
+      background-color: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="register-container">
+      <div class="register-header">
+        <h3><i class="fas fa-car me-2"></i> GoPandaCars</h3>
+        <p class="mb-0">Create your account</p>
+      </div>
+      
+      <div class="register-body p-4">
+        <form id="registrationForm">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstName" class="form-label">First Name*</label>
+              <input type="text" class="form-control" id="firstName" placeholder="Enter first name" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lastName" class="form-label">Last Name*</label>
+              <input type="text" class="form-control" id="lastName" placeholder="Enter last name" required>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address*</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number*</label>
+            <div class="input-group">
+              <span class="input-group-text">+91</span>
+              <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" pattern="[0-9]{10}" required>
+            </div>
+            <small class="text-muted">10 digit Indian phone number</small>
+          </div>
+          
+          <div class="mb-3">
+            <label for="password" class="form-label">Password*</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+              <button class="btn btn-outline-secondary" type="button" id="togglePasswordVisibility">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <div class="password-strength">
+              <div class="password-strength-bar" id="passwordStrengthBar"></div>
+            </div>
+            <small class="text-muted">Minimum 8 characters with at least 1 uppercase, 1 lowercase, and 1 number</small>
+          </div>
+          
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm Password*</label>
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+            <div class="invalid-feedback" id="passwordMatchError">Passwords do not match</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="license" class="form-label">Driver's License Number*</label>
+            <input type="text" class="form-control" id="license" placeholder="Enter driver's license number" required>
+          </div>
+          
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="termsCheck" required>
+            <label class="form-check-label" for="termsCheck">I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a></label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100 py-2">
+            <i class="fas fa-user-plus me-2"></i> Register
+          </button>
+        </form>
+        
+        <div class="text-center mt-3">
+          <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+      authDomain: "gopandacars-7085f.firebaseapp.com",
+      projectId: "gopandacars-7085f",
+      storageBucket: "gopandacars-7085f.appspot.com",
+      messagingSenderId: "486383420605"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    // DOM elements
+    const registrationForm = document.getElementById('registrationForm');
+    const togglePasswordVisibility = document.getElementById('togglePasswordVisibility');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+    const passwordMatchError = document.getElementById('passwordMatchError');
+
+    // Toggle password visibility
+    togglePasswordVisibility.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePasswordVisibility.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    // Password strength indicator
+    passwordInput.addEventListener('input', () => {
+      const password = passwordInput.value;
+      let strength = 0;
+      
+      if (password.length >= 8) strength += 25;
+      if (/[A-Z]/.test(password)) strength += 25;
+      if (/[a-z]/.test(password)) strength += 25;
+      if (/[0-9]/.test(password)) strength += 25;
+      
+      passwordStrengthBar.style.width = strength + '%';
+      passwordStrengthBar.style.backgroundColor = 
+        strength < 50 ? '#dc3545' : 
+        strength < 75 ? '#fd7e14' : '#28a745';
+    });
+
+    // Password match validation
+    confirmPasswordInput.addEventListener('input', () => {
+      if (passwordInput.value !== confirmPasswordInput.value) {
+        confirmPasswordInput.classList.add('is-invalid');
+        passwordMatchError.style.display = 'block';
+      } else {
+        confirmPasswordInput.classList.remove('is-invalid');
+        passwordMatchError.style.display = 'none';
+      }
+    });
+
+    // Registration form submission
+    registrationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Get form values
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = '+91' + document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const license = document.getElementById('license').value.trim();
+      
+      // Validate passwords
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      
+      if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+        alert('Password must be at least 8 characters with uppercase, lowercase, and number');
+        return;
+      }
+      
+      try {
+        // Show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registering...';
+        
+        // Create user with email and password
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Save additional user data to Firestore
+        await db.collection('users').doc(user.uid).set({
+          firstName: firstName,
+          lastName: lastName,
+          name: `${firstName} ${lastName}`,
+          email: email,
+          phone: phone,
+          driverLicense: license,
+          role: 'user',
+          status: 'active',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Send email verification
+        await user.sendEmailVerification();
+        
+        // Automatically sign in the user after registration
+        await auth.signInWithEmailAndPassword(email, password);
+        
+        alert('Registration successful! Please verify your email.');
+        window.location.href = 'profile.html';
+        
+      } catch (error) {
+        console.error('Registration Error:', error);
+        alert(getErrorMessage(error.code));
+        
+        // Reset button state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus me-2"></i> Register';
+      }
+    });
+    
+    function getErrorMessage(errorCode) {
+      const errorMessages = {
+        'auth/email-already-in-use': 'Email already in use',
+        'auth/invalid-email': 'Invalid email address',
+        'auth/operation-not-allowed': 'Operation not allowed',
+        'auth/weak-password': 'Password is too weak',
+        'auth/network-request-failed': 'Network error. Please check your connection'
+      };
+      return errorMessages[errorCode] || 'Registration failed. Please try again.';
+    }
+
+    // Check if user is already logged in
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        window.location.href = 'profile.html';
+      }
+    });
+  </script>
+</body>
+</html>
