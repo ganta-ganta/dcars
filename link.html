@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Rental Terms via WhatsApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #25D366;
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+        .preview-box {
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+        .terms-icon {
+            color: #25D366;
+            margin-right: 10px;
+        }
+        .language-tabs .nav-link {
+            color: #25D366;
+            font-weight: bold;
+        }
+        .language-tabs .nav-link.active {
+            background-color: #25D366;
+            color: white;
+        }
+        #teluguPreview {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header header">
+                        <h3 class="mb-0 text-center"><i class="fab fa-whatsapp"></i> Send Rental Terms via WhatsApp</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="whatsappForm">
+                            <div class="mb-4">
+                                <label for="customerName" class="form-label">Customer Name</label>
+                                <input type="text" class="form-control" id="customerName" placeholder="Enter customer name">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="phoneNumber" class="form-label">Phone Number (with country code)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" class="form-control" id="phoneNumber" placeholder="e.g. 919876543210" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">Select Language</label>
+                                <ul class="nav nav-tabs language-tabs" id="languageTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="english-tab" data-bs-toggle="tab" data-bs-target="#englishPreview" type="button" role="tab" aria-controls="englishPreview" aria-selected="true">English</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="telugu-tab" data-bs-toggle="tab" data-bs-target="#teluguPreview" type="button" role="tab" aria-controls="teluguPreview" aria-selected="false">తెలుగు (Telugu)</button>
+                                    </li>
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active preview-box" id="englishPreview" role="tabpanel" aria-labelledby="english-tab">
+                                        <strong>🚗 *Rental Terms & Conditions* 🚗</strong>
+                                        <hr>
+                                        
+                                        <p><i class="fas fa-tachometer-alt terms-icon"></i> <strong>Speed Limit</strong><br>
+                                        - Max allowed speed: 105 km/h<br>
+                                        - Penalty: ₹1000 per violation<br>
+                                        - Insurance void if exceeded</p>
+                                        
+                                        <p><i class="fas fa-shield-alt terms-icon"></i> <strong>Insurance Exclusions</strong><br>
+                                        No coverage for:<br>
+                                        ⚠️ Over-speeding (>105 km/h)<br>
+                                        ⚠️ Rash driving<br>
+                                        ⚠️ Off-road driving<br>
+                                        ⚠️ Alcohol/drug influenced driving</p>
+                                        
+                                        <p><i class="fas fa-exclamation-triangle terms-icon"></i> <strong>Important Notice</strong><br>
+                                        - All traffic fines are customer's responsibility<br>
+                                        - ₹200 service fee per violation<br>
+                                        - Deducted from security deposit</p>
+                                        
+                                        <p><i class="fas fa-gas-pump terms-icon"></i> <strong>Fuel Policy</strong><br>
+                                        - Return with same fuel level<br>
+                                        - Refill only at authorized station:<br>
+                                        &nbsp;&nbsp;<a href="https://maps.app.goo.gl/K6435xMeiHd4Dndw9" target="_blank">HP Petrol Bunk, Guntur</a><br>
+                                        - Provide original receipt with:<br>
+                                        &nbsp;&nbsp;🖋️ Petrol bunk stamp & signature<br>
+                                        &nbsp;&nbsp;📅 Date/time of refill<br>
+                                        &nbsp;&nbsp;🚗 Vehicle registration number<br>
+                                        &nbsp;&nbsp;⚖️ Quantity/amount visible<br>
+                                        - ₹500 penalty for missing receipt</p>
+                                        
+                                        <p><i class="fas fa-file-contract terms-icon"></i> <strong>General Conditions</strong><br>
+                                        - Late returns charged at 1.5x hourly rate<br>
+                                        - Vehicle must be returned in same condition<br>
+                                        - Security deposit refund in 7 working days</p>
+                                        
+                                        <p><i class="fas fa-check-circle terms-icon"></i> <strong>Acceptance</strong><br>
+                                        By payment, you agree to all terms. Violations may result in additional charges or rental termination.</p>
+                                        
+                                        <hr>
+                                        <p>Need clarification? Reply to this message.</p>
+                                    </div>
+                                    
+                                    <div class="tab-pane fade preview-box" id="teluguPreview" role="tabpanel" aria-labelledby="telugu-tab">
+                                        <strong>🚗 *కిరాయి షరతులు & నిబంధనలు* 🚗</strong>
+                                        <hr>
+                                        
+                                        <p><i class="fas fa-tachometer-alt terms-icon"></i> <strong>వేగ పరిమితి</strong><br>
+                                        - గరిష్ట అనుమతించబడిన వేగం: 105 km/h<br>
+                                        - ఉల్లంఘనకు జరిమానా: ₹1000<br>
+                                        - పరిమితి మించిన బీమా రద్దు</p>
+                                        
+                                        <p><i class="fas fa-shield-alt terms-icon"></i> <strong>బీమా మినహాయింపులు</strong><br>
+                                        కింది సందర్భాలలో కవరేజీ లేదు:<br>
+                                        ⚠️ 105 km/h కంటే ఎక్కువ వేగం<br>
+                                        ⚠️ తొందరపాటు డ్రైవింగ్<br>
+                                        ⚠️ రోడ్డు లేని ప్రాంతాల్లో డ్రైవింగ్<br>
+                                        ⚠️ మద్యం/మందులు తీసుకున్న తర్వాత డ్రైవింగ్</p>
+                                        
+                                        <p><i class="fas fa-exclamation-triangle terms-icon"></i> <strong>ముఖ్యమైన నోటీసు</strong><br>
+                                        - ట్రాఫిక్ జరిమానాలు కస్టమర్ బాధ్యత<br>
+                                        - ఉల్లంఘనకు ₹200 సర్వీస్ ఛార్జీ<br>
+                                        - సెక్యూరిటీ డిపాజిట్ నుండి కట్ చేయబడుతుంది</p>
+                                        
+                                        <p><i class="fas fa-gas-pump terms-icon"></i> <strong>ఇంధన విధానం</strong><br>
+                                        - తీసుకున్న సమయంలో ఉన్న ఇంధన స్థాయిలోనే తిరిగి ఇవ్వాలి<br>
+                                        - అధికారిక ఇంధన కేంద్రంలోనే నింపాలి:<br>
+                                        &nbsp;&nbsp;<a href="https://maps.app.goo.gl/K6435xMeiHd4Dndw9" target="_blank">HP పెట్రోల్ బంక్, గుంటూరు</a><br>
+                                        - అసలు రసీదు అందజేయాలి:<br>
+                                        &nbsp;&nbsp;🖋️ పెట్రోల్ బంక్ స్టాంప్ & సంతకం<br>
+                                        &nbsp;&nbsp;📅 నింపిన తేదీ/సమయం<br>
+                                        &nbsp;&nbsp;🚗 వాహన రిజిస్ట్రేషన్ నంబర్<br>
+                                        &nbsp;&nbsp;⚖️ పరిమాణం/మొత్తం స్పష్టంగా కనిపించేలా<br>
+                                        - రసీదు లేకపోతే ₹500 జరిమానా</p>
+                                        
+                                        <p><i class="fas fa-file-contract terms-icon"></i> <strong>సాధారణ షరతులు</strong><br>
+                                        - ఆలస్యంగా తిరిగి ఇస్తే 1.5x రేటు వర్తిస్తుంది<br>
+                                        - వాహనం తీసుకున్న స్థితిలోనే తిరిగి ఇవ్వాలి<br>
+                                        - భద్రతా డిపాజిట్ 7 పని దినాలలో తిరిగి ఇవ్వబడుతుంది</p>
+                                        
+                                        <p><i class="fas fa-check-circle terms-icon"></i> <strong>అంగీకారం</strong><br>
+                                        చెల్లింపు ద్వారా మీరు ఈ షరతులన్నింటికీ అంగీకరిస్తున్నారు. ఉల్లంఘనల వలన అదనపు ఛార్జీలు లేదా ఒప్పందం రద్దు కావచ్చు.</p>
+                                        
+                                        <hr>
+                                        <p>స్పష్టత కావాలంటే ఈ సందేశానికి రిప్లై చేయండి.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-whatsapp btn-lg" onclick="sendWhatsApp()">
+                                    <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function sendWhatsApp() {
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const customerName = document.getElementById('customerName').value.trim();
+            const isEnglish = document.getElementById('english-tab').classList.contains('active');
+            
+            if (!phone) {
+                alert('Please enter a phone number');
+                return;
+            }
+            
+            let greeting = customerName ? (isEnglish ? `Hi ${customerName},\n\n` : `${customerName} గారికి,\n\n`) : '';
+            
+            let message = '';
+            
+            if (isEnglish) {
+                message = `${greeting}🚗 *Rental Terms & Conditions* 🚗
+
+📌 *Speed Limit*
+- Max allowed speed: 105 km/h
+- Penalty: ₹1000 per violation
+- Insurance void if exceeded
+
+🛡️ *Insurance Exclusions*
+No coverage for:
+⚠️ Over-speeding (>105 km/h)
+⚠️ Rash driving
+⚠️ Off-road driving
+⚠️ Alcohol/drug influenced driving
+
+❗ *Important Notice*
+- All traffic fines are customer's responsibility
+- ₹200 service fee per violation
+- Deducted from security deposit
+
+⛽ *Fuel Policy*
+- Return with same fuel level
+- Refill only at authorized station:
+  https://maps.app.goo.gl/K6435xMeiHd4Dndw9
+- Provide original receipt with:
+  🖋️ Petrol bunk stamp & signature
+  📅 Date/time of refill
+  🚗 Vehicle registration number
+  ⚖️ Quantity/amount visible
+- ₹500 penalty for missing receipt
+
+⚖️ *General Conditions*
+- Late returns charged at 1.5x hourly rate
+- Vehicle must be returned in same condition
+- Security deposit refund in 7 working days
+
+✅ *Acceptance*
+By payment, you agree to all terms. Violations may result in additional charges or rental termination.
+
+Need clarification? Reply to this message.`;
+            } else {
+                message = `${greeting}🚗 *కిరాయి షరతులు & నిబంధనలు* 🚗
+
+📌 *వేగ పరిమితి*
+- గరిష్ట అనుమతించబడిన వేగం: 105 km/h
+- ఉల్లంఘనకు జరిమానా: ₹1000
+- పరిమితి మించిన బీమా రద్దు
+
+🛡️ *బీమా మినహాయింపులు*
+కింది సందర్భాలలో కవరేజీ లేదు:
+⚠️ 105 km/h కంటే ఎక్కువ వేగం
+⚠️ తొందరపాటు డ్రైవింగ్
+⚠️ రోడ్డు లేని ప్రాంతాల్లో డ్రైవింగ్
+⚠️ మద్యం/మందులు తీసుకున్న తర్వాత డ్రైవింగ్
+
+❗ *ముఖ్యమైన నోటీసు*
+- ట్రాఫిక్ జరిమానాలు కస్టమర్ బాధ్యత
+- ఉల్లంఘనకు ₹200 సర్వీస్ ఛార్జీ
+- సెక్యూరిటీ డిపాజిట్ నుండి కట్ చేయబడుతుంది
+
+⛽ *ఇంధన విధానం*
+- తీసుకున్న సమయంలో ఉన్న ఇంధన స్థాయిలోనే తిరిగి ఇవ్వాలి
+- అధికారిక ఇంధన కేంద్రంలోనే నింపాలి:
+  https://maps.app.goo.gl/K6435xMeiHd4Dndw9
+- అసలు రసీదు అందజేయాలి:
+  🖋️ పెట్రోల్ బంక్ స్టాంప్ & సంతకం
+  📅 నింపిన తేదీ/సమయం
+  🚗 వాహన రిజిస్ట్రేషన్ నంబర్
+  ⚖️ పరిమాణం/మొత్తం స్పష్టంగా కనిపించేలా
+- రసీదు లేకపోతే ₹500 జరిమానా
+
+⚖️ *సాధారణ షరతులు*
+- ఆలస్యంగా తిరిగి ఇస్తే 1.5x రేటు వర్తిస్తుంది
+- వాహనం తీసుకున్న స్థితిలోనే తిరిగి ఇవ్వాలి
+- భద్రతా డిపాజిట్ 7 పని దినాలలో తిరిగి ఇవ్వబడుతుంది
+
+✅ *అంగీకారం*
+చెల్లింపు ద్వారా మీరు ఈ షరతులన్నింటికీ అంగీకరిస్తున్నారు. ఉల్లంఘనల వలన అదనపు ఛార్జీలు లేదా ఒప్పందం రద్దు కావచ్చు.
+
+స్పష్టత కావాలంటే ఈ సందేశానికి రిప్లై చేయండి.`;
+            }
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
