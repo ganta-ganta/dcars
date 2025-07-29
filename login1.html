@@ -134,6 +134,8 @@
           <!-- Phone Login Tab -->
           <div class="tab-pane fade" id="phone-login" role="tabpanel">
             <form id="phoneLoginForm">
+              <div id="phoneLoginAlert" class="alert alert-danger d-none" role="alert"></div>
+              
               <div class="mb-3">
                 <label for="phoneNumber" class="form-label">Phone Number</label>
                 <div class="input-group">
@@ -142,8 +144,12 @@
                 </div>
                 <div class="form-text">We'll send an OTP to this number</div>
               </div>
-              <button type="submit" class="btn btn-primary w-100 py-2">
-                <i class="fas fa-mobile-alt me-2"></i> Send OTP
+              <div class="mb-3 d-none" id="otpField">
+                <label for="otp" class="form-label">OTP</label>
+                <input type="text" class="form-control" id="otp" placeholder="Enter 6-digit OTP">
+              </div>
+              <button type="submit" class="btn btn-primary w-100 py-2" id="phoneSubmitBtn">
+                <i class="fas fa-mobile-alt me-2"></i> <span id="phoneBtnText">Send OTP</span>
               </button>
             </form>
           </div>
@@ -215,7 +221,7 @@
       projectId: "gopandacars-7085f",
       storageBucket: "gopandacars-7085f.appspot.com",
       messagingSenderId: "486383420605",
-      appId: "1:486383420605:web:3c9b5c4c3b1c8e3b5e8a3a"
+      appId: "1:486383420605:web:9a8b5e0c8c7f5a8f0a8b1e"
     };
     
     // Initialize Firebase
@@ -232,8 +238,18 @@
     const passwordInput = document.getElementById('password');
     const rememberMeCheckbox = document.getElementById('rememberMe');
     const loginAlert = document.getElementById('loginAlert');
+    const phoneLoginAlert = document.getElementById('phoneLoginAlert');
     const googleLoginBtn = document.getElementById('googleLogin');
     const facebookLoginBtn = document.getElementById('facebookLogin');
+    const otpField = document.getElementById('otpField');
+    const phoneSubmitBtn = document.getElementById('phoneSubmitBtn');
+    const phoneBtnText = document.getElementById('phoneBtnText');
+    const phoneNumberInput = document.getElementById('phoneNumber');
+    const otpInput = document.getElementById('otp');
+
+    // Global variables
+    let confirmationResult = null;
+    let isOTPSent = false;
 
     // Toggle password visibility
     togglePasswordVisibility.addEventListener('click', () => {
@@ -245,12 +261,17 @@
     });
 
     // Show error message
-    function showError(message) {
-      loginAlert.textContent = message;
-      loginAlert.classList.remove('d-none');
-      setTimeout(() => {
-        loginAlert.classList.add('d-none');
-      }, 5000);
+    function showError(message, isPhoneLogin = false) {
+      const alertElement = isPhoneLogin ? phoneLoginAlert : loginAlert;
+      if (alertElement) {
+        alertElement.textContent = message;
+        alertElement.classList.remove('d-none');
+        setTimeout(() => {
+          alertElement.classList.add('d-none');
+        }, 5000);
+      } else {
+        alert(message); // Fallback if alert element doesn't exist
+      }
     }
 
     // Email login form submission
@@ -306,13 +327,13 @@
           const userData = userDoc.data();
           // Redirect based on user role
           if (userData.role === 'admin@gopandacars.in') {
-            window.location.href = 'admin.html';
+            window.location.href = 'admin/dashboard.html';
           } else {
-            window.location.href = 'index.html';
+            window.location.href = 'user/dashboard.html';
           }
         } else {
           // New user without profile, redirect to complete profile
-          window.location.href = 'profile.html';
+          window.location.href = 'complete-profile.html';
         }
         
       } catch (error) {
@@ -329,80 +350,234 @@
     // Phone login form submission
     phoneLoginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const phoneNumber = '+91' + document.getElementById('phoneNumber').value.trim();
+      const phoneNumber = '+91' + phoneNumberInput.value.trim();
       
       try {
         // Show loading state
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending OTP...';
+        const originalBtnText = phoneBtnText.textContent;
+        phoneSubmitBtn.disabled = true;
+        phoneBtnText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
         
-        // Send OTP (you'll need to implement this with your preferred method)
-        // This is a placeholder - you might use Firebase Phone Auth or another service
-        console.log('OTP would be sent to:', phoneNumber);
-        
-        // For demo purposes, we'll just show a success message
-        setTimeout(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
-          showError('OTP functionality not implemented in this demo');
-        }, 1500);
+        if (!isOTPSent) {
+          // Send OTP
+          const appVerifier = new firebase.auth.RecaptchaVerifier('phoneSubmitBtn', {
+            size: 'invisible',
+            callback: () => {
+              // reCAPTCHA solved, will proceed with sending OTP
+            }
+          });
+          
+          confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, appVerifier);
+          isOTPSent = true;
+          otpField.classList.remove('d-none');
+          phoneBtnText.textContent = 'Verify OTP';
+          showError('OTP sent successfully!', true);
+        } else {
+          // Verify OTP
+          const otp = otpInput.value.trim();
+          if (otp.length !== 6 || !/^\d+$/.test(otp)) {
+            showError('Please enter a valid 6-digit OTP', true);
+            return;
+          }
+          
+          const userCredential = await confirmationResult.confirm(otp);
+          const user = userCredential.user;
+          
+          // Check if user exists in Firestore
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          
+          if (!userDoc.exists) {
+            // Create new user document
+            await db.collection('users').doc(user.uid).set({
+              uid: user.uid,
+              phoneNumber: user.phoneNumber,
+              provider: 'phone',
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          } else {
+            // Update last login
+            await db.collection('users').doc(user.uid).update({
+              lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          }
+          
+          // Redirect to dashboard
+          window.location.href = 'user/dashboard.html';
+        }
         
       } catch (error) {
         console.error('Phone Login Error:', error);
-        showError(getErrorMessage(error.code));
+        showError(getErrorMessage(error.code), true);
         
-        // Reset button state
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-mobile-alt me-2"></i> Send OTP';
+        // Reset OTP state if error occurs during OTP sending
+        if (error.code === 'auth/invalid-phone-number' || error.code === 'auth/quota-exceeded') {
+          isOTPSent = false;
+          otpField.classList.add('d-none');
+          phoneBtnText.textContent = 'Send OTP';
+        }
+      } finally {
+        phoneSubmitBtn.disabled = false;
       }
     });
     
     // Google login
-    googleLoginBtn.addEventListener('click', async () => {
+    async function signInWithGoogle() {
       try {
+        // Show loading state
+        const originalBtnText = googleLoginBtn.innerHTML;
+        googleLoginBtn.disabled = true;
+        googleLoginBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Signing in...';
+        
+        // Create Google provider instance
         const provider = new firebase.auth.GoogleAuthProvider();
-        await auth.signInWithPopup(provider);
-        // On success, the auth state listener will handle the redirect
+        
+        // Optional: Add additional scopes if needed
+        // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        
+        // Set custom parameters (optional)
+        provider.setCustomParameters({
+          prompt: 'select_account' // Forces account selection even when one account is available
+        });
+        
+        // Sign in with popup
+        const result = await auth.signInWithPopup(provider);
+        
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = result.credential;
+        const token = credential.accessToken;
+        
+        // The signed-in user info
+        const user = result.user;
+        
+        // Check if user exists in Firestore
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        
+        if (!userDoc.exists) {
+          // If new user, create a document in Firestore
+          await db.collection('users').doc(user.uid).set({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            provider: 'google',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        } else {
+          // Update last login time for existing user
+          await db.collection('users').doc(user.uid).update({
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+        
+        // Redirect based on user role (you can customize this)
+        window.location.href = 'dashboard.html';
+        
       } catch (error) {
-        console.error('Google Login Error:', error);
+        console.error('Google Sign-In Error:', error);
         showError(getErrorMessage(error.code));
+      } finally {
+        // Reset button state
+        googleLoginBtn.disabled = false;
+        googleLoginBtn.innerHTML = '<i class="fab fa-google me-2"></i> Continue with Google';
       }
-    });
+    }
     
-    // Facebook login
-    facebookLoginBtn.addEventListener('click', async () => {
+    // Facebook login (placeholder - needs proper implementation)
+    async function signInWithFacebook() {
       try {
+        // Show loading state
+        const originalBtnText = facebookLoginBtn.innerHTML;
+        facebookLoginBtn.disabled = true;
+        facebookLoginBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Signing in...';
+        
+        // Create Facebook provider instance
         const provider = new firebase.auth.FacebookAuthProvider();
-        await auth.signInWithPopup(provider);
-        // On success, the auth state listener will handle the redirect
+        
+        // Add additional permissions if needed
+        provider.addScope('email');
+        provider.addScope('public_profile');
+        
+        // Sign in with popup
+        const result = await auth.signInWithPopup(provider);
+        
+        // The signed-in user info
+        const user = result.user;
+        
+        // Check if user exists in Firestore
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        
+        if (!userDoc.exists) {
+          // If new user, create a document in Firestore
+          await db.collection('users').doc(user.uid).set({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            provider: 'facebook',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+        
+        // Redirect to dashboard
+        window.location.href = 'user/dashboard.html';
+        
       } catch (error) {
-        console.error('Facebook Login Error:', error);
+        console.error('Facebook Sign-In Error:', error);
         showError(getErrorMessage(error.code));
+      } finally {
+        // Reset button state
+        facebookLoginBtn.disabled = false;
+        facebookLoginBtn.innerHTML = '<i class="fab fa-facebook-f me-2"></i> Continue with Facebook';
       }
-    });
+    }
+    
+    // Add event listeners
+    googleLoginBtn.addEventListener('click', signInWithGoogle);
+    facebookLoginBtn.addEventListener('click', signInWithFacebook);
     
     // Error message mapping
     function getErrorMessage(errorCode) {
       const errorMessages = {
+        // Email/Password errors
         'auth/invalid-email': 'Invalid email address format',
         'auth/user-disabled': 'This account has been disabled',
         'auth/user-not-found': 'No account found with this email',
         'auth/wrong-password': 'Incorrect password',
         'auth/too-many-requests': 'Too many attempts. Please try again later',
         'auth/network-request-failed': 'Network error. Please check your connection',
-        'auth/operation-not-allowed': 'This operation is not allowed',
+        
+        // Phone auth errors
+        'auth/invalid-phone-number': 'Invalid phone number format',
+        'auth/missing-phone-number': 'Please enter a phone number',
+        'auth/quota-exceeded': 'OTP quota exceeded. Try again later',
+        'auth/code-expired': 'OTP code has expired',
+        'auth/invalid-verification-code': 'Invalid OTP code',
+        'auth/session-expired': 'Session expired. Please try again',
+        
+        // Google auth errors
+        'auth/account-exists-with-different-credential': 'An account already exists with the same email but different sign-in method.',
+        'auth/auth-domain-config-required': 'Authentication domain configuration required.',
+        'auth/cancelled-popup-request': 'Popup sign-in was cancelled.',
+        'auth/operation-not-allowed': 'This sign-in method is not enabled.',
+        'auth/operation-not-supported-in-this-environment': 'This operation is not supported in this environment.',
+        'auth/popup-blocked': 'Popup was blocked by the browser. Please allow popups for this site.',
+        'auth/popup-closed-by-user': 'Popup was closed by the user before completing sign-in.',
+        'auth/unauthorized-domain': 'This domain is not authorized for authentication.',
+        
+        // Facebook auth errors
+        'auth/facebook-auth-disabled': 'Facebook authentication is disabled',
+        'auth/facebook-auth-invalid-token': 'Invalid Facebook token',
+        
+        // General errors
         'auth/email-already-in-use': 'Email already in use',
         'auth/weak-password': 'Password should be at least 6 characters',
-        'auth/account-exists-with-different-credential': 'Account exists with different credentials',
-        'auth/popup-blocked': 'Popup blocked by browser. Please allow popups for this site',
-        'auth/popup-closed-by-user': 'Login popup was closed before completing',
-        'auth/cancelled-popup-request': 'Only one popup request is allowed at a time'
+        'auth/operation-not-allowed': 'This operation is not allowed'
       };
       
-      return errorMessages[errorCode] || 'Login failed. Please try again.';
+      return errorMessages[errorCode] || 'Authentication failed. Please try again.';
     }
 
     // Check if user is already logged in
@@ -414,13 +589,13 @@
             if (doc.exists) {
               const userData = doc.data();
               if (userData.role === 'admin@gopandacars.in') {
-                window.location.href = 'admin.html';
+                window.location.href = 'admin/dashboard.html';
               } else {
-                window.location.href = 'index.html';
+                window.location.href = 'user/dashboard.html';
               }
             } else {
               // New user without profile
-              window.location.href = 'profile.html';
+              window.location.href = 'complete-profile.html';
             }
           })
           .catch(error => {
