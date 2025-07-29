@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       background-color: #f8f9fa;
@@ -121,32 +122,44 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="bg-dark sticky-top">
-    <nav class="navbar navbar-expand-lg navbar-dark container">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
-          <h1 class="m-0">GoPanda Cars</h1>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="profile.html">Profile</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="login.html" id="loginLink">Login</a>
-            </li>
-          </ul>
+ <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+               <!-- <i class="fas fa-paw"></i>-->
+               <!-- <img src="img/logo.png" alt="Go Panda self drive cars guntur">-->
+                <span>GoPanda Cars</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pay"><i class="fas fa-credit-card"></i> Pay</a>
+                    </li>
+                    <!--<li class="nav-item">
+                        <a class="nav-link" href="help"><i class="fas fa-question-circle"></i> Help</a>
+                    </li>-->
+                    <li class="nav-item">
+                        <a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
-  </header>
 
   <!-- Payment Container -->
   <div class="container payment-container">
@@ -556,26 +569,7 @@
           return;
         }
         
-        // For demo purposes - in a real app, you would check Firestore
-        if (offerCode === 'WELCOME10') {
-          applyDiscount({
-            name: "Welcome Discount",
-            description: "10% off on your first booking",
-            discountType: "percentage",
-            discountValue: 10
-          });
-        } else if (offerCode === 'FEST500') {
-          applyDiscount({
-            name: "Festive Offer",
-            description: "Flat ₹500 off on any booking",
-            discountType: "fixed",
-            discountValue: 500
-          });
-        } else {
-          showOfferMessage('Invalid or expired offer code', 'danger');
-        }
-      }
-
+        
       function applyDiscount(offer) {
         let finalPrice = currentBooking.originalPrice;
         let discount = 0;
