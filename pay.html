@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - GoPanda Cars</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .payment-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    .payment-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .payment-method {
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    .payment-method:hover {
+      border-color: #0d6efd;
+      box-shadow: 0 0 10px rgba(13, 110, 253, 0.2);
+    }
+    .payment-method.active {
+      border-color: #0d6efd;
+      background-color: #f0f7ff;
+    }
+    .payment-method h5 {
+      margin-bottom: 15px;
+    }
+    .payment-details {
+      display: none;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+    .payment-details.active {
+      display: block;
+    }
+    .qr-code {
+      max-width: 200px;
+      margin: 15px auto;
+      display: block;
+    }
+    .booking-summary {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 40px;
+      right: 40px;
+      background-color: #25d366;
+      color: #FFF;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 3px #999;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s;
+      text-decoration: none;
+    }
+    .whatsapp-float:hover {
+      background-color: #128C7E;
+      transform: scale(1.05);
+    }
+    .verification-pending {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+    .payment-option {
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .payment-header {
+      margin-bottom: 15px;
+    }
+    .copied-message {
+      color: #198754;
+      display: none;
+    }
+    .copy-btn {
+      min-width: 80px;
+    }
+    .offer-input-group {
+      max-width: 300px;
+    }
+    #offerMessage {
+      display: none;
+      margin-top: 10px;
+    }
+    .price-breakdown {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <span>GoPanda Cars</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#"><i class="fas fa-credit-card"></i> Pay</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Payment Container -->
+  <div class="container payment-container">
+    <div class="payment-header">
+      <h2>Complete Your Payment</h2>
+      <p class="text-muted">Please select your preferred payment method</p>
+    </div>
+
+    <!-- Booking Summary -->
+    <div class="booking-summary" id="bookingSummary">
+      <h4>Booking Summary</h4>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Car:</strong> <span id="summaryCarName">Loading...</span></p>
+          <p><strong>Pickup:</strong> <span id="summaryPickup">Loading...</span></p>
+          <p><strong>Dropoff:</strong> <span id="summaryDropoff">Loading...</span></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Duration:</strong> <span id="summaryDuration">Loading...</span></p>
+          <p><strong>Payment Method:</strong> <span id="summaryMethod">Not selected</span></p>
+          <h5 class="mt-3">Total: ₹<span id="summaryTotal">0</span></h5>
+        </div>
+      </div>
+      
+      <!-- Price Breakdown -->
+      <div class="price-breakdown mt-4">
+        <h6 class="mb-3"><i class="fas fa-file-invoice-dollar me-2"></i> Price Breakdown</h6>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Base Price</span>
+            <span>₹<span id="basePrice">0</span></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Discount</span>
+            <span class="text-success">-₹<span id="discountAmount">0</span></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between fw-bold">
+            <span>Total Amount</span>
+            <span>₹<span id="totalAmount">0</span></span>
+          </li>
+        </ul>
+        
+        <!-- Offer Code -->
+        <div class="mt-3">
+          <div class="input-group offer-input-group">
+            <input type="text" class="form-control" id="offerCode" placeholder="Enter offer code">
+            <button class="btn btn-outline-primary" type="button" id="applyOffer">Apply</button>
+          </div>
+          <div id="offerMessage" class="alert"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="payment-options">
+      <h4 class="mb-4">Payment Options</h4>
+      
+      <!-- UPI QR Code Payment -->
+      <div class="payment-option">
+        <div class="payment-header">
+          <h4><i class="bi bi-qr-code"></i> Scan UPI QR Code</h4>
+        </div>
+        <div class="text-center">
+          <img id="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gopandacars@ybl&pn=GoPanda%20Cars&am=0&cu=INR" alt="UPI QR Code" class="qr-code img-fluid mb-3">
+          <p class="text-muted">Scan this code with any UPI app to pay</p>
+        </div>
+      </div>
+      
+      <!-- UPI ID Payment -->
+      <div class="payment-option">
+        <div class="payment-header">
+          <h4><i class="bi bi-wallet2"></i> Pay via UPI ID</h4>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <strong>UPI ID:</strong> 
+            <span id="upiId">gopandacars@ybl</span>
+            <span id="upiCopied" class="copied-message ms-2">Copied!</span>
+          </div>
+          <button class="btn btn-sm btn-outline-primary copy-btn" onclick="copyToClipboard('upiId', 'upiCopied')">
+            <i class="bi bi-clipboard"></i> Copy
+          </button>
+        </div>
+      </div>
+      
+      <!-- PhonePe Payment -->
+      <div class="payment-option">
+        <div class="payment-header">
+          <h4><i class="bi bi-phone"></i> Pay via Phone Number</h4>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <strong>Phone Number:</strong> 
+            <span id="phoneNumber">9052017979</span>
+            <span id="phoneCopied" class="copied-message ms-2">Copied!</span>
+          </div>
+          <button class="btn btn-sm btn-outline-primary copy-btn" onclick="copyToClipboard('phoneNumber', 'phoneCopied')">
+            <i class="bi bi-clipboard"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verify Payment Section -->
+    <div class="verify-payment mt-4 p-4 verification-pending">
+      <h4 class="mb-3"><i class="fas fa-check-circle me-2"></i> Payment Verification</h4>
+      <p>Please submit your payment details for admin verification. Your booking will be confirmed after verification.</p>
+      <button class="btn btn-success btn-lg" id="verifyPaymentBtn">
+        <i class="fas fa-check me-2"></i> Verify Payment
+      </button>
+    </div>
+  </div>
+
+  <!-- WhatsApp Float Button -->
+  <a href="https://wa.me/9052017979" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Payment Verification Modal -->
+  <div class="modal fade" id="verifyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Payment Verification</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="verifyForm">
+            <div class="mb-3">
+              <label class="form-label">Transaction ID/Reference*</label>
+              <input type="text" class="form-control" id="transactionId" required 
+                     placeholder="Enter transaction ID or UPI reference">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Payment Amount (₹)*</label>
+              <input type="number" class="form-control" id="paymentAmount" required 
+                     placeholder="Enter amount paid" value="">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Payment Date*</label>
+              <input type="date" class="form-control" id="paymentDate" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="submitVerificationBtn">
+            <span class="submit-text">Submit Verification</span>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verification Submitted Modal -->
+  <div class="modal fade" id="verificationSubmittedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-5">
+          <div class="text-info mb-4">
+            <i class="fas fa-hourglass-half" style="font-size: 5rem;"></i>
+          </div>
+          <h3 class="mb-3">Verification Submitted</h3>
+          <p>Your payment details have been submitted for admin verification.</p>
+          <p>We'll notify you via WhatsApp once your booking is confirmed.</p>
+          <p class="text-muted">Booking ID: <span id="verificationBookingId"></span></p>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i> Usually verified within 1 hour
+          </div>
+          <button class="btn btn-primary mt-3" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+        authDomain: "gopandacars-7085f.firebaseapp.com",
+        projectId: "gopandacars-7085f",
+        storageBucket: "gopandacars-7085f.appspot.com",
+        messagingSenderId: "486383420605"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+      const storage = firebase.storage();
+
+      // Get booking ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const bookingId = urlParams.get('bookingId');
+      let bookingData = null;
+
+      // Initialize modals
+      const verifyModal = new bootstrap.Modal(document.getElementById('verifyModal'));
+      const verificationSubmittedModal = new bootstrap.Modal(document.getElementById('verificationSubmittedModal'));
+
+      // Current booking data
+      const currentBooking = {
+        originalPrice: 0,
+        finalPrice: 0,
+        discountAmount: 0,
+        carName: "",
+        startDate: "",
+        startTime: "",
+        endDate: "",
+        endTime: "",
+        duration: ""
+      };
+
+      // Check auth state
+      auth.onAuthStateChanged(user => {
+        const loginLink = document.getElementById('loginLink');
+        if (user) {
+          loginLink.textContent = 'Logout';
+          loginLink.href = '#';
+          loginLink.onclick = () => {
+            auth.signOut().then(() => window.location.href = 'index.html');
+          };
+          
+          // Load booking data if user is logged in
+          if (bookingId) {
+            loadBookingData(bookingId, user.uid);
+          } else {
+            window.location.href = 'profile.html';
+          }
+        } else {
+          loginLink.textContent = 'Login';
+          loginLink.href = 'login.html';
+          loginLink.onclick = null;
+          window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+        }
+      });
+
+      // Load booking data from Firestore
+      function loadBookingData(bookingId, userId) {
+        db.collection('bookings').doc(bookingId).get()
+          .then(doc => {
+            if (doc.exists && doc.data().userId === userId) {
+              bookingData = doc.data();
+              
+              // Check if booking is already confirmed
+              if (bookingData.status === 'confirmed') {
+                window.location.href = 'profile.html';
+                return;
+              }
+              
+              // Update current booking data
+              currentBooking.originalPrice = bookingData.originalPrice;
+              currentBooking.finalPrice = bookingData.finalPrice || bookingData.originalPrice;
+              currentBooking.discountAmount = bookingData.discountAmount || 0;
+              currentBooking.carName = bookingData.carName;
+              
+              // Convert Firestore timestamps to Date objects
+              const startDate = bookingData.startDateTime.toDate();
+              const endDate = bookingData.endDateTime.toDate();
+              
+              // Format dates and times
+              currentBooking.startDate = startDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+              });
+              currentBooking.startTime = startDate.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              currentBooking.endDate = endDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+              });
+              currentBooking.endTime = endDate.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              
+              // Calculate duration
+              const hours = Math.round((endDate - startDate) / (1000 * 60 * 60));
+              if (hours < 24) {
+                currentBooking.duration = `${hours} hours`;
+              } else {
+                const days = Math.floor(hours / 24);
+                const remainingHours = hours % 24;
+                currentBooking.duration = `${days} days`;
+                if (remainingHours > 0) {
+                  currentBooking.duration += ` ${remainingHours} hours`;
+                }
+              }
+              
+              // Display booking summary
+              displayBookingSummary();
+              
+              // Set payment amount in form
+              document.getElementById('paymentAmount').value = currentBooking.finalPrice;
+              
+              // Set today's date as default
+              const today = new Date().toISOString().split('T')[0];
+              document.getElementById('paymentDate').value = today;
+              
+              // Update QR code with correct amount
+              updateQRCode(currentBooking.finalPrice);
+            } else {
+              window.location.href = 'profile.html';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading booking:', error);
+            window.location.href = 'profile.html';
+          });
+      }
+
+      // Display booking summary
+      function displayBookingSummary() {
+        document.getElementById('summaryCarName').textContent = currentBooking.carName;
+        document.getElementById('summaryPickup').textContent = 
+          `${currentBooking.startDate} at ${currentBooking.startTime}`;
+        document.getElementById('summaryDropoff').textContent = 
+          `${currentBooking.endDate} at ${currentBooking.endTime}`;
+        document.getElementById('summaryDuration').textContent = currentBooking.duration;
+        document.getElementById('summaryTotal').textContent = currentBooking.finalPrice.toFixed(2);
+        document.getElementById('basePrice').textContent = currentBooking.originalPrice.toFixed(2);
+        document.getElementById('discountAmount').textContent = currentBooking.discountAmount.toFixed(2);
+        document.getElementById('totalAmount').textContent = currentBooking.finalPrice.toFixed(2);
+      }
+
+      // Update QR code with payment amount
+      function updateQRCode(amount) {
+        document.getElementById('qrCodeImage').src = 
+          `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gopandacars@ybl&pn=GoPanda%20Cars&am=${amount}&cu=INR`;
+      }
+
+      // Copy to clipboard function
+      function copyToClipboard(elementId, copiedElementId) {
+        const element = document.getElementById(elementId);
+        const copiedElement = document.getElementById(copiedElementId);
+        
+        navigator.clipboard.writeText(element.textContent).then(() => {
+          copiedElement.style.display = 'inline';
+          setTimeout(() => {
+            copiedElement.style.display = 'none';
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      }
+
+      // Show offer message
+      function showOfferMessage(message, type) {
+        const offerMessage = document.getElementById('offerMessage');
+        offerMessage.innerHTML = message;
+        offerMessage.className = `alert alert-${type}`;
+        offerMessage.style.display = 'block';
+        
+        setTimeout(() => {
+          offerMessage.style.display = 'none';
+        }, 5000);
+      }
+
+      // Apply offer code
+      document.getElementById('applyOffer').addEventListener('click', function() {
+        const offerCode = document.getElementById('offerCode').value.trim();
+        const offerMessage = document.getElementById('offerMessage');
+        
+        if (!offerCode) {
+          showOfferMessage('Please enter an offer code', 'danger');
+          return;
+        }
+        
+        // Check if offer exists in Firestore
+        db.collection('offers').where('code', '==', offerCode).limit(1).get()
+          .then(snapshot => {
+            if (snapshot.empty) {
+              showOfferMessage('Invalid offer code', 'danger');
+              return;
+            }
+            
+            const offer = snapshot.docs[0].data();
+            const now = new Date();
+            const validUntil = new Date(offer.validUntil);
+            
+            // Check if offer is expired
+            if (now > validUntil) {
+              showOfferMessage('This offer has expired', 'danger');
+              return;
+            }
+            
+            // Check if offer is active
+            if (!offer.isActive) {
+              showOfferMessage('This offer is not currently active', 'danger');
+              return;
+            }
+            
+            // Apply discount
+            applyDiscount(offer);
+          })
+          .catch(error => {
+            console.error('Error checking offer:', error);
+            showOfferMessage('Error applying offer code', 'danger');
+          });
+      });
+
+      function applyDiscount(offer) {
+        // Keep original price unchanged
+        const originalPrice = currentBooking.originalPrice;
+        let discountAmount = 0;
+        
+        // Calculate discount based on offer type
+        if (offer.discountType === 'percentage') {
+          discountAmount = originalPrice * (offer.discountValue / 100);
+        } else if (offer.discountType === 'fixed') {
+          discountAmount = offer.discountValue;
+        }
+        
+        // Calculate final price
+        const finalPrice = originalPrice - discountAmount;
+        
+        // Update current booking
+        currentBooking.finalPrice = finalPrice;
+        currentBooking.discountAmount = discountAmount;
+        
+        // Update UI
+        document.getElementById('discountAmount').textContent = discountAmount.toFixed(2);
+        document.getElementById('totalAmount').textContent = finalPrice.toFixed(2);
+        document.getElementById('summaryTotal').textContent = finalPrice.toFixed(2);
+        document.getElementById('paymentAmount').value = finalPrice;
+        
+        // Update QR code with discounted amount
+        updateQRCode(finalPrice);
+        
+        // Show success message
+        showOfferMessage(`
+          <strong>${offer.name}</strong> applied successfully!<br>
+          You saved ₹${discountAmount.toFixed(2)}.
+        `, 'success');
+        
+        // Update booking in Firestore with discount
+        db.collection('bookings').doc(bookingId).update({
+          finalPrice: finalPrice,
+          discountApplied: true,
+          discountCode: offer.code,
+          discountAmount: discountAmount,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
+
+      // Verify Payment Button
+      document.getElementById('verifyPaymentBtn').addEventListener('click', function() {
+        verifyModal.show();
+      });
+
+      // Submit Verification
+      document.getElementById('submitVerificationBtn').addEventListener('click', async function() {
+        const transactionId = document.getElementById('transactionId').value;
+        const paymentAmount = parseFloat(document.getElementById('paymentAmount').value);
+        const paymentDate = document.getElementById('paymentDate').value;
+        
+        // Validate inputs
+        if (!transactionId || !paymentAmount || !paymentDate) {
+          alert('Please fill all required fields');
+          return;
+        }
+        
+        if (paymentAmount !== currentBooking.finalPrice) {
+          if (!confirm(`You entered ₹${paymentAmount} but the booking total is ₹${currentBooking.finalPrice}. Continue anyway?`)) {
+            return;
+          }
+        }
+        
+        // Set loading state
+        const btn = this;
+        const submitText = btn.querySelector('.submit-text');
+        const spinner = btn.querySelector('.spinner-border');
+        
+        submitText.textContent = 'Submitting...';
+        spinner.classList.remove('d-none');
+        btn.disabled = true;
+        
+        try {
+          // Prepare payment data
+          const paymentData = {
+            transactionId: transactionId,
+            amount: paymentAmount,
+            date: paymentDate,
+            method: 'UPI', // Default method
+            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            verified: false,
+            verifiedBy: null,
+            verifiedAt: null
+          };
+          
+          // Update booking in Firestore
+          await db.collection('bookings').doc(bookingId).update({
+            status: 'awaiting_verification',
+            paymentDetails: paymentData,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          
+          // Show success modal
+          verifyModal.hide();
+          document.getElementById('verificationBookingId').textContent = bookingId;
+          verificationSubmittedModal.show();
+          
+        } catch (error) {
+          console.error('Error submitting verification:', error);
+          alert('Error submitting verification. Please try again or contact support.');
+        } finally {
+          // Reset button state
+          submitText.textContent = 'Submit Verification';
+          spinner.classList.add('d-none');
+          btn.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
