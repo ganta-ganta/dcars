@@ -10,9 +10,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-
-  
   <style>
     body {
       background-color: #f8f9fa;
@@ -124,45 +121,39 @@
   </style>
 </head>
 <body>
- <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-               <!-- <i class="fas fa-paw"></i>-->
-               <!-- <img src="img/logo.png" alt="Go Panda self drive cars guntur">-->
-                <span>GoPanda Cars</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html"><i class="fas fa-home"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#about"><i class="fas fa-info-circle"></i> About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pay"><i class="fas fa-credit-card"></i> Pay</a>
-                    </li>
-                    <!--<li class="nav-item">
-                        <a class="nav-link" href="help"><i class="fas fa-question-circle"></i> Help</a>
-                    </li>-->
-                    <li class="nav-item">
-                        <a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <span>GoPanda Cars</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#about"><i class="fas fa-info-circle"></i> About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pay"><i class="fas fa-credit-card"></i> Pay</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="loginLink" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
   <!-- Payment Container -->
   <div class="container payment-container">
@@ -176,14 +167,14 @@
       <h4>Booking Summary</h4>
       <div class="row">
         <div class="col-md-6">
-          <p><strong>Car:</strong> <span id="summaryCarName">Loading...</span></p>
-          <p><strong>Pickup:</strong> <span id="summaryPickup">Loading...</span></p>
-          <p><strong>Dropoff:</strong> <span id="summaryDropoff">Loading...</span></p>
+          <p><strong>Car:</strong> <span id="summaryCarName">Toyota Innova</span></p>
+          <p><strong>Pickup:</strong> <span id="summaryPickup">Jun 15, 2023 at 10:00 AM</span></p>
+          <p><strong>Dropoff:</strong> <span id="summaryDropoff">Jun 17, 2023 at 10:00 AM</span></p>
         </div>
         <div class="col-md-6">
-          <p><strong>Duration:</strong> <span id="summaryDuration">Loading...</span></p>
+          <p><strong>Duration:</strong> <span id="summaryDuration">2 days</span></p>
           <p><strong>Payment Method:</strong> <span id="summaryMethod">Not selected</span></p>
-          <h5 class="mt-3">Total: ₹<span id="summaryTotal">0</span></h5>
+          <h5 class="mt-3">Total: ₹<span id="summaryTotal">5000</span></h5>
         </div>
       </div>
       
@@ -192,8 +183,8 @@
         <h6 class="mb-3"><i class="fas fa-file-invoice-dollar me-2"></i> Price Breakdown</h6>
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between">
-            <span>Base Price</span>
-            <span>₹<span id="basePrice">0</span></span>
+            <span>Estimated Price</span>
+            <span>₹<span id="estimatedPrice">5000</span></span>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>Discount</span>
@@ -201,7 +192,7 @@
           </li>
           <li class="list-group-item d-flex justify-content-between fw-bold">
             <span>Total Amount</span>
-            <span>₹<span id="totalAmount">0</span></span>
+            <span>₹<span id="totalAmount">5000</span></span>
           </li>
         </ul>
         
@@ -226,7 +217,7 @@
           <h4><i class="bi bi-qr-code"></i> Scan UPI QR Code</h4>
         </div>
         <div class="text-center">
-          <img id="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gopandacars@ybl&pn=GoPanda%20Cars&am=0&cu=INR" alt="UPI QR Code" class="qr-code img-fluid mb-3">
+          <img id="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gopandacars@ybl&pn=GoPanda%20Cars&am=5000&cu=INR" alt="UPI QR Code" class="qr-code img-fluid mb-3">
           <p class="text-muted">Scan this code with any UPI app to pay</p>
         </div>
       </div>
@@ -274,11 +265,8 @@
           </label>
         </div>
         <div class="payment-details" id="bankDetails">
-          <p>use Phone pay or paytm above number </p>
-          
-          
-            <i class="fas fa-exclamation-circle me-2"></i> After transfer, please verify your payment below.
-          </div>
+          <p>use Phone pay or paytm above number</p>
+          <i class="fas fa-exclamation-circle me-2"></i> After transfer, please verify your payment below.
         </div>
       </div>
     </div>
@@ -316,17 +304,12 @@
             <div class="mb-3">
               <label class="form-label">Payment Amount (₹)*</label>
               <input type="number" class="form-control" id="paymentAmount" required 
-                     placeholder="Enter amount paid" value="">
+                     placeholder="Enter amount paid" value="5000">
             </div>
             <div class="mb-3">
               <label class="form-label">Payment Date*</label>
               <input type="date" class="form-control" id="paymentDate" required>
             </div>
-           <!-- <div class="mb-3">
-              <label class="form-label">Payment Screenshot (Optional)</label>
-              <input type="file" class="form-control" id="paymentScreenshot" accept="image/*">
-              <small class="text-muted">You can upload payment proof if available</small>
-            </div>-->
           </form>
         </div>
         <div class="modal-footer">
@@ -351,7 +334,7 @@
           <h3 class="mb-3">Verification Submitted</h3>
           <p>Your payment details have been submitted for admin verification.</p>
           <p>We'll notify you via WhatsApp once your booking is confirmed.</p>
-          <p class="text-muted">Booking ID: <span id="verificationBookingId"></span></p>
+          <p class="text-muted">Booking ID: <span id="verificationBookingId">BOOK12345</span></p>
           <div class="alert alert-info mt-3">
             <i class="fas fa-info-circle me-2"></i> Usually verified within 1 hour
           </div>
@@ -363,170 +346,24 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
-        authDomain: "gopandacars-7085f.firebaseapp.com",
-        projectId: "gopandacars-7085f",
-        storageBucket: "gopandacars-7085f.appspot.com",
-        messagingSenderId: "486383420605"
-      };
-      
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-      const storage = firebase.storage();
-
-      // Get booking ID from URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const bookingId = urlParams.get('bookingId');
-      let bookingData = null;
-
       // Initialize modals
       const verifyModal = new bootstrap.Modal(document.getElementById('verifyModal'));
       const verificationSubmittedModal = new bootstrap.Modal(document.getElementById('verificationSubmittedModal'));
 
       // Current booking data
       const currentBooking = {
-        originalPrice: 0,
-        finalPrice: 0,
-        carName: "",
-        startDate: "",
-        startTime: "",
-        endDate: "",
-        endTime: "",
-        duration: ""
+        originalPrice: 6000,
+        estimatedPrice: 5000,  // This is the price before any discounts
+        finalPrice: 5000,
+        carName: "Toyota Innova",
+        startDate: "Jun 15, 2023",
+        startTime: "10:00 AM",
+        endDate: "Jun 17, 2023",
+        endTime: "10:00 AM",
+        duration: "2 days"
       };
-
-      // Check auth state
-      auth.onAuthStateChanged(user => {
-        const loginLink = document.getElementById('loginLink');
-        if (user) {
-          loginLink.textContent = 'Logout';
-          loginLink.href = '#';
-          loginLink.onclick = () => {
-            auth.signOut().then(() => window.location.href = 'index.html');
-          };
-          
-          // Load booking data if user is logged in
-          if (bookingId) {
-            loadBookingData(bookingId, user.uid);
-          } else {
-            window.location.href = 'profile.html';
-          }
-        } else {
-          loginLink.textContent = 'Login';
-          loginLink.href = 'login.html';
-          loginLink.onclick = null;
-          window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
-        }
-      });
-
-      // Load booking data from Firestore
-      function loadBookingData(bookingId, userId) {
-        db.collection('bookings').doc(bookingId).get()
-          .then(doc => {
-            if (doc.exists && doc.data().userId === userId) {
-              bookingData = doc.data();
-              
-              // Check if booking is already confirmed
-              if (bookingData.status === 'confirmed') {
-                window.location.href = 'profile.html';
-                return;
-              }
-              
-              // Update current booking data
-              currentBooking.originalPrice = bookingData.originalPrice;
-              currentBooking.finalPrice = bookingData.finalPrice || bookingData.originalPrice;
-              currentBooking.carName = bookingData.carName;
-              
-              // Convert Firestore timestamps to Date objects
-              const startDate = bookingData.startDateTime.toDate();
-              const endDate = bookingData.endDateTime.toDate();
-              
-              // Format dates and times
-              currentBooking.startDate = startDate.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-              });
-              currentBooking.startTime = startDate.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit'
-              });
-              currentBooking.endDate = endDate.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-              });
-              currentBooking.endTime = endDate.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit'
-              });
-              
-              // Calculate duration
-              const hours = Math.round((endDate - startDate) / (1000 * 60 * 60));
-              if (hours < 24) {
-                currentBooking.duration = `${hours} hours`;
-              } else {
-                const days = Math.floor(hours / 24);
-                const remainingHours = hours % 24;
-                currentBooking.duration = `${days} days`;
-                if (remainingHours > 0) {
-                  currentBooking.duration += ` ${remainingHours} hours`;
-                }
-              }
-              
-              // Display booking summary
-              displayBookingSummary();
-              
-              // Set payment amount in form
-              document.getElementById('paymentAmount').value = currentBooking.finalPrice;
-              
-              // Set today's date as default
-              const today = new Date().toISOString().split('T')[0];
-              document.getElementById('paymentDate').value = today;
-              
-              // Update QR code with correct amount
-              updateQRCode(currentBooking.finalPrice);
-            } else {
-              window.location.href = 'profile.html';
-            }
-          })
-          .catch(error => {
-            console.error('Error loading booking:', error);
-            window.location.href = 'profile.html';
-          });
-      }
-
-      // Display booking summary
-      function displayBookingSummary() {
-        document.getElementById('summaryCarName').textContent = currentBooking.carName;
-        document.getElementById('summaryPickup').textContent = 
-          `${currentBooking.startDate} at ${currentBooking.startTime}`;
-        document.getElementById('summaryDropoff').textContent = 
-          `${currentBooking.endDate} at ${currentBooking.endTime}`;
-        document.getElementById('summaryDuration').textContent = currentBooking.duration;
-        document.getElementById('summaryTotal').textContent = currentBooking.finalPrice.toFixed(2);
-        document.getElementById('basePrice').textContent = currentBooking.originalPrice.toFixed(2);
-        document.getElementById('totalAmount').textContent = currentBooking.finalPrice.toFixed(2);
-        document.getElementById('discountAmount').textContent = 
-          (currentBooking.originalPrice - currentBooking.finalPrice).toFixed(2);
-      }
-
-      // Update QR code with payment amount
-      function updateQRCode(amount) {
-        document.getElementById('qrCodeImage').src = 
-          `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gopandacars@ybl&pn=GoPanda%20Cars&am=${amount}&cu=INR`;
-      }
 
       // Copy to clipboard function
       function copyToClipboard(elementId, copiedElementId) {
@@ -558,56 +395,68 @@
       // Apply offer code
       document.getElementById('applyOffer').addEventListener('click', function() {
         const offerCode = document.getElementById('offerCode').value.trim();
-        const offerMessage = document.getElementById('offerMessage');
         
         if (!offerCode) {
           showOfferMessage('Please enter an offer code', 'danger');
           return;
         }
         
-        // Check if offer exists in Firestore
-        db.collection('offers').where('code', '==', offerCode).limit(1).get()
-          .then(snapshot => {
-            if (snapshot.empty) {
-              showOfferMessage('Invalid offer code', 'danger');
-              return;
-            }
-            
-            const offer = snapshot.docs[0].data();
-            const now = new Date();
-            const validUntil = new Date(offer.validUntil);
-            
-            // Check if offer is expired
-            if (now > validUntil) {
-              showOfferMessage('This offer has expired', 'danger');
-              return;
-            }
-            
-            // Check if offer is active
-            if (!offer.isActive) {
-              showOfferMessage('This offer is not currently active', 'danger');
-              return;
-            }
-            
-            // Apply discount
-            applyDiscount(offer);
-          })
-          .catch(error => {
-            console.error('Error checking offer:', error);
-            showOfferMessage('Error applying offer code', 'danger');
-          });
+        // Sample offers - in a real app these would come from your database
+        const offers = {
+          'WELCOME10': { 
+            name: 'Welcome Offer', 
+            description: '10% off on your first booking',
+            discountType: 'percentage',
+            discountValue: 10,
+            validUntil: '2023-12-31',
+            isActive: true
+          },
+          'FLAT500': {
+            name: 'Flat Discount',
+            description: '₹500 off on your booking',
+            discountType: 'fixed',
+            discountValue: 500,
+            validUntil: '2023-12-31',
+            isActive: true
+          }
+        };
+        
+        const offer = offers[offerCode];
+        
+        if (!offer) {
+          showOfferMessage('Invalid offer code', 'danger');
+          return;
+        }
+        
+        const now = new Date();
+        const validUntil = new Date(offer.validUntil);
+        
+        // Check if offer is expired
+        if (now > validUntil) {
+          showOfferMessage('This offer has expired', 'danger');
+          return;
+        }
+        
+        // Check if offer is active
+        if (!offer.isActive) {
+          showOfferMessage('This offer is not currently active', 'danger');
+          return;
+        }
+        
+        // Apply discount
+        applyDiscount(offer);
       });
 
       function applyDiscount(offer) {
-        let finalPrice = currentBooking.originalPrice;
+        let finalPrice = currentBooking.estimatedPrice; // Using estimated price as base
         let discount = 0;
         
         if (offer.discountType === 'percentage') {
-          discount = currentBooking.originalPrice * (offer.discountValue / 100);
-          finalPrice = currentBooking.originalPrice - discount;
+          discount = currentBooking.estimatedPrice * (offer.discountValue / 100);
+          finalPrice = currentBooking.estimatedPrice - discount;
         } else if (offer.discountType === 'fixed') {
-          discount = Math.min(offer.discountValue, currentBooking.originalPrice); // Ensure discount doesn't make price negative
-          finalPrice = currentBooking.originalPrice - discount;
+          discount = Math.min(offer.discountValue, currentBooking.estimatedPrice);
+          finalPrice = currentBooking.estimatedPrice - discount;
         }
         
         // Update current booking data
@@ -634,15 +483,12 @@
           <strong>${offer.name}</strong> (${discountText}) applied successfully!<br>
           ${offer.description}
         `, 'success');
-        
-        // Update booking in Firestore with discount
-        db.collection('bookings').doc(bookingId).update({
-          finalPrice: finalPrice,
-          discountApplied: true,
-          discountCode: offer.code,
-          discountAmount: discount,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+      }
+
+      // Update QR code with payment amount
+      function updateQRCode(amount) {
+        document.getElementById('qrCodeImage').src = 
+          `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=gopandacars@ybl&pn=GoPanda%20Cars&am=${amount}&cu=INR`;
       }
 
       // Payment method selection
@@ -673,7 +519,6 @@
         const transactionId = document.getElementById('transactionId').value;
         const paymentAmount = parseFloat(document.getElementById('paymentAmount').value);
         const paymentDate = document.getElementById('paymentDate').value;
-        const screenshotFile = document.getElementById('paymentScreenshot').files[0];
         
         // Validate inputs
         if (!transactionId || !paymentAmount || !paymentDate) {
@@ -697,39 +542,12 @@
         btn.disabled = true;
         
         try {
-          let screenshotUrl = null;
-          
-          // Upload screenshot if provided (optional)
-          if (screenshotFile) {
-            const storageRef = storage.ref(`payment-proofs/${bookingId}_${Date.now()}`);
-            const uploadTask = storageRef.put(screenshotFile);
-            const snapshot = await uploadTask;
-            screenshotUrl = await snapshot.ref.getDownloadURL();
-          }
-          
-          // Prepare payment data
-          const paymentData = {
-            transactionId: transactionId,
-            amount: paymentAmount,
-            date: paymentDate,
-            method: document.querySelector('input[name="paymentMethod"]:checked').value,
-            screenshotUrl: screenshotUrl,
-            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            verified: false,
-            verifiedBy: null,
-            verifiedAt: null
-          };
-          
-          // Update booking in Firestore
-          await db.collection('bookings').doc(bookingId).update({
-            status: 'awaiting_verification',
-            paymentDetails: paymentData,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
+          // Simulate API call delay
+          await new Promise(resolve => setTimeout(resolve, 1500));
           
           // Show success modal
           verifyModal.hide();
-          document.getElementById('verificationBookingId').textContent = bookingId;
+          document.getElementById('verificationBookingId').textContent = 'BOOK' + Math.floor(10000 + Math.random() * 90000);
           verificationSubmittedModal.show();
           
         } catch (error) {
@@ -742,6 +560,10 @@
           btn.disabled = false;
         }
       });
+
+      // Set today's date as default in verification form
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('paymentDate').value = today;
 
       // Set default payment method
       document.getElementById('bankRadio').click();
