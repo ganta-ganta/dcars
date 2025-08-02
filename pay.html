@@ -352,18 +352,7 @@
       const verifyModal = new bootstrap.Modal(document.getElementById('verifyModal'));
       const verificationSubmittedModal = new bootstrap.Modal(document.getElementById('verificationSubmittedModal'));
 
-      // Current booking data
-      const currentBooking = {
-        originalPrice: 6000,
-        estimatedPrice: 5000,  // This is the price before any discounts
-        finalPrice: 5000,
-        carName: "Toyota Innova",
-        startDate: "Jun 15, 2023",
-        startTime: "10:00 AM",
-        endDate: "Jun 17, 2023",
-        endTime: "10:00 AM",
-        duration: "2 days"
-      };
+     
 
       // Copy to clipboard function
       function copyToClipboard(elementId, copiedElementId) {
@@ -401,25 +390,7 @@
           return;
         }
         
-        // Sample offers - in a real app these would come from your database
-        const offers = {
-          'WELCOME10': { 
-            name: 'Welcome Offer', 
-            description: '10% off on your first booking',
-            discountType: 'percentage',
-            discountValue: 10,
-            validUntil: '2023-12-31',
-            isActive: true
-          },
-          'FLAT500': {
-            name: 'Flat Discount',
-            description: '₹500 off on your booking',
-            discountType: 'fixed',
-            discountValue: 500,
-            validUntil: '2023-12-31',
-            isActive: true
-          }
-        };
+       
         
         const offer = offers[offerCode];
         
