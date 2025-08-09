@@ -102,115 +102,111 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   
   <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
-      authDomain: "gopandacars-7085f.firebaseapp.com",
-      projectId: "gopandacars-7085f",
-      storageBucket: "gopandacars-7085f.appspot.com",
-      messagingSenderId: "486383420605"
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJKgz1fONteZPPD5T9bcIVjw3-iBUZyro",
+    authDomain: "gopandacars-7085f.firebaseapp.com",
+    projectId: "gopandacars-7085f",
+    storageBucket: "gopandacars-7085f.appspot.com",
+    messagingSenderId: "486383420605"
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  
+  // DOM elements
+  const emailLoginForm = document.getElementById('emailLoginForm');
+  const togglePasswordVisibility = document.getElementById('togglePasswordVisibility');
+  const passwordInput = document.getElementById('password');
+  const rememberMeCheckbox = document.getElementById('rememberMe');
+
+  // Toggle password visibility
+  togglePasswordVisibility.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    togglePasswordVisibility.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+  });
+
+  // Email login form submission
+  emailLoginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const rememberMe = rememberMeCheckbox.checked;
+    
+    // Set persistence based on "Remember me" selection
+    const persistence = rememberMe ? 
+      firebase.auth.Auth.Persistence.LOCAL : 
+      firebase.auth.Auth.Persistence.SESSION;
+    
+    try {
+      // Set authentication persistence
+      await auth.setPersistence(persistence);
+      
+      // Show loading state
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging in...';
+      
+      // Sign in with email and password
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      
+      // Check if user is admin by email
+      if (user.email === 'admin@gopandacars.in') {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'index.html';
+      }
+      
+    } catch (error) {
+      console.error('Login Error:', error);
+      
+      // Show error message
+      const errorMessage = getErrorMessage(error.code);
+      alert(errorMessage);
+      
+      // Reset button state
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    }
+  });
+  
+  // Error message mapping
+  function getErrorMessage(errorCode) {
+    const errorMessages = {
+      'auth/invalid-email': 'Invalid email address',
+      'auth/user-disabled': 'This account has been disabled',
+      'auth/user-not-found': 'No account found with this email',
+      'auth/wrong-password': 'Incorrect password',
+      'auth/too-many-requests': 'Too many attempts. Please try again later',
+      'auth/network-request-failed': 'Network error. Please check your connection'
     };
     
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    
-    // DOM elements
-    const emailLoginForm = document.getElementById('emailLoginForm');
-    const togglePasswordVisibility = document.getElementById('togglePasswordVisibility');
-    const passwordInput = document.getElementById('password');
-    const rememberMeCheckbox = document.getElementById('rememberMe');
+    return errorMessages[errorCode] || 'Login failed. Please try again.';
+  }
 
-    // Toggle password visibility
-    togglePasswordVisibility.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      togglePasswordVisibility.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-    });
-
-    // Email login form submission
-    emailLoginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const rememberMe = rememberMeCheckbox.checked;
-      
-      // Set persistence based on "Remember me" selection
-      const persistence = rememberMe ? 
-        firebase.auth.Auth.Persistence.LOCAL : 
-        firebase.auth.Auth.Persistence.SESSION;
-      
-      try {
-        // Set authentication persistence
-        await auth.setPersistence(persistence);
-        
-        // Show loading state
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging in...';
-        
-        // Sign in with email and password
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
-        
-        // Check if user is admin
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        const userData = userDoc.data();
-        
-        // Redirect based on user role
-        if (userData && userData.role === 'admin@gopandacars.in') {
-          window.location.href = 'admin.html';
-        } else {
-          window.location.href = 'index.html';
-        }
-        
-      } catch (error) {
-        console.error('Login Error:', error);
-        
-        // Show error message
-        const errorMessage = getErrorMessage(error.code);
-        alert(errorMessage);
-        
-        // Reset button state
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
+  // Check if user is already logged in
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      // User is logged in, check email and redirect
+      if (user.email === 'admin@gopandacars.in') {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'index.html';
       }
-    });
-    
-    // Error message mapping
-    function getErrorMessage(errorCode) {
-      const errorMessages = {
-        'auth/invalid-email': 'Invalid email address',
-        'auth/user-disabled': 'This account has been disabled',
-        'auth/user-not-found': 'No account found with this email',
-        'auth/wrong-password': 'Incorrect password',
-        'auth/too-many-requests': 'Too many attempts. Please try again later',
-        'auth/network-request-failed': 'Network error. Please check your connection'
-      };
-      
-      return errorMessages[errorCode] || 'Login failed. Please try again.';
     }
+  });
 
-    // Check if user is already logged in
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        // User is logged in, check role and redirect
-        db.collection('users').doc(user.uid).get()
-          .then(doc => {
-            if (doc.exists) {
-              const userData = doc.data();
-              if (userData.role === 'admin@gopandacars.in') {
-                window.location.href = 'admin.html';
-              } else {
-                window.location.href = 'index.html';
-              }
-            }
-          });
-      }
-    });
-  </script>
+  // Optional: Focus on email field when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('email').focus();
+  });
+</script>
 </body>
 </html>
+
